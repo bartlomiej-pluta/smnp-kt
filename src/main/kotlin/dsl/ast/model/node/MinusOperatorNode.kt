@@ -1,5 +1,3 @@
 package dsl.ast.model.node
 
-import dsl.token.model.entity.TokenPosition
-
-class MinusOperatorNode(position: TokenPosition) : UnaryOperatorAbstractNode(position)
+class MinusOperatorNode(operator: Node, operand: Node) : UnaryOperatorAbstractNode(operator, operand)

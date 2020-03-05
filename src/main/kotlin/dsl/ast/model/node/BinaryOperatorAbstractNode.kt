@@ -1,23 +1,18 @@
 package dsl.ast.model.node
 
-import dsl.token.model.entity.TokenPosition
-
-abstract class BinaryOperatorAbstractNode(position: TokenPosition) : Node(3, position) {
-    var lhs: Any
+abstract class BinaryOperatorAbstractNode(lhs: Node, operator: Node, rhs: Node) : Node(3, operator.position) {
+    val lhs: Any
     get() = children[0]
-    set(value) {
-        children[0] = value
-    }
 
-    var operator: Any
+    val operator: Any
     get() = children[1]
-    set(value) {
-        children[1] = value
-    }
 
-    var rhs: Any
+    val rhs: Any
     get() = children[2]
-    set(value) {
-        children[2] = value
+
+    init {
+        children[0] = lhs
+        children[1] = operator
+        children[2] = rhs
     }
 }

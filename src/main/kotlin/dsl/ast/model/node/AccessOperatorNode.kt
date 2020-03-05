@@ -1,5 +1,3 @@
 package dsl.ast.model.node
 
-import dsl.token.model.entity.TokenPosition
-
-class AccessOperatorNode(position: TokenPosition) : BinaryOperatorAbstractNode(position)
+class AccessOperatorNode(lhs: Node, operator: Node, rhs: Node) : BinaryOperatorAbstractNode(lhs, operator, rhs)

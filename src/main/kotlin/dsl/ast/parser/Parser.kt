@@ -65,7 +65,7 @@ abstract class Parser {
         }
 
         // allOf -> a b c ...
-        fun allOf(parsers: List<Parser>, createNode: (List<Node>, TokenPosition) -> Node): Parser {
+        fun allOf(parsers: List<Parser>, createNode: (List<Node>) -> Node): Parser {
             return object : Parser() {
                 override fun tryToParse(input: TokenList): ParserOutput {
                     if(parsers.isEmpty()) {
@@ -84,7 +84,7 @@ abstract class Parser {
                         nodes += output.node
                     }
 
-                    return ParserOutput.ok(createNode(nodes, nodes.first().position))
+                    return ParserOutput.ok(createNode(nodes))
                 }
 
             }
