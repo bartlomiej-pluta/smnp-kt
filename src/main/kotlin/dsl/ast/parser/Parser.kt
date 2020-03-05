@@ -91,7 +91,7 @@ abstract class Parser {
         }
 
         // leftAssociative -> left | left OP right
-        fun leftAssociativeOperator(lhsParser: Parser, allowedOperators: List<TokenType>, rhsParser: Parser, createNode: (left: Node, operator: Node, right: Node) -> Node): Parser {
+        fun leftAssociativeOperator(lhsParser: Parser, allowedOperators: List<TokenType>, rhsParser: Parser, createNode: (lhs: Node, operator: Node, rhs: Node) -> Node): Parser {
             return object : Parser() {
                 override fun tryToParse(input: TokenList): ParserOutput {
                     val opParser = terminals(allowedOperators)
