@@ -10,6 +10,7 @@ class StatementParser : Parser() {
             listOf(
                 oneOf(
                     listOf(
+                        ConditionParser(),
                         ExpressionParser(),
                         BlockParser(),
                         ReturnParser(),
