@@ -25,16 +25,13 @@ abstract class Parser {
     companion object {
 
         // a -> A
-        fun terminal(terminal: TokenType, createNode: (Token) -> Node = { TokenNode(it) }, assert: Boolean = false): Parser {
+        fun terminal(terminal: TokenType, createNode: (Token) -> Node = { TokenNode(it) }): Parser {
             return object : Parser() {
                 override fun tryToParse(input: TokenList): ParserOutput {
                     if(input.hasCurrent() && input.current.type == terminal) {
                         val token = input.current
                         input.ahead()
                         return ParserOutput.ok(createNode(token))
-                    }
-                    else if(assert) {
-                        throw RuntimeException("Expected $terminal")
                     }
 
                     return ParserOutput.fail()
@@ -43,7 +40,7 @@ abstract class Parser {
         }
 
         // oneOf -> a | b | c | ...
-        fun oneOf(parsers: List<Parser>, expectedString: String? = null, exceptionSupplier: ((TokenList) -> Exception)? = null): Parser {
+        fun oneOf(parsers: List<Parser>): Parser {
             return object : Parser() {
                 override fun tryToParse(input: TokenList): ParserOutput {
                     if(parsers.isEmpty()) {
@@ -57,14 +54,6 @@ abstract class Parser {
                         }
                     }
 
-                    if (expectedString != null) {
-                        throw RuntimeException("Expected $expectedString")
-                    }
-
-                    if (exceptionSupplier != null) {
-                        throw exceptionSupplier(input)
-                    }
-
                     return ParserOutput.fail()
                 }
             }
@@ -76,7 +65,7 @@ abstract class Parser {
         }
 
         // allOf -> a b c ...
-        fun allOf(parsers: List<Parser>, createNode: (List<Node>, TokenPosition) -> Node, exceptionSupplier: ((TokenList) -> Exception)? = null): Parser {
+        fun allOf(parsers: List<Parser>, createNode: (List<Node>, TokenPosition) -> Node): Parser {
             return object : Parser() {
                 override fun tryToParse(input: TokenList): ParserOutput {
                     if(parsers.isEmpty()) {
@@ -89,10 +78,6 @@ abstract class Parser {
                         val output = parser.parse(input)
 
                         if (output.result == ParsingResult.FAILED) {
-                            if (exceptionSupplier != null) {
-                                throw exceptionSupplier(input)
-                            }
-
                             return ParserOutput.fail()
                         }
 

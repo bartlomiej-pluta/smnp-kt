@@ -1,5 +1,5 @@
 package dsl.ast.model.node
 
-import dsl.token.model.entity.TokenPosition
+import dsl.token.model.entity.Token
 
-class BoolLiteralNode(position: TokenPosition) : AtomAbstractNode(position)
+class BoolLiteralNode(token: Token) : AtomAbstractNode(token)
