@@ -1,7 +1,5 @@
 package dsl.token.model.entity
 
-import java.lang.RuntimeException
-
 class TokenList(val tokens: List<Token>, val lines: List<String>) {
     private var cursor = 0
     private var snap = 0
@@ -10,16 +8,17 @@ class TokenList(val tokens: List<Token>, val lines: List<String>) {
         return tokens[index]
     }
 
-    fun current(): Token {
-        if(!hasCurrent()) {
-            throw RuntimeException("Cursor points to not existing token! Cursor = ${cursor}, length = ${tokens.size}")
+    val current: Token
+        get() {
+            if (!hasCurrent()) {
+                throw RuntimeException("Cursor points to not existing token! Cursor = ${cursor}, length = ${tokens.size}")
+            }
+
+            return tokens[cursor]
         }
 
-        return tokens[cursor]
-    }
-
     fun currentPos(): TokenPosition {
-        return current().position
+        return current.position
     }
 
     fun hasCurrent(): Boolean {
@@ -54,5 +53,8 @@ class TokenList(val tokens: List<Token>, val lines: List<String>) {
         cursor = 0
     }
 
-
+    override fun toString(): String {
+        val currentStr = if(hasCurrent()) "current: ${cursor} -> ${current}" else "<all tokens consumed>"
+        return "size: ${tokens.size}\n${currentStr}\nall: ${tokens}"
+    }
 }
