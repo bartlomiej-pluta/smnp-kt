@@ -10,7 +10,10 @@ class StatementParser : Parser() {
             listOf(
                 oneOf(
                     listOf(
-                        ExpressionParser()
+                        ExpressionParser(),
+                        BlockParser(),
+                        ReturnParser(),
+                        ThrowParser()
                     )
                 ),
                 optional(terminal(TokenType.SEMICOLON))

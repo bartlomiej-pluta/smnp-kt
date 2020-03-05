@@ -10,6 +10,6 @@ data class TokenPosition(val line: Int, val beginCol: Int, val endCol: Int) {
     }
 
     fun short(): String {
-        return "${line+1}:${beginCol}}"
+        return "${line+1}:${beginCol}"
     }
 }
