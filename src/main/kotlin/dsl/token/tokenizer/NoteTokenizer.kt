@@ -20,7 +20,7 @@ class NoteTokenizer : Tokenizer {
             consumedChars += 1
 
             // Note basic pitch
-            if(listOf('c', 'd', 'e', 'f', 'g', 'a', 'h').contains(input[current+consumedChars].toLowerCase())) {
+            if(listOf('c', 'd', 'e', 'f', 'g', 'a', 'h', 'b').contains(input[current+consumedChars].toLowerCase())) {
                 rawValue += input[current+consumedChars]
                 notePitch = input[current+consumedChars].toString()
                 consumedChars += 1
