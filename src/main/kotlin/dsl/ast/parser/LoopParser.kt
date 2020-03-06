@@ -11,7 +11,7 @@ class LoopParser : Parser() {
         val loopParametersParser = allOf(listOf(
             terminal(TokenType.AS),
             oneOf(listOf(
-                mapNode(IdentifierParser()) { LoopParametersNode(listOf(it), it.position) },
+                mapNode(SimpleIdentifierParser()) { LoopParametersNode(listOf(it), it.position) },
                 LoopParametersParser()
             ))
         )) { it[1] }

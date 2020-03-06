@@ -9,7 +9,7 @@ class MapEntryParser : Parser() {
     override fun tryToParse(input: TokenList): ParserOutput {
         val keyParser = oneOf(listOf(
             LiteralParser(),
-            IdentifierParser()
+            SimpleIdentifierParser()
         ))
 
         return allOf(listOf(
