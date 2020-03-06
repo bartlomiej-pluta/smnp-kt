@@ -11,8 +11,8 @@ class TermParser : Parser() {
             FactorParser(),
             listOf(TokenType.ASTERISK, TokenType.SLASH),
             FactorParser()
-        ) {
-            lhs, operator, rhs -> ProductOperatorNode(lhs, operator, rhs)
+        ) { lhs, operator, rhs ->
+            ProductOperatorNode(lhs, operator, rhs)
         }.parse(input)
     }
 }

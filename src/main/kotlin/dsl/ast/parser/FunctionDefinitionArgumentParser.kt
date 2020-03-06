@@ -5,9 +5,9 @@ import dsl.token.model.entity.TokenList
 
 class FunctionDefinitionArgumentParser : Parser() {
     override fun tryToParse(input: TokenList): ParserOutput {
-        return oneOf(listOf(
+        return oneOf(
             OptionalFunctionDefinitionArgumentParser(),
             RegularFunctionDefinitionArgumentParser()
-        )).parse(input)
+        ).parse(input)
     }
 }

@@ -8,26 +8,26 @@ import dsl.token.model.enumeration.TokenType
 
 class LoopParser : Parser() {
     override fun tryToParse(input: TokenList): ParserOutput {
-        val loopParametersParser = allOf(listOf(
+        val loopParametersParser = allOf(
             terminal(TokenType.AS),
-            oneOf(listOf(
+            oneOf(
                 mapNode(SimpleIdentifierParser()) { LoopParametersNode(listOf(it), it.position) },
                 LoopParametersParser()
-            ))
-        )) { it[1] }
+            )
+        ) { it[1] }
 
-        val loopFilterParser = allOf(listOf(
+        val loopFilterParser = allOf(
             terminal(TokenType.PERCENT),
             assert(SubexpressionParser(), "filter as bool expression")
-        )) { it[1] }
+        ) { it[1] }
 
-        return allOf(listOf(
+        return allOf(
             SubexpressionParser(),
             optional(loopParametersParser),
             terminal(TokenType.CARET),
             StatementParser(),
             optional(loopFilterParser)
-        )) {
+        ) {
             LoopNode(it[0], it[1], it[2], it[3], it[4])
         }.parse(input)
     }

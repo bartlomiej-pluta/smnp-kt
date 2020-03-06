@@ -7,14 +7,14 @@ import dsl.token.model.enumeration.TokenType
 
 class RegularFunctionDefinitionArgumentParser : Parser() {
     override fun tryToParse(input: TokenList): ParserOutput {
-        return allOf(listOf(
+        return allOf(
             optional(terminal(TokenType.DOTS)),
             SimpleIdentifierParser(),
-            optional(allOf(listOf(
+            optional(allOf(
                 terminal(TokenType.COLON),
                 TypeParser()
-            )){ it[1] })
-        )) {
+            ) { it[1] })
+        ) {
             RegularFunctionDefinitionArgumentNode(it[1], it[2], it[0])
         }.parse(input)
     }

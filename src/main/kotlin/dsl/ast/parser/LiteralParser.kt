@@ -5,12 +5,12 @@ import dsl.token.model.entity.TokenList
 
 class LiteralParser : Parser() {
     override fun tryToParse(input: TokenList): ParserOutput {
-        return oneOf(listOf(
+        return oneOf(
             BoolLiteralParser(),
             FloatLiteralParser(),
             IntegerLiteralParser(),
             NoteLiteralParser(),
             StringLiteralParser()
-        )).parse(input)
+        ).parse(input)
     }
 }

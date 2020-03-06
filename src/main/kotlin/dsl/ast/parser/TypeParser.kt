@@ -7,10 +7,10 @@ import dsl.token.model.entity.TokenList
 
 class TypeParser : Parser() {
     override fun tryToParse(input: TokenList): ParserOutput {
-        return allOf(listOf(
+        return allOf(
             SimpleIdentifierParser(),
-            optional(repeat(TypeSpecifierParser()) { list, tokenPosition -> TypeSpecifiersNode(list,  tokenPosition) })
-        )) {
+            optional(repeat(TypeSpecifierParser()) { list, tokenPosition -> TypeSpecifiersNode(list, tokenPosition) })
+        ) {
             TypeNode(it[0], it[1])
         }.parse(input)
     }

@@ -8,17 +8,17 @@ import dsl.token.model.enumeration.TokenType
 
 class ConditionParser : Parser() {
     override fun tryToParse(input: TokenList): ParserOutput {
-        val ifStatementParser = allOf(listOf(
+        val ifStatementParser = allOf(
             terminal(TokenType.IF),
             terminal(TokenType.OPEN_PAREN),
             SubexpressionParser(),
             terminal(TokenType.CLOSE_PAREN),
             StatementParser()
-        )) {
+        ) {
             ConditionNode(it[0], it[2], it[4], Node.NONE, Node.NONE)
         }
 
-        val ifElseStatementParser = allOf(listOf(
+        val ifElseStatementParser = allOf(
             terminal(TokenType.IF),
             terminal(TokenType.OPEN_PAREN),
             SubexpressionParser(),
@@ -26,13 +26,13 @@ class ConditionParser : Parser() {
             StatementParser(),
             terminal(TokenType.ELSE),
             StatementParser()
-        )) {
+        ) {
             ConditionNode(it[0], it[2], it[4], it[5], it[6])
         }
 
-        return oneOf(listOf(
+        return oneOf(
             ifElseStatementParser,
             ifStatementParser
-        )).parse(input)
+        ).parse(input)
     }
 }

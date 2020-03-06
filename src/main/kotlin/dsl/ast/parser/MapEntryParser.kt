@@ -7,16 +7,16 @@ import dsl.token.model.enumeration.TokenType
 
 class MapEntryParser : Parser() {
     override fun tryToParse(input: TokenList): ParserOutput {
-        val keyParser = oneOf(listOf(
+        val keyParser = oneOf(
             LiteralParser(),
             SimpleIdentifierParser()
-        ))
+        )
 
-        return allOf(listOf(
+        return allOf(
             keyParser,
             terminal(TokenType.ARROW),
             assert(SubexpressionParser(), "expression")
-        )) {
+        ) {
             MapEntryNode(it[0], it[1], it[2])
         }.parse(input)
     }

@@ -7,23 +7,19 @@ import dsl.token.model.enumeration.TokenType
 class AtomParser : Parser() {
     override fun tryToParse(input: TokenList): ParserOutput {
         val parenthesesParser = allOf(
-            listOf(
-                terminal(TokenType.OPEN_PAREN),
-                ExpressionParser(),
-                terminal(TokenType.CLOSE_PAREN)
-            )
+            terminal(TokenType.OPEN_PAREN),
+            ExpressionParser(),
+            terminal(TokenType.CLOSE_PAREN)
         ) {
             it[1]
         }
 
         val literalParser = oneOf(
-            listOf(
-                parenthesesParser,
-                ComplexIdentifierParser(),
-                ListParser(),
-                LiteralParser(),
-                MapParser()
-            )
+            parenthesesParser,
+            ComplexIdentifierParser(),
+            ListParser(),
+            LiteralParser(),
+            MapParser()
         )
 
         return literalParser.parse(input)

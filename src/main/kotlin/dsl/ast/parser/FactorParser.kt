@@ -16,16 +16,16 @@ class FactorParser : Parser() {
             PowerOperatorNode(lhs, operator, rhs)
         }
 
-        val notOperatorParser = allOf(listOf(
+        val notOperatorParser = allOf(
             terminal(TokenType.NOT),
             factorParser
-        )) {
+        ) {
             NotOperatorNode(it[0], it[1])
         }
 
-        return oneOf(listOf(
+        return oneOf(
             notOperatorParser,
             factorParser
-        )).parse(input)
+        ).parse(input)
     }
 }

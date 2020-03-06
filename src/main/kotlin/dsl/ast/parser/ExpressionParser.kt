@@ -5,9 +5,9 @@ import dsl.token.model.entity.TokenList
 
 class ExpressionParser : Parser() {
     override fun tryToParse(input: TokenList): ParserOutput {
-        return oneOf(listOf(
+        return oneOf(
             LoopParser(),
             SubexpressionParser()
-        )).parse(input)
+        ).parse(input)
     }
 }

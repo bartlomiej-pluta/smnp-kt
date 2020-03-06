@@ -13,29 +13,28 @@ abstract class AbstractIterableParser(
     private val createNode: (List<Node>, TokenPosition) -> Node
 ) : Parser() {
     override fun tryToParse(input: TokenList): ParserOutput {
-        val emptyIterableParser = allOf(listOf(terminal(beginTokenType), terminal(endTokenType))) { createNode(listOf(), it[0].position) }
+        val emptyIterableParser = allOf(
+            terminal(beginTokenType),
+            terminal(endTokenType)
+        ) { createNode(listOf(), it[0].position) }
 
         val nonEmptyIterableParser = allOf(
-            listOf(terminal(beginTokenType),
-                allOf(listOf(
-                    itemParser,
-                    optional(repeat(allOf(
-                        listOf(
-                            terminal(TokenType.COMMA),
-                            itemParser
-                        )
-                    ) { it[1] }) { list, position -> object : Node(list, position) {} }
-                ))) { list ->
-                    object : Node(listOf(list[0]) + list[1].children, TokenPosition.NONE) {} },
-                terminal(endTokenType)
-            )
+            terminal(beginTokenType),
+            allOf(
+                itemParser,
+                optional(repeat(allOf(
+                    terminal(TokenType.COMMA),
+                    itemParser
+                ) { it[1] }) { list, position -> object : Node(list, position) {} }
+                )) { list ->
+                object : Node(listOf(list[0]) + list[1].children, TokenPosition.NONE) {}
+            },
+            terminal(endTokenType)
         ) { createNode(it[1].children.toList(), it[0].position) }
 
         return oneOf(
-            listOf(
-                emptyIterableParser,
-                nonEmptyIterableParser
-            )
+            emptyIterableParser,
+            nonEmptyIterableParser
         ).parse(input)
     }
 

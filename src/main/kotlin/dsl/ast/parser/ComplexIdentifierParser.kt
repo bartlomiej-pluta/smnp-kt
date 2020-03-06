@@ -5,10 +5,10 @@ import dsl.token.model.entity.TokenList
 
 class ComplexIdentifierParser : Parser() {
     override fun tryToParse(input: TokenList): ParserOutput {
-        return oneOf(listOf(
+        return oneOf(
             AssignmentOperatorParser(),
             FunctionCallParser(),
             SimpleIdentifierParser()
-        )).parse(input)
+        ).parse(input)
     }
 }

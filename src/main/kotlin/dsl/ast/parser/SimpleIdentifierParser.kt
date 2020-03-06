@@ -9,8 +9,8 @@ class SimpleIdentifierParser : Parser() {
     override fun tryToParse(input: TokenList): ParserOutput {
         val identifierParser = terminal(TokenType.IDENTIFIER) { IdentifierNode(it) }
 
-        return oneOf(listOf(
+        return oneOf(
             identifierParser
-        )).parse(input)
+        ).parse(input)
     }
 }

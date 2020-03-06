@@ -7,11 +7,11 @@ import dsl.token.model.enumeration.TokenType
 
 class AssignmentOperatorParser : Parser() {
     override fun tryToParse(input: TokenList): ParserOutput {
-        return allOf(listOf(
+        return allOf(
             SimpleIdentifierParser(),
             terminal(TokenType.ASSIGN),
             assert(ExpressionParser(), "expression")
-        )) {
+        ) {
             AssignmentOperatorNode(it[0], it[1], it[2])
         }.parse(input)
     }
