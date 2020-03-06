@@ -1,10 +1,10 @@
 package dsl.ast.model.node
 
 abstract class UnaryOperatorAbstractNode(operator: Node, operand: Node) : Node(2, operator.position) {
-    val operator: Any
+    val operator: Node
     get() = children[0]
 
-    val operand: Any
+    val operand: Node
     get() = children[1]
 
     init {

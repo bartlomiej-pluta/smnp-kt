@@ -1,13 +1,13 @@
 package dsl.ast.model.node
 
 class ConditionNode(trueBranchToken: Node, condition: Node, trueBranch: Node, falseBranchToken: Node, falseBranch: Node) : Node(3, trueBranchToken.position) {
-    val condition: Any
+    val condition: Node
     get() = children[0]
 
-    val trueBranch: Any
+    val trueBranch: Node
     get() = children[1]
 
-    val falseBranch: Any
+    val falseBranch: Node
     get() = children[2]
 
     init {
