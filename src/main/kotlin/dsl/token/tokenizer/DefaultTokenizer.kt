@@ -31,6 +31,7 @@ class DefaultTokenizer : Tokenizer {
         default(TokenType.ASTERISK),
         default(TokenType.PERCENT),
         default(TokenType.ASSIGN),
+        default(TokenType.COLON),
         default(TokenType.COMMA),
         default(TokenType.SLASH),
         default(TokenType.MINUS),

@@ -17,6 +17,7 @@ enum class TokenType(val token: String) {
     PERCENT("%"),
     ASSIGN("="),
     ARROW("->"),
+    COLON(":"),
     COMMA(","),
     SLASH("/"),
     MINUS("-"),
