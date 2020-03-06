@@ -6,8 +6,6 @@ import dsl.token.model.entity.TokenList
 import dsl.token.model.entity.TokenPosition
 import dsl.token.model.enumeration.TokenType
 
-class AbstractIterableNode(beginNode: Node, items: List<Node>) : Node(items, beginNode.position)
-
 abstract class AbstractIterableParser(
     private val beginTokenType: TokenType,
     private val itemParser: Parser,

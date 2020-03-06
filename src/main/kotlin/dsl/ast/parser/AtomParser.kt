@@ -23,7 +23,8 @@ class AtomParser : Parser() {
                 FloatLiteralParser(),
                 IntegerLiteralParser(),
                 NoteLiteralParser(),
-                StringLiteralParser()
+                StringLiteralParser(),
+                ListParser()
             )
         )
 
