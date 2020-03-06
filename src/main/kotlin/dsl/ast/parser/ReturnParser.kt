@@ -9,7 +9,7 @@ class ReturnParser : Parser() {
     override fun tryToParse(input: TokenList): ParserOutput {
         return allOf(
             terminal(TokenType.RETURN),
-            optional(SubexpressionParser())
+            optional(ExpressionParser())
         ) {
             ReturnNode(it[1])
         }.parse(input)
