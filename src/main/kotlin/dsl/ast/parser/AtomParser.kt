@@ -19,12 +19,10 @@ class AtomParser : Parser() {
         val literalParser = oneOf(
             listOf(
                 parenthesesParser,
-                BoolLiteralParser(),
-                FloatLiteralParser(),
-                IntegerLiteralParser(),
-                NoteLiteralParser(),
-                StringLiteralParser(),
-                ListParser()
+                IdentifierParser(),
+                ListParser(),
+                LiteralParser(),
+                MapParser()
             )
         )
 
