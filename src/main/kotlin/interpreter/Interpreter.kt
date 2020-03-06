@@ -8,9 +8,9 @@ class Interpreter {
     fun run(code: String) {
         val tokenizer = DefaultTokenizer()
         val parser = RootParser()
+
         val lines = code.split("\n")
         val tokens = tokenizer.tokenize(lines)
-
         val ast = parser.parse(tokens)
 
         ast.node.pretty()
@@ -19,8 +19,13 @@ class Interpreter {
 
     fun run(file: File) {
         val tokenizer = DefaultTokenizer()
+        val parser = RootParser()
+
         val lines = file.readLines()
         val tokens = tokenizer.tokenize(lines)
+        val ast = parser.parse(tokens)
+
+        ast.node.pretty()
         println(tokens)
     }
 }
