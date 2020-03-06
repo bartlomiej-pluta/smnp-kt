@@ -11,7 +11,7 @@ class ConditionParser : Parser() {
         val ifStatementParser = allOf(listOf(
             terminal(TokenType.IF),
             terminal(TokenType.OPEN_PAREN),
-            ExpressionParser(),
+            SubexpressionParser(),
             terminal(TokenType.CLOSE_PAREN),
             StatementParser()
         )) {
@@ -21,7 +21,7 @@ class ConditionParser : Parser() {
         val ifElseStatementParser = allOf(listOf(
             terminal(TokenType.IF),
             terminal(TokenType.OPEN_PAREN),
-            ExpressionParser(),
+            SubexpressionParser(),
             terminal(TokenType.CLOSE_PAREN),
             StatementParser(),
             terminal(TokenType.ELSE),

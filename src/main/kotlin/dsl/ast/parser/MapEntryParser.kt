@@ -15,7 +15,7 @@ class MapEntryParser : Parser() {
         return allOf(listOf(
             keyParser,
             terminal(TokenType.ARROW),
-            assert(ExpressionParser(), "expression")
+            assert(SubexpressionParser(), "expression")
         )) {
             MapEntryNode(it[0], it[1], it[2])
         }.parse(input)

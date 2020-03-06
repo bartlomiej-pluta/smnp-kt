@@ -9,7 +9,7 @@ class ThrowParser : Parser() {
     override fun tryToParse(input: TokenList): ParserOutput {
         return allOf(listOf(
             terminal(TokenType.THROW),
-            optional(ExpressionParser())
+            optional(SubexpressionParser())
         )) {
             ThrowNode(it[1])
         }.parse(input)

@@ -184,5 +184,14 @@ abstract class Parser {
                 }
             }
         }
+
+        fun mapNode(parser: Parser, mapper: (Node) -> Node) : Parser {
+            return object : Parser() {
+                override fun tryToParse(input: TokenList): ParserOutput {
+                    return parser.parse(input).map(mapper)
+                }
+
+            }
+        }
     }
 }

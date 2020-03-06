@@ -5,11 +5,7 @@ import dsl.ast.model.node.Node
 
 data class ParserOutput private constructor(val result: ParsingResult, val node: Node) {
     fun map(mapper: (Node) -> Node): ParserOutput {
-        if(result == ParsingResult.FAILED) {
-            throw RuntimeException("Mapping operation is not allowed for failed parsing output")
-        }
-
-        return ok(mapper(node))
+        return if(result == ParsingResult.OK) ok(mapper(node)) else fail()
     }
 
     companion object {
