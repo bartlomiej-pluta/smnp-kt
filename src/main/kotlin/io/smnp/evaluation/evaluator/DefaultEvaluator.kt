@@ -18,7 +18,8 @@ class DefaultEvaluator : Evaluator() {
             MapEvaluator(), 
 
             MinusOperatorEvaluator(), 
-            NotOperatorEvaluator()
+            NotOperatorEvaluator(),
+            PowerOperatorEvaluator()
         ).evaluate(node, environment)
     }
 }

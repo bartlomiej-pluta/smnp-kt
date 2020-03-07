@@ -22,6 +22,10 @@ enum class DataType(val kotlinType: KClass<out Any>?) {
         return kotlinType.isInstance(value)
     }
 
+    fun isNumeric(): Boolean {
+        return this == INT || this == FLOAT
+    }
+
     override fun toString(): String {
         return super.toString().toLowerCase()
     }
