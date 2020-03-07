@@ -20,7 +20,8 @@ class DefaultEvaluator : Evaluator() {
             MinusOperatorEvaluator(), 
             NotOperatorEvaluator(),
             PowerOperatorEvaluator(),
-            ProductOperatorEvaluator()
+            ProductOperatorEvaluator(),
+            SumOperatorEvaluator()
         ).evaluate(node, environment)
     }
 }
