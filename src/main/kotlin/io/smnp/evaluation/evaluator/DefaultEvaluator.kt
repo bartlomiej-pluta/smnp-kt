@@ -15,7 +15,9 @@ class DefaultEvaluator : Evaluator {
             forward(BoolLiteralEvaluator(), BoolLiteralNode::class),
             forward(NoteLiteralEvaluator(), NoteLiteralNode::class),
             forward(ListEvaluator(), ListNode::class),
-            forward(MapEvaluator(), MapNode::class)
+            forward(MapEvaluator(), MapNode::class),
+
+            forward(MinusOperatorEvaluator(), MinusOperatorNode::class)
         ).evaluate(node, environment)
     }
 }
