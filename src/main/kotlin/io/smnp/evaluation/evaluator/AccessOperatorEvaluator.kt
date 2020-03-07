@@ -12,7 +12,7 @@ class AccessOperatorEvaluator : Evaluator() {
     override fun supportedNodes() = listOf(AccessOperatorNode::class)
 
     override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
-        val evaluator = DefaultEvaluator()
+        val evaluator = ExpressionEvaluator()
         val (lhsNode, _, rhsNode) = (node as AccessOperatorNode)
         val lhs = evaluator.evaluate(lhsNode, environment).value!!
 

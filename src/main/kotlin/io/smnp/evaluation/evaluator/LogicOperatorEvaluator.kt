@@ -15,7 +15,7 @@ class LogicOperatorEvaluator : Evaluator() {
     override fun supportedNodes() = listOf(LogicOperatorNode::class)
 
     override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
-        val evaluator = DefaultEvaluator()
+        val evaluator = ExpressionEvaluator()
         val (lhsNode, opNode, rhsNode) = (node as LogicOperatorNode)
         val lhs = evaluator.evaluate(lhsNode, environment).value!!
         val rhs = evaluator.evaluate(rhsNode, environment).value!!

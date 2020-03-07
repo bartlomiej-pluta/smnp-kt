@@ -11,7 +11,7 @@ class MapEvaluator : Evaluator() {
     override fun supportedNodes() = listOf(MapNode::class)
 
     override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
-        val atomEvaluator = DefaultEvaluator()
+        val atomEvaluator = ExpressionEvaluator()
         val value = (node as MapNode).items
             .map { it as MapEntryNode }
             .map { atomEvaluator.evaluate(it.key, environment).value!! to atomEvaluator.evaluate(it.value, environment).value!! }

@@ -13,7 +13,7 @@ class PowerOperatorEvaluator : Evaluator() {
 
     override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
         val (lhsNode, _, rhsNode) = (node as PowerOperatorNode)
-        val evaluator = DefaultEvaluator()
+        val evaluator = ExpressionEvaluator()
         val lhs = evaluator.evaluate(lhsNode, environment).value!!
         val rhs = evaluator.evaluate(rhsNode, environment).value!!
 

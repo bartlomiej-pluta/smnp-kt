@@ -10,7 +10,7 @@ class ListEvaluator : Evaluator() {
     override fun supportedNodes() = listOf(ListNode::class)
 
     override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
-        val atomEvaluator = DefaultEvaluator()
+        val atomEvaluator = ExpressionEvaluator()
         val items = (node as ListNode).items
             .map { atomEvaluator.evaluate(it, environment) }
             .map { it.value!! }

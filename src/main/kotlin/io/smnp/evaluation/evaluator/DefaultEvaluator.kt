@@ -9,22 +9,7 @@ class DefaultEvaluator : Evaluator() {
 
     override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
         return oneOf(
-            IntegerLiteralEvaluator(), 
-            FloatLiteralEvaluator(), 
-            StringLiteralEvaluator(), 
-            BoolLiteralEvaluator(), 
-            NoteLiteralEvaluator(), 
-            ListEvaluator(), 
-            MapEvaluator(), 
-
-            MinusOperatorEvaluator(), 
-            NotOperatorEvaluator(),
-            PowerOperatorEvaluator(),
-            ProductOperatorEvaluator(),
-            SumOperatorEvaluator(),
-            AccessOperatorEvaluator(),
-            LogicOperatorEvaluator(),
-            RelationOperatorEvaluator()
+            ExpressionEvaluator()
         ).evaluate(node, environment)
     }
 }

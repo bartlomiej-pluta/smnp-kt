@@ -12,7 +12,7 @@ class MinusOperatorEvaluator : Evaluator() {
     override fun supportedNodes() = listOf(MinusOperatorNode::class)
 
     override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
-        val evaluator = DefaultEvaluator()
+        val evaluator = ExpressionEvaluator()
         val (_, operandNode) = (node as MinusOperatorNode)
         val operand = evaluator.evaluate(operandNode, environment)
 

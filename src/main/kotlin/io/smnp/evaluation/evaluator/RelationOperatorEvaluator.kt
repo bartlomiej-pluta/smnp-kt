@@ -14,7 +14,7 @@ class RelationOperatorEvaluator : Evaluator() {
     override fun supportedNodes() = listOf(RelationOperatorNode::class)
 
     override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
-        val evaluator = DefaultEvaluator()
+        val evaluator = ExpressionEvaluator()
         val (lhsNode, opNode, rhsNode) = (node as RelationOperatorNode)
         val lhs = evaluator.evaluate(lhsNode, environment).value!!
         val rhs = evaluator.evaluate(rhsNode, environment).value!!
