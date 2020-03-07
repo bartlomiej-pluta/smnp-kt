@@ -22,7 +22,8 @@ class DefaultEvaluator : Evaluator() {
             PowerOperatorEvaluator(),
             ProductOperatorEvaluator(),
             SumOperatorEvaluator(),
-            AccessOperatorEvaluator()
+            AccessOperatorEvaluator(),
+            LogicOperatorEvaluator()
         ).evaluate(node, environment)
     }
 }
