@@ -1,6 +1,5 @@
 package io.smnp.evaluation.evaluator
 
-import io.smnp.data.enumeration.DataType
 import io.smnp.data.model.Value
 import io.smnp.dsl.ast.model.node.Node
 import io.smnp.dsl.ast.model.node.SumOperatorNode
@@ -10,6 +9,7 @@ import io.smnp.error.EvaluationException
 import io.smnp.error.ShouldNeverReachThisLineException
 import io.smnp.evaluation.environment.Environment
 import io.smnp.evaluation.model.entity.EvaluatorOutput
+import io.smnp.evaluation.util.NumberUnification.unify
 
 class SumOperatorEvaluator : Evaluator() {
     override fun supportedNodes() = listOf(SumOperatorNode::class)
@@ -26,25 +26,9 @@ class SumOperatorEvaluator : Evaluator() {
         }
 
         return EvaluatorOutput.value(when(operator) {
-            TokenType.PLUS -> sum(lhs, rhs)
-            TokenType.MINUS -> difference(lhs, rhs)
+            TokenType.PLUS -> unify(lhs, rhs, intConsumer = { (l, r) -> Value.int(l + r) }, floatConsumer = { (l, r) -> Value.float(l + r) })
+            TokenType.MINUS -> unify(lhs, rhs, intConsumer = { (l, r) -> Value.int(l - r) }, floatConsumer = { (l, r) -> Value.float(l - r) })
             else -> throw ShouldNeverReachThisLineException()
         })
-    }
-
-    private fun sum(lhs: Value, rhs: Value): Value {
-        if(listOf(lhs.type, rhs.type).contains(DataType.FLOAT)) {
-            return Value.float((lhs.value as Number).toFloat() + (rhs.value as Number).toFloat())
-        }
-
-        return Value.int((lhs.value as Int) + (rhs.value as Int))
-    }
-
-    private fun difference(lhs: Value, rhs: Value): Value {
-        if(listOf(lhs.type, rhs.type).contains(DataType.FLOAT)) {
-            return Value.float((lhs.value as Number).toFloat() - (rhs.value as Number).toFloat())
-        }
-
-        return Value.int((lhs.value as Int) - (rhs.value as Int))
     }
 }

@@ -1,6 +1,5 @@
 package io.smnp.evaluation.evaluator
 
-import io.smnp.data.enumeration.DataType
 import io.smnp.data.model.Value
 import io.smnp.dsl.ast.model.node.Node
 import io.smnp.dsl.ast.model.node.ProductOperatorNode
@@ -10,6 +9,7 @@ import io.smnp.error.EvaluationException
 import io.smnp.error.ShouldNeverReachThisLineException
 import io.smnp.evaluation.environment.Environment
 import io.smnp.evaluation.model.entity.EvaluatorOutput
+import io.smnp.evaluation.util.NumberUnification.unify
 
 class ProductOperatorEvaluator : Evaluator() {
     override fun supportedNodes() = listOf(ProductOperatorNode::class)
@@ -27,26 +27,10 @@ class ProductOperatorEvaluator : Evaluator() {
 
         return EvaluatorOutput.value(
             when (operator) {
-                TokenType.ASTERISK -> product(lhs, rhs)
-                TokenType.SLASH -> quotient(lhs, rhs)
+                TokenType.ASTERISK -> unify(lhs, rhs, intConsumer = { (l, r) -> Value.int(l * r) }, floatConsumer = { (l, r) -> Value.float(l * r) })
+                TokenType.SLASH -> unify(lhs, rhs, intConsumer = { (l, r) -> Value.int(l / r) }, floatConsumer = { (l, r) -> Value.float(l / r) })
                 else -> throw ShouldNeverReachThisLineException()
             }
         )
-    }
-
-    private fun product(lhs: Value, rhs: Value): Value {
-        if(listOf(lhs.type, rhs.type).contains(DataType.FLOAT)) {
-            return Value.float((lhs.value as Number).toFloat() * (rhs.value as Number).toFloat())
-        }
-
-        return Value.int((lhs.value as Int) * (rhs.value as Int))
-    }
-
-    private fun quotient(lhs: Value, rhs: Value): Value {
-        if(listOf(lhs.type, rhs.type).contains(DataType.FLOAT)) {
-            return Value.float((lhs.value as Number).toFloat() / (rhs.value as Number).toFloat())
-        }
-
-        return Value.int((lhs.value as Int) / (rhs.value as Int))
     }
 }
