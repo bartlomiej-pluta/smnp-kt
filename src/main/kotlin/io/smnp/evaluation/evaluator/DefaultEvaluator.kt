@@ -9,6 +9,7 @@ class DefaultEvaluator : Evaluator() {
 
     override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
         return oneOf(
+            ConditionEvaluator(),
             BlockEvaluator(),
             ThrowEvaluator(),
             ExpressionEvaluator()
