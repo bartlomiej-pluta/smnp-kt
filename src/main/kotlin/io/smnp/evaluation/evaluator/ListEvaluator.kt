@@ -8,7 +8,7 @@ import io.smnp.evaluation.model.entity.EvaluatorOutput
 
 class ListEvaluator : Evaluator {
     override fun evaluate(node: Node, environment: Environment): EvaluatorOutput {
-        val atomEvaluator = RootEvaluator()
+        val atomEvaluator = DefaultEvaluator()
         val items = (node as ListNode).items
             .map { atomEvaluator.evaluate(it, environment) }
             .map { it.value!! }

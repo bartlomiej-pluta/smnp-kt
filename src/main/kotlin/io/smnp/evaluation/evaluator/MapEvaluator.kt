@@ -9,7 +9,7 @@ import io.smnp.evaluation.model.entity.EvaluatorOutput
 
 class MapEvaluator : Evaluator {
     override fun evaluate(node: Node, environment: Environment): EvaluatorOutput {
-        val atomEvaluator = RootEvaluator()
+        val atomEvaluator = DefaultEvaluator()
         val value = (node as MapNode).items
             .map { it as MapEntryNode }
             .map { atomEvaluator.evaluate(it.key, environment).value!! to atomEvaluator.evaluate(it.value, environment).value!! }

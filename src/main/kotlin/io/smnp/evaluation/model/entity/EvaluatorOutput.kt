@@ -4,6 +4,11 @@ import io.smnp.data.model.Value
 import io.smnp.evaluation.model.enumeration.EvaluationResult
 
 class EvaluatorOutput private constructor(val result: EvaluationResult, val value: Value?) {
+
+    override fun toString(): String {
+        return "${result.name.toLowerCase()}(${value ?: ""})"
+    }
+
     companion object {
         fun ok(): EvaluatorOutput {
             return EvaluatorOutput(EvaluationResult.OK, null)
