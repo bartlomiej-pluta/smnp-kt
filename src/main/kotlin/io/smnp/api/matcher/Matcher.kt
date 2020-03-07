@@ -1,7 +1,7 @@
-package io.smnp.data.signature
+package io.smnp.api.matcher
 
-import io.smnp.data.enumeration.DataType
-import io.smnp.data.model.Value
+import io.smnp.api.enumeration.DataType
+import io.smnp.api.model.Value
 
 class Matcher(val type: DataType?, private val matcher: (Value) -> Boolean, private val string: String, val optional: Boolean = false) {
 
@@ -32,7 +32,12 @@ class Matcher(val type: DataType?, private val matcher: (Value) -> Boolean, priv
 
     companion object {
         fun optional(matcher: Matcher): Matcher {
-            return Matcher(matcher.type, matcher.matcher, "${matcher.string}?", true)
+            return Matcher(
+                matcher.type,
+                matcher.matcher,
+                "${matcher.string}?",
+                true
+            )
         }
 
         fun mapOfMatchers(keyMatchers: List<Matcher>, valueMatchers: List<Matcher>): Matcher {
@@ -92,7 +97,11 @@ class Matcher(val type: DataType?, private val matcher: (Value) -> Boolean, priv
         }
 
         fun ofTypes(vararg types: DataType): Matcher {
-            return Matcher(null, { it.type in types }, "<${types.joinToString(", ") { it.name.toLowerCase() }}>")
+            return Matcher(
+                null,
+                { it.type in types },
+                "<${types.joinToString(", ") { it.name.toLowerCase() }}>"
+            )
         }
 
         fun ofType(type: DataType): Matcher {

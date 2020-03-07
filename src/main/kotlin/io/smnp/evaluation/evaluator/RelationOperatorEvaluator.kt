@@ -1,12 +1,12 @@
 package io.smnp.evaluation.evaluator
 
-import io.smnp.data.model.Value
+import io.smnp.api.model.Value
 import io.smnp.dsl.ast.model.node.Node
 import io.smnp.dsl.ast.model.node.RelationOperatorNode
 import io.smnp.dsl.ast.model.node.TokenNode
 import io.smnp.error.EvaluationException
 import io.smnp.error.ShouldNeverReachThisLineException
-import io.smnp.evaluation.environment.Environment
+import io.smnp.api.environment.Environment
 import io.smnp.evaluation.model.entity.EvaluatorOutput
 import io.smnp.evaluation.util.NumberUnification.unify
 

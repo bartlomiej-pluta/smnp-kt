@@ -2,7 +2,7 @@ package io.smnp.evaluation.evaluator
 
 import io.smnp.dsl.ast.model.node.BlockNode
 import io.smnp.dsl.ast.model.node.Node
-import io.smnp.evaluation.environment.Environment
+import io.smnp.api.environment.Environment
 import io.smnp.evaluation.model.entity.EvaluatorOutput
 import io.smnp.evaluation.model.enumeration.EvaluationResult
 

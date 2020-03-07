@@ -5,7 +5,7 @@ import io.smnp.dsl.ast.model.node.FunctionCallNode
 import io.smnp.dsl.ast.model.node.IdentifierNode
 import io.smnp.dsl.ast.model.node.Node
 import io.smnp.error.EvaluationException
-import io.smnp.evaluation.environment.Environment
+import io.smnp.api.environment.Environment
 import io.smnp.evaluation.model.entity.EvaluatorOutput
 
 class AccessOperatorEvaluator : Evaluator() {

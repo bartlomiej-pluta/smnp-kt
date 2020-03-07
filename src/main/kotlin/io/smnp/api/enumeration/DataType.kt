@@ -1,4 +1,4 @@
-package io.smnp.data.enumeration
+package io.smnp.api.enumeration
 
 import io.smnp.data.entity.Note
 import kotlin.reflect.KClass

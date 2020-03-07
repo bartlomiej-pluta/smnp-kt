@@ -1,7 +1,7 @@
 package io.smnp.evaluation.util
 
-import io.smnp.data.enumeration.DataType
-import io.smnp.data.model.Value
+import io.smnp.api.enumeration.DataType
+import io.smnp.api.model.Value
 
 object NumberUnification {
     fun unify(vararg numbers: Value, int: (List<Int>) -> Value, float: (List<Float>) -> Value): Value {

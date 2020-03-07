@@ -1,11 +1,11 @@
 package io.smnp.evaluation.evaluator
 
-import io.smnp.data.enumeration.DataType
+import io.smnp.api.enumeration.DataType
 import io.smnp.dsl.ast.model.node.ConditionNode
 import io.smnp.dsl.ast.model.node.Node
 import io.smnp.dsl.ast.model.node.NoneNode
 import io.smnp.error.EvaluationException
-import io.smnp.evaluation.environment.Environment
+import io.smnp.api.environment.Environment
 import io.smnp.evaluation.model.entity.EvaluatorOutput
 
 class ConditionEvaluator : Evaluator() {

@@ -3,7 +3,7 @@ package io.smnp.evaluation.evaluator
 import io.smnp.dsl.ast.model.node.Node
 import io.smnp.dsl.ast.model.node.ThrowNode
 import io.smnp.error.CustomException
-import io.smnp.evaluation.environment.Environment
+import io.smnp.api.environment.Environment
 import io.smnp.evaluation.model.entity.EvaluatorOutput
 
 class ThrowEvaluator : Evaluator() {

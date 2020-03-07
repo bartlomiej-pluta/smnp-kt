@@ -1,14 +1,14 @@
 package io.smnp.evaluation.evaluator
 
-import io.smnp.data.enumeration.DataType
-import io.smnp.data.model.Value
+import io.smnp.api.enumeration.DataType
+import io.smnp.api.model.Value
 import io.smnp.dsl.ast.model.node.LogicOperatorNode
 import io.smnp.dsl.ast.model.node.Node
 import io.smnp.dsl.ast.model.node.TokenNode
 import io.smnp.dsl.token.model.enumeration.TokenType
 import io.smnp.error.EvaluationException
 import io.smnp.error.ShouldNeverReachThisLineException
-import io.smnp.evaluation.environment.Environment
+import io.smnp.api.environment.Environment
 import io.smnp.evaluation.model.entity.EvaluatorOutput
 
 class LogicOperatorEvaluator : Evaluator() {

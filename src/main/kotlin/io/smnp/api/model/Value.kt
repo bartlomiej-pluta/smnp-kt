@@ -1,7 +1,7 @@
-package io.smnp.data.model
+package io.smnp.api.model
 
 import io.smnp.data.entity.Note
-import io.smnp.data.enumeration.DataType
+import io.smnp.api.enumeration.DataType
 import io.smnp.error.ShouldNeverReachThisLineException
 
 class Value private constructor(val type: DataType, val value: Any?, val properties: Map<String, Value> = emptyMap()) {
@@ -33,19 +33,22 @@ class Value private constructor(val type: DataType, val value: Any?, val propert
         }
 
         fun string(value: String): Value {
-            return Value(DataType.STRING, value, hashMapOf(
+            return Value(
+                DataType.STRING, value, hashMapOf(
                 Pair("length", int(value.length))
             ))
         }
 
         fun list(value: List<Value>): Value {
-            return Value(DataType.LIST, value, hashMapOf(
+            return Value(
+                DataType.LIST, value, hashMapOf(
                 Pair("size", int(value.size))
             ))
         }
 
         fun map(value: Map<Value, Value>): Value {
-            return Value(DataType.MAP, value, hashMapOf(
+            return Value(
+                DataType.MAP, value, hashMapOf(
                 Pair("size", int(value.size)),
                 Pair("keys", list(value.keys.toList())),
                 Pair("values", list(value.values.toList()))
@@ -53,7 +56,8 @@ class Value private constructor(val type: DataType, val value: Any?, val propert
         }
 
         fun note(value: Note): Value {
-            return Value(DataType.NOTE, value, hashMapOf(
+            return Value(
+                DataType.NOTE, value, hashMapOf(
                 Pair("pitch", string(value.pitch.toString())),
                 Pair("octave", int(value.octave)),
                 Pair("duration", int(value.duration)),

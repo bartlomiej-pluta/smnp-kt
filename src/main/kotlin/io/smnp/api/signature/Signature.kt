@@ -1,6 +1,8 @@
-package io.smnp.data.signature
+package io.smnp.api.signature
 
-import io.smnp.data.model.Value
+import io.smnp.api.matcher.Matcher
+import io.smnp.api.model.ArgumentsList
+import io.smnp.api.model.Value
 
 interface Signature {
     fun parse(arguments: List<Value>): ArgumentsList

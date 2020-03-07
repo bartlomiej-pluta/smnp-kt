@@ -1,6 +1,4 @@
-package io.smnp.data.signature
-
-import io.smnp.data.model.Value
+package io.smnp.api.model
 
 class ArgumentsList(val isValid: Boolean, val arguments: List<Value>) {
     operator fun get(index: Int) = arguments[index]

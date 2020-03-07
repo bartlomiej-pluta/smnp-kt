@@ -1,6 +1,6 @@
 package io.smnp.evaluation.model.entity
 
-import io.smnp.data.model.Value
+import io.smnp.api.model.Value
 import io.smnp.evaluation.model.enumeration.EvaluationResult
 
 class EvaluatorOutput private constructor(val result: EvaluationResult, val value: Value?) {
