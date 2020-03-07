@@ -26,8 +26,8 @@ class SumOperatorEvaluator : Evaluator() {
         }
 
         return EvaluatorOutput.value(when(operator) {
-            TokenType.PLUS -> unify(lhs, rhs, intConsumer = { (l, r) -> Value.int(l + r) }, floatConsumer = { (l, r) -> Value.float(l + r) })
-            TokenType.MINUS -> unify(lhs, rhs, intConsumer = { (l, r) -> Value.int(l - r) }, floatConsumer = { (l, r) -> Value.float(l - r) })
+            TokenType.PLUS -> unify(lhs, rhs, int = { (l, r) -> Value.int(l + r) }, float = { (l, r) -> Value.float(l + r) })
+            TokenType.MINUS -> unify(lhs, rhs, int = { (l, r) -> Value.int(l - r) }, float = { (l, r) -> Value.float(l - r) })
             else -> throw ShouldNeverReachThisLineException()
         })
     }

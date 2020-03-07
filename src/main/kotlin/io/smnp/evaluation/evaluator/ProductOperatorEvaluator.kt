@@ -27,8 +27,8 @@ class ProductOperatorEvaluator : Evaluator() {
 
         return EvaluatorOutput.value(
             when (operator) {
-                TokenType.ASTERISK -> unify(lhs, rhs, intConsumer = { (l, r) -> Value.int(l * r) }, floatConsumer = { (l, r) -> Value.float(l * r) })
-                TokenType.SLASH -> unify(lhs, rhs, intConsumer = { (l, r) -> Value.int(l / r) }, floatConsumer = { (l, r) -> Value.float(l / r) })
+                TokenType.ASTERISK -> unify(lhs, rhs, int = { (l, r) -> Value.int(l * r) }, float = { (l, r) -> Value.float(l * r) })
+                TokenType.SLASH -> unify(lhs, rhs, int = { (l, r) -> Value.int(l / r) }, float = { (l, r) -> Value.float(l / r) })
                 else -> throw ShouldNeverReachThisLineException()
             }
         )
