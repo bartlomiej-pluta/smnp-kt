@@ -8,8 +8,10 @@ import io.smnp.error.EvaluationException
 import io.smnp.evaluation.environment.Environment
 import io.smnp.evaluation.model.entity.EvaluatorOutput
 
-class MinusOperatorEvaluator : Evaluator {
-    override fun evaluate(node: Node, environment: Environment): EvaluatorOutput {
+class MinusOperatorEvaluator : Evaluator() {
+    override fun supportedNodes() = listOf(MinusOperatorNode::class)
+
+    override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
         val evaluator = DefaultEvaluator()
         val (_, operandNode) = (node as MinusOperatorNode)
         val operand = evaluator.evaluate(operandNode, environment)

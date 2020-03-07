@@ -6,8 +6,10 @@ import io.smnp.dsl.ast.model.node.Node
 import io.smnp.evaluation.environment.Environment
 import io.smnp.evaluation.model.entity.EvaluatorOutput
 
-class IntegerLiteralEvaluator : Evaluator {
-    override fun evaluate(node: Node, environment: Environment): EvaluatorOutput {
+class IntegerLiteralEvaluator : Evaluator() {
+    override fun supportedNodes() = listOf(IntegerLiteralNode::class)
+
+    override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
         val value = (node as IntegerLiteralNode).token.value as Int
         return EvaluatorOutput.value(Value.int(value))
     }

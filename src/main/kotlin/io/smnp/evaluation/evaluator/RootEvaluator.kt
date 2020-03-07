@@ -6,12 +6,10 @@ import io.smnp.evaluation.environment.Environment
 import io.smnp.evaluation.model.entity.EvaluatorOutput
 import io.smnp.evaluation.model.enumeration.EvaluationResult
 
-class RootEvaluator : Evaluator {
-    override fun evaluate(node: Node, environment: Environment): EvaluatorOutput {
-        if(node !is RootNode) {
-            return EvaluatorOutput.fail()
-        }
+class RootEvaluator : Evaluator() {
+    override fun supportedNodes() = listOf(RootNode::class)
 
+    override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
         val evaluator = DefaultEvaluator()
         for(child in node.children) {
             val output = evaluator.evaluate(child, environment)

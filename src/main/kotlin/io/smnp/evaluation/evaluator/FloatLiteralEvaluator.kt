@@ -6,8 +6,10 @@ import io.smnp.dsl.ast.model.node.Node
 import io.smnp.evaluation.environment.Environment
 import io.smnp.evaluation.model.entity.EvaluatorOutput
 
-class FloatLiteralEvaluator : Evaluator {
-    override fun evaluate(node: Node, environment: Environment): EvaluatorOutput {
+class FloatLiteralEvaluator : Evaluator() {
+    override fun supportedNodes() = listOf(FloatLiteralNode::class)
+
+    override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
         val value = (node as FloatLiteralNode).token.value as Float
         return EvaluatorOutput.value(Value.float(value))
     }
