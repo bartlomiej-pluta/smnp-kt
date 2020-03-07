@@ -4,15 +4,16 @@ import dsl.ast.model.node.Node
 import evaluation.environment.Environment
 import evaluation.model.entity.EvaluatorOutput
 import evaluation.model.enumeration.EvaluationResult
+import kotlin.reflect.KClass
 
 interface Evaluator {
     fun evaluate(node: Node, environment: Environment): EvaluatorOutput
 
     companion object {
-        fun forward(evaluator: Evaluator, vararg nodes: Node): Evaluator {
+        fun forward(evaluator: Evaluator, vararg nodes: KClass<out Node>): Evaluator {
             return object : Evaluator {
                 override fun evaluate(node: Node, environment: Environment): EvaluatorOutput {
-                    if(nodes.map { it::class }.any { it.isInstance(node) }) {
+                    if(nodes.any { it.isInstance(node) }) {
                         return evaluator.evaluate(node, environment)
                     }
 
