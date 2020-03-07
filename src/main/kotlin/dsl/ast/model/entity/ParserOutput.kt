@@ -3,7 +3,7 @@ package dsl.ast.model.entity
 import dsl.ast.model.enumeration.ParsingResult
 import dsl.ast.model.node.Node
 
-data class ParserOutput private constructor(val result: ParsingResult, val node: Node) {
+class ParserOutput private constructor(val result: ParsingResult, val node: Node) {
     fun map(mapper: (Node) -> Node): ParserOutput {
         return if(result == ParsingResult.OK) ok(mapper(node)) else fail()
     }

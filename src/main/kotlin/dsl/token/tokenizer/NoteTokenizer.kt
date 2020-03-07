@@ -1,7 +1,7 @@
 package dsl.token.tokenizer
 
-import data.model.entity.Note
-import data.model.enumeration.Pitch
+import data.entity.Note
+import data.enumeration.Pitch
 import dsl.token.model.entity.TokenizerOutput
 import dsl.token.model.enumeration.TokenType
 

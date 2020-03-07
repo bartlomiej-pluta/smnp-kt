@@ -1,6 +1,6 @@
-package data.model.entity
+package data.entity
 
-import data.model.enumeration.Pitch
+import data.enumeration.Pitch
 
 class Note private constructor(val pitch: Pitch, val octave: Int, val duration: Int, val dot: Boolean) {
     data class Builder(var pitch: Pitch = Pitch.A, var octave: Int = 4, var duration: Int = 4, var dot: Boolean = false) {

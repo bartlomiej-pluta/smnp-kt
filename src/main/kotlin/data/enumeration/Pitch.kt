@@ -1,6 +1,4 @@
-package data.model.enumeration
-
-import java.lang.RuntimeException
+package data.enumeration
 
 enum class Pitch {
     C, C_S, D, D_S, E, F, F_S, G, G_S, A, A_S, H;
@@ -32,7 +30,7 @@ enum class Pitch {
                 "d" -> D
                 "d#" -> D_S
                 "eb" -> D_S
-                "e" ->  E
+                "e" -> E
                 "e#" -> F
                 "fb" -> E
                 "f" -> F
