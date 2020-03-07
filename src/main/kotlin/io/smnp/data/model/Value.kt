@@ -2,6 +2,7 @@ package io.smnp.data.model
 
 import io.smnp.data.entity.Note
 import io.smnp.data.enumeration.DataType
+import io.smnp.error.ShouldNeverReachThisLineException
 
 class Value private constructor(val type: DataType, val value: Any?, val properties: Map<String, Value> = emptyMap()) {
     init {
@@ -21,6 +22,14 @@ class Value private constructor(val type: DataType, val value: Any?, val propert
 
         fun float(value: Float): Value {
             return Value(DataType.FLOAT, value)
+        }
+
+        fun numeric(value: Number): Value {
+            return when(value::class) {
+                Int::class -> int(value.toInt())
+                Float::class -> float(value.toFloat())
+                else -> throw ShouldNeverReachThisLineException()
+            }
         }
 
         fun string(value: String): Value {
