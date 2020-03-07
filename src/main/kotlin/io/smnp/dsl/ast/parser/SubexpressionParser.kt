@@ -19,15 +19,15 @@ class SubexpressionParser : Parser() {
 
         val expr2Parser = leftAssociativeOperator(
             expr1Parser,
-            listOf(TokenType.RELATION, TokenType.OPEN_ANGLE, TokenType.CLOSE_ANGLE),
+            listOf(TokenType.AND),
             expr1Parser
         ) { lhs, operator, rhs ->
-            RelationOperatorNode(lhs, operator, rhs)
+            LogicOperatorNode(lhs, operator, rhs)
         }
 
         val expr3Parser = leftAssociativeOperator(
             expr2Parser,
-            listOf(TokenType.AND),
+            listOf(TokenType.OR),
             expr2Parser
         ) { lhs, operator, rhs ->
             LogicOperatorNode(lhs, operator, rhs)
@@ -35,10 +35,10 @@ class SubexpressionParser : Parser() {
 
         val expr4Parser = leftAssociativeOperator(
             expr3Parser,
-            listOf(TokenType.OR),
+            listOf(TokenType.RELATION, TokenType.OPEN_ANGLE, TokenType.CLOSE_ANGLE),
             expr3Parser
         ) { lhs, operator, rhs ->
-            LogicOperatorNode(lhs, operator, rhs)
+            RelationOperatorNode(lhs, operator, rhs)
         }
 
         return expr4Parser.parse(input)
