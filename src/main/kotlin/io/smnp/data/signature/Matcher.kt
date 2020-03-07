@@ -3,7 +3,7 @@ package io.smnp.data.signature
 import io.smnp.data.enumeration.DataType
 import io.smnp.data.model.Value
 
-class Matcher(val type: DataType?, val matcher: (Value) -> Boolean, val string: String) {
+class Matcher(val type: DataType?, private val matcher: (Value) -> Boolean, private val string: String, val optional: Boolean = false) {
 
     fun match(value: Value): Boolean =
         (type != null && type == value.type && matcher(value)) || (type == null) && matcher(value)
@@ -31,6 +31,10 @@ class Matcher(val type: DataType?, val matcher: (Value) -> Boolean, val string: 
     override fun toString() = string
 
     companion object {
+        fun optional(matcher: Matcher): Matcher {
+            return Matcher(matcher.type, matcher.matcher, "${matcher.string}?", true)
+        }
+
         fun mapOfMatchers(keyMatchers: List<Matcher>, valueMatchers: List<Matcher>): Matcher {
             return Matcher(
                 DataType.MAP,
