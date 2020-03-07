@@ -8,6 +8,7 @@ import dsl.token.model.entity.Token
 import dsl.token.model.entity.TokenList
 import dsl.token.model.entity.TokenPosition
 import dsl.token.model.enumeration.TokenType
+import error.InvalidSyntaxException
 
 abstract class Parser {
     fun parse(input: TokenList): ParserOutput {
@@ -177,7 +178,7 @@ abstract class Parser {
                     val output = parser.parse(input)
 
                     if (output.result == ParsingResult.FAILED) {
-                        throw RuntimeException("Expected $expected")
+                        throw InvalidSyntaxException("Expected $expected, got '${input.current.rawValue}'", input.currentPos())
                     }
 
                     return output

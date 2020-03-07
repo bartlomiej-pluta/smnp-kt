@@ -2,6 +2,7 @@ package dsl.token.tokenizer
 
 import dsl.token.model.entity.Token
 import dsl.token.model.entity.TokenList
+import dsl.token.model.entity.TokenPosition
 import dsl.token.model.entity.TokenizerOutput
 import dsl.token.model.enumeration.TokenType
 import dsl.token.tokenizer.Tokenizer.Companion.default
@@ -9,6 +10,7 @@ import dsl.token.tokenizer.Tokenizer.Companion.keywords
 import dsl.token.tokenizer.Tokenizer.Companion.mapValue
 import dsl.token.tokenizer.Tokenizer.Companion.regex
 import dsl.token.tokenizer.Tokenizer.Companion.separated
+import error.InvalidSyntaxException
 
 class DefaultTokenizer : Tokenizer {
     private val tokenizers = listOf(
@@ -89,7 +91,7 @@ class DefaultTokenizer : Tokenizer {
                 val output = tokenize(line, current, index)
 
                 if (!output.consumed()) {
-                    throw RuntimeException("Unknown symbol ${line[current]}")
+                    throw InvalidSyntaxException("Unknown symbol ${line[current]}", TokenPosition(index, current, -1))
                 }
 
                 current += output.consumedChars
