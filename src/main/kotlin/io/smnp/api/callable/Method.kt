@@ -3,6 +3,7 @@ package io.smnp.api.callable
 import io.smnp.api.environment.Environment
 import io.smnp.api.matcher.Matcher
 import io.smnp.api.model.Value
+import io.smnp.error.MethodInvocationException
 
 abstract class Method(val typeMatcher: Matcher, val name: String) {
     private var definitions: List<MethodDefinition> = mutableListOf()
@@ -18,8 +19,9 @@ abstract class Method(val typeMatcher: Matcher, val name: String) {
     fun call(environment: Environment, obj: Value, vararg arguments: Value): Value {
         val (definition, args) = definitions
             .map { Pair(it, it.signature.parse(arguments.toList())) }
-            .first { (_, args) -> args.signatureMatched }
-        // TODO: Throw exception if signature is not matched
+            .firstOrNull { (_, args) -> args.signatureMatched }
+            ?: throw MethodInvocationException(this, obj, arguments)
+
         return definition.body(environment, obj, args.arguments)
     }
 
