@@ -3,6 +3,4 @@ include 'api'
 include 'app'
 include 'modules'
 
-//include 'modules:A'
-//include 'modules:B'
-//include 'modules:C'
+include 'modules:lang'

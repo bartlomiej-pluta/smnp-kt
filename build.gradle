@@ -10,7 +10,6 @@ subprojects {
     }
 }
 
-// plugin location
 ext.pluginsDir = rootProject.buildDir.path + '/modules'
 
 group 'io.bartek'
