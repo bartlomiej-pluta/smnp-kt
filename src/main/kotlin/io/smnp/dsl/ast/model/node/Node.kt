@@ -26,7 +26,6 @@ abstract class Node(numberOfChildren: Int, val position: TokenPosition) {
         for ((index, child) in children.withIndex()) {
             newLast = index == children.size - 1
             child.pretty(newPrefix, newLast, false)
-            //println(newPrefix + (if (newLast) "└ " else "├ ") + child) // todo move to atom nodes
         }
     }
 
