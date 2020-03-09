@@ -19,7 +19,7 @@ abstract class Function(val name: String) {
             .firstOrNull { (_, args) -> args.signatureMatched }
             ?: throw FunctionInvocationException(this, arguments)
 
-        return definition.body(environment, args.arguments)
+        return definition.body(environment, arguments.toList())
     }
 
     val signature: String

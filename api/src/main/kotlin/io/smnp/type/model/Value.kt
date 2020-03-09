@@ -4,7 +4,7 @@ import io.smnp.data.entity.Note
 import io.smnp.error.ShouldNeverReachThisLineException
 import io.smnp.type.enumeration.DataType
 
-class Value private constructor(val type: DataType, val value: Any?, val properties: Map<String, Value> = emptyMap()) {
+data class Value(val type: DataType, val value: Any?, val properties: Map<String, Value> = emptyMap()) {
     init {
         if(!type.isInstance(value)) {
             throw RuntimeException("'$value' is not of type $type")

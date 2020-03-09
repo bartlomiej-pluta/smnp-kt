@@ -44,7 +44,7 @@ task plugin(type: Jar) {
 }
 
 task assemblePlugin(type: Copy) {
-    from plugin
+    from jar
     into pluginsDir
 }
 
