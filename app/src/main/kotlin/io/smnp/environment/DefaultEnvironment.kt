@@ -16,9 +16,11 @@ class DefaultEnvironment : Environment {
     }
 
     override fun loadModule(path: String) {
-        DefaultModuleRegistry.requestModulesForPath(path).forEach {
-            rootModule.addSubmodule(it)
-            loadedModules.add(path)
+        if(!loadedModules.contains(path)) {
+            DefaultModuleRegistry.requestModulesForPath(path).forEach {
+                rootModule.addSubmodule(it)
+                loadedModules.add(path)
+            }
         }
     }
 
