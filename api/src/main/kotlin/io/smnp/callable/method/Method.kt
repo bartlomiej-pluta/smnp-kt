@@ -2,11 +2,22 @@ package io.smnp.callable.method
 
 import io.smnp.environment.Environment
 import io.smnp.error.MethodInvocationException
+import io.smnp.error.RuntimeException
 import io.smnp.type.matcher.Matcher
 import io.smnp.type.model.Value
+import io.smnp.type.module.Module
 
 abstract class Method(val typeMatcher: Matcher, val name: String) {
     private var definitions: List<MethodDefinition> = mutableListOf()
+    private var _module: Module? = null
+    var module: Module
+        get() = _module ?: throw RuntimeException("Method has not set module yet")
+        set(value) {
+            if (_module != null) {
+                throw RuntimeException("Module of method is already set to ${module.canonicalName}")
+            }
+            _module = value
+        }
 
     abstract fun define(new: MethodDefinitionTool)
 

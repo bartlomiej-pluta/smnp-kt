@@ -17,6 +17,8 @@ class Module(
 
     init {
         children.forEach { addSubmodule(it) }
+        functions.forEach { it.module = this }
+        methods.forEach { it.module = this }
     }
 
     fun addSubmodule(module: Module) {
@@ -35,19 +37,19 @@ class Module(
     }
 
     val canonicalName: String
-    get() {
-        val modules = mutableListOf(this)
-        var par = parent
-        while(par != null) {
-            modules.add(par)
-            par = par.parent
+        get() {
+            val modules = mutableListOf(this)
+            var par = parent
+            while (par != null) {
+                modules.add(par)
+                par = par.parent
+            }
+
+            return modules.reversed().joinToString(".") { it.name }
         }
 
-        return modules.reversed().joinToString(".") { it.name }
-    }
-
     fun merge(module: Module): Module {
-        if(name != module.name) {
+        if (name != module.name) {
             return this
         }
 
@@ -73,7 +75,12 @@ class Module(
     }
 
     fun findMethod(value: Value, name: String): List<Method> {
-        return methods.filter { it.name == name && it.verifyType(value) } + children.flatMap { it.findMethod(value, name) }
+        return methods.filter { it.name == name && it.verifyType(value) } + children.flatMap {
+            it.findMethod(
+                value,
+                name
+            )
+        }
     }
 
     override fun toString() = name
@@ -84,7 +91,7 @@ class Module(
 
         println(newPrefix + (if (first) "" else if (newLast) "└─ " else "├─ ") + name)
         newPrefix += if (newLast) "   " else "│  "
-        if(printContent) {
+        if (printContent) {
             val contentPrefix = newPrefix + if (children.isNotEmpty()) "|" else ""
             for ((index, function) in functions.withIndex()) {
                 println(contentPrefix + (if (index == functions.size - 1 && methods.isEmpty()) "└ " else "├ ") + "${function.name}()")
@@ -109,20 +116,22 @@ class Module(
             children: List<Module> = emptyList()
         ): Module {
             val modules = path.split(".")
-            if(modules.isEmpty()) {
+            if (modules.isEmpty()) {
                 return Module(path, functions, methods, children)
             }
 
             val root = modules.map { Module(it) }.reduceRight { m, n -> m.addSubmodule(n); m }
 
             var youngest = root
-            while(youngest.children.isNotEmpty()) {
+            while (youngest.children.isNotEmpty()) {
                 youngest = youngest.children[0]
             }
 
             youngest.functions.addAll(functions)
             youngest.methods.addAll(methods)
             youngest.children.addAll(children)
+            youngest.functions.forEach { it.module = youngest }
+            youngest.methods.forEach { it.module = youngest }
 
             return root
         }

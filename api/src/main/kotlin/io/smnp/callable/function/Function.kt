@@ -2,10 +2,21 @@ package io.smnp.callable.function
 
 import io.smnp.environment.Environment
 import io.smnp.error.FunctionInvocationException
+import io.smnp.error.RuntimeException
 import io.smnp.type.model.Value
+import io.smnp.type.module.Module
 
 abstract class Function(val name: String) {
     private var definitions: List<FunctionDefinition> = mutableListOf()
+    private var _module: Module? = null
+    var module: Module
+        get() = _module ?: throw RuntimeException("Method has not set module yet")
+        set(value) {
+            if (_module != null) {
+                throw RuntimeException("Module of method is already set to ${module.canonicalName}")
+            }
+            _module = value
+        }
 
     abstract fun define(new: FunctionDefinitionTool)
 

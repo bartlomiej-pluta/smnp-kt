@@ -4,6 +4,10 @@ import io.smnp.type.enumeration.DataType
 import io.smnp.type.model.Value
 
 object ActualSignatureFormatter {
+    fun format(value: Value): String {
+        return format(arrayOf(value), false)
+    }
+
     fun format(arguments: Array<out Value>, parentheses: Boolean = true): String {
         val output = mutableListOf<String>()
         for(argument in arguments) {
