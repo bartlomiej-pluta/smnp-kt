@@ -25,7 +25,9 @@ class ExpressionEvaluator : Evaluator() {
             SumOperatorEvaluator(),
             AccessOperatorEvaluator(),
             LogicOperatorEvaluator(),
-            RelationOperatorEvaluator()
+            RelationOperatorEvaluator(),
+
+            FunctionCallEvaluator()
         ).evaluate(node, environment)
 
         if(output.result == EvaluationResult.OK) {

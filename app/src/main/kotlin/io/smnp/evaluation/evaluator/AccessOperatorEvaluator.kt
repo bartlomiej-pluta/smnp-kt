@@ -1,9 +1,6 @@
 package io.smnp.evaluation.evaluator
 
-import io.smnp.dsl.ast.model.node.AccessOperatorNode
-import io.smnp.dsl.ast.model.node.FunctionCallNode
-import io.smnp.dsl.ast.model.node.IdentifierNode
-import io.smnp.dsl.ast.model.node.Node
+import io.smnp.dsl.ast.model.node.*
 import io.smnp.environment.Environment
 import io.smnp.error.EvaluationException
 import io.smnp.evaluation.model.entity.EvaluatorOutput
@@ -22,8 +19,10 @@ class AccessOperatorEvaluator : Evaluator() {
                 EvaluatorOutput.value(lhs.properties[rhs] ?: throw EvaluationException("Unknown property $rhs of type ${lhs.type.name.toLowerCase()}", rhsNode.position))
             }
             is FunctionCallNode -> {
-                // todo Implement when methods become available
-                EvaluatorOutput.fail()
+                val (identifierNode, argsNode) = rhsNode
+                val identifier = (identifierNode as IdentifierNode).token.rawValue
+                val arguments = (argsNode as FunctionCallArgumentsNode).items.map { evaluator.evaluate(it, environment).value!! }
+                return EvaluatorOutput.value(environment.invokeMethod(lhs, identifier, arguments))
             }
             else -> {
                 throw EvaluationException("Invalid property access type - only property name and method call are allowed", rhsNode.position)
