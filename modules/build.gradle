@@ -1,0 +1,51 @@
+subprojects {
+    apply plugin: 'kotlin-kapt'
+
+    dependencies {
+        // compileOnly important!!! We do not want to put the api into the zip file since the main program has it already!
+        compileOnly project(':api')
+        compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+        kapt(group: 'org.pf4j', name: 'pf4j', version: "3.2.0")
+        compileOnly(group: 'org.pf4j', name: 'pf4j', version: "3.2.0") {
+            exclude group: "org.slf4j"
+        }
+        compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
+        testCompile group: 'junit', name: 'junit', version: '4.+'
+    }
+
+    jar {
+        manifest {
+            attributes 'Plugin-Id': "${pluginId}",
+                    'Plugin-Class': "${pluginClass}",
+                    'Plugin-Version': "${pluginVersion}",
+                    'Plugin-Provider': "${pluginProvider}",
+                    'Plugin-Dependencies': "${pluginDependencies}"
+        }
+    }
+
+    task plugin(type: Jar) {
+        archiveBaseName = "plugin-${pluginId}"
+        into('classes') {
+            with jar
+        }
+        into('lib') {
+            from configurations.compile
+        }
+        archiveExtension = 'zip'
+    }
+
+    task assemblePlugin(type: Copy) {
+        from jar
+        into pluginsDir
+    }
+}
+
+clean {
+    dependsOn subprojects.clean
+}
+
+task assemblePlugins(type: Copy) {
+    dependsOn subprojects.assemblePlugin
+}
+
+build.dependsOn assemblePlugins
