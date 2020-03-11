@@ -1,6 +1,6 @@
 package io.smnp.dsl.ast.model.node
 
-class TypeNode(type: Node, specifiers: Node) : Node(2, type.position) {
+class SingleTypeNode(type: Node, specifiers: Node) : Node(2, type.position) {
     val type: Node
     get() = children[0]
 

@@ -11,7 +11,7 @@ class ExtendParser : Parser() {
     override fun tryToParse(input: TokenList): ParserOutput {
         val simpleExtendParser = allOf(
             terminal(TokenType.EXTEND),
-            assert(TypeParser(), "type to be extended"),
+            assert(SingleTypeParser(), "type to be extended"),
             assert(terminal(TokenType.AS), "'as' keyword with identifier"),
             assert(SimpleIdentifierParser(), "identifier"),
             terminal(TokenType.WITH),
@@ -22,7 +22,7 @@ class ExtendParser : Parser() {
 
         val complexExtendParser = allOf(
             terminal(TokenType.EXTEND),
-            assert(TypeParser(), "type to be extended"),
+            assert(SingleTypeParser(), "type to be extended"),
             assert(terminal(TokenType.AS), "'as' keyword with identifier"),
             assert(SimpleIdentifierParser(), "identifier"),
             assert(loop(terminal(TokenType.OPEN_CURLY), assert(FunctionDefinitionParser(), "method definition or }"), terminal(TokenType.CLOSE_CURLY)) {

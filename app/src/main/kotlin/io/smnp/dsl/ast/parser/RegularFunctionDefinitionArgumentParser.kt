@@ -2,7 +2,9 @@ package io.smnp.dsl.ast.parser
 
 import io.smnp.dsl.ast.model.entity.ParserOutput
 import io.smnp.dsl.ast.model.node.RegularFunctionDefinitionArgumentNode
+import io.smnp.dsl.ast.model.node.UnionTypeNode
 import io.smnp.dsl.token.model.entity.TokenList
+import io.smnp.dsl.token.model.entity.TokenPosition
 import io.smnp.dsl.token.model.enumeration.TokenType
 
 class RegularFunctionDefinitionArgumentParser : Parser() {
@@ -13,9 +15,9 @@ class RegularFunctionDefinitionArgumentParser : Parser() {
             optional(allOf(
                 terminal(TokenType.COLON),
                 TypeParser()
-            ) { it[1] })
-        ) {
-            RegularFunctionDefinitionArgumentNode(it[1], it[2], it[0])
+            ) { it[1] }) { UnionTypeNode(emptyList(), TokenPosition.NONE) }
+        ) { (vararg, identifier, type) ->
+            RegularFunctionDefinitionArgumentNode(identifier, type, vararg)
         }.parse(input)
     }
 }

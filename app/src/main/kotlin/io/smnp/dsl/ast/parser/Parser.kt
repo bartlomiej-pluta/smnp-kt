@@ -187,11 +187,11 @@ abstract class Parser {
         }
 
         // optional -> a?
-        fun optional(parser: Parser): Parser {
+        fun optional(parser: Parser, createFallbackNode: () -> Node = { Node.NONE }): Parser {
             return object : Parser() {
                 override fun tryToParse(input: TokenList): ParserOutput {
                     val output = parser.parse(input)
-                    return if (output.result == ParsingResult.OK) output else ParserOutput.ok(Node.NONE)
+                    return if (output.result == ParsingResult.OK) output else ParserOutput.ok(createFallbackNode())
                 }
             }
         }
