@@ -27,6 +27,7 @@ class ExpressionEvaluator : Evaluator() {
             AccessOperatorEvaluator(),
             LogicOperatorEvaluator(),
             RelationOperatorEvaluator(),
+            AssignmentOperatorEvaluator(),
 
             FunctionCallEvaluator()
         ).evaluate(node, environment)
