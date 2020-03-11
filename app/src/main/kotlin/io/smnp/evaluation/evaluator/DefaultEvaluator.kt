@@ -12,6 +12,7 @@ class DefaultEvaluator : Evaluator() {
             ConditionEvaluator(),
             BlockEvaluator(),
             ThrowEvaluator(),
+            ReturnEvaluator(),
             ExpressionEvaluator()
         ).evaluate(node, environment)
     }

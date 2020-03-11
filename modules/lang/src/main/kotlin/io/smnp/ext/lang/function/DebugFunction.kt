@@ -7,7 +7,7 @@ import io.smnp.type.model.Value
 
 class DebugFunction : Function("debug") {
     override fun define(new: FunctionDefinitionTool) {
-        new function simple() define { env, _ ->
+        new function simple() body { env, _ ->
             env.printCallStack()
             Value.void()
         }

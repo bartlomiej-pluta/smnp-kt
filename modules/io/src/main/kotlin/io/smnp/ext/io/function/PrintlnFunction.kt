@@ -8,7 +8,7 @@ import io.smnp.type.model.Value
 
 class PrintlnFunction : Function("println") {
     override fun define(new: FunctionDefinitionTool) {
-        new function vararg(allTypes()) define { _module,  (vararg) ->
+        new function vararg(allTypes()) body { _,  (vararg) ->
             // TODO: Implement equivalent of "toString()" method
             println((vararg.value!! as List<Value>).joinToString("") { it.value!!.toString() })
             Value.void()

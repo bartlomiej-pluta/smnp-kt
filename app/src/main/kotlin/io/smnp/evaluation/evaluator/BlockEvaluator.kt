@@ -12,7 +12,7 @@ class BlockEvaluator : Evaluator() {
     override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
         val evaluator = DefaultEvaluator()
         val ok = (node as BlockNode).statements.all {
-            evaluator.evaluate(it, environment).result == EvaluationResult.OK
+            evaluator.evaluate(it, environment).result != EvaluationResult.FAILED
         }
 
         return if(ok) EvaluatorOutput.ok() else EvaluatorOutput.fail()

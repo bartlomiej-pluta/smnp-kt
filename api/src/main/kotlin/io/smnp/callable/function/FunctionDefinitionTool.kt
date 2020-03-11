@@ -12,7 +12,7 @@ class FunctionDefinitionTool {
     }
 
     inner class FunctionDefinitionToolStage2(private val signature: Signature) {
-        infix fun define(body: (Environment, List<Value>) -> Value) {
+        infix fun body(body: (Environment, List<Value>) -> Value) {
             definitions.add(FunctionDefinition(signature, body))
         }
     }
