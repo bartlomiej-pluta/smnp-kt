@@ -1,28 +1,22 @@
 package io.smnp.runtime.model
 
+import io.smnp.collection.Stack
 import io.smnp.type.model.Value
 import io.smnp.type.module.Module
 
+
 class CallStack {
-    private val items = mutableListOf<CallStackItem>()
+    private val items = Stack.of<CallStackFrame>()
 
     fun push(module: Module, name: String, arguments: List<Value>) {
-        items.add(CallStackItem(module, name, arguments))
+        items.push(CallStackFrame(module, name, arguments))
     }
 
-    fun push(item: CallStackItem) {
-        items.add(item)
-    }
+    fun push(frame: CallStackFrame) = items.push(frame)
 
-    fun pop(): CallStackItem? {
-        if(items.isEmpty()) {
-            return null
-        }
+    fun pop() = items.pop()
 
-        val last = items.last()
-        items.removeAt(items.size-1)
-        return last
-    }
+    fun top() = items.top()
 
     fun pretty() {
         items.asReversed().forEachIndexed { index, item -> println("[${items.size - index - 1}] $item") }

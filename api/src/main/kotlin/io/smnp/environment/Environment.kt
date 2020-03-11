@@ -12,4 +12,9 @@ interface Environment {
     fun printCallStack()
     fun defineFunction(function: Function)
     fun defineMethod(method: Method)
+    fun pushScope(scope: MutableMap<String, Value> = mutableMapOf())
+    fun popScope(): Map<String, Value>?
+    fun printScopes()
+    fun setVariable(name: String, value: Value)
+    fun getVariable(name: String): Value
 }

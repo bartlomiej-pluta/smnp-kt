@@ -16,7 +16,8 @@ class ExpressionEvaluator : Evaluator() {
             BoolLiteralEvaluator(), 
             NoteLiteralEvaluator(), 
             ListEvaluator(), 
-            MapEvaluator(), 
+            MapEvaluator(),
+            IdentifierEvaluator(),
 
             MinusOperatorEvaluator(), 
             NotOperatorEvaluator(),

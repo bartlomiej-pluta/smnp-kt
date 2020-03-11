@@ -15,15 +15,18 @@ object CustomFunction {
             override fun define(new: FunctionDefinitionTool) {
                 val (_, argumentsNode, bodyNode) = node
                 val signature = FunctionSignatureParser.parseSignature(argumentsNode as FunctionDefinitionArgumentsNode)
-                val evaluator = BlockEvaluator()
+                val evaluator = BlockEvaluator(dedicatedScope = false)
 
                 new function signature body { env, args ->
                     val boundArguments = FunctionEnvironmentProvider.provideEnvironment(argumentsNode, args, env)
-                    // TODO push boundArguments to variables scope
+
                     try {
+                        env.pushScope(boundArguments.toMutableMap())
                         evaluator.evaluate(bodyNode, env)
                     } catch(value: Return) {
                         return@body value.value
+                    } finally {
+                        env.popScope()
                     }
 
                     Value.void()

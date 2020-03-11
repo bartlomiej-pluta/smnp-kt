@@ -79,4 +79,14 @@ class DefaultEnvironment : Environment {
     override fun defineMethod(method: Method) {
         rootModule.addMethod(method)
     }
+
+    override fun pushScope(scope: MutableMap<String, Value>) = callStack.top().pushScope(scope)
+
+    override fun popScope() = callStack.top().popScope()
+
+    override fun printScopes() = callStack.top().prettyScope()
+
+    override fun setVariable(name: String, value: Value) = callStack.top().setVariable(name, value)
+
+    override fun getVariable(name: String) = callStack.top().getVariable(name)
 }
