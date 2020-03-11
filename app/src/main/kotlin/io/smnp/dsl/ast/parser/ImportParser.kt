@@ -9,8 +9,7 @@ class ImportParser : Parser() {
     override fun tryToParse(input: TokenList): ParserOutput {
         val pathParser = oneOf(
             UnitParser(),
-            SimpleIdentifierParser(),
-            StringLiteralParser()
+            SimpleIdentifierParser()
         )
 
         return allOf(

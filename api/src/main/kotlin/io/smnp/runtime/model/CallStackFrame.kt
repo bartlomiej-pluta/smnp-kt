@@ -24,7 +24,7 @@ data class CallStackFrame(
     }
 
     fun getVariable(name: String): Value {
-        return scopes.lastOrNull { it.containsKey(name) }?.get(name) ?: throw RuntimeException("Variable `$name` not found")
+        return scopes.lastOrNull { it.containsKey(name) }?.get(name) ?: throw RuntimeException("Undefined variable `$name`")
     }
 
     fun prettyScope() {

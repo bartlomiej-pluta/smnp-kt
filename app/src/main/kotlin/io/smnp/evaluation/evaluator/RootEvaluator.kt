@@ -11,8 +11,10 @@ class RootEvaluator : Evaluator() {
 
     override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
         val evaluator = oneOf(
+            ImportEvaluator(),
             ExpressionEvaluator(),
-            FunctionDefinitionEvaluator()
+            FunctionDefinitionEvaluator(),
+            DefaultEvaluator()
         )
 
         for(child in node.children) {
