@@ -10,17 +10,35 @@ import io.smnp.evaluation.evaluator.ExpressionEvaluator
 import io.smnp.type.model.Value
 
 object FunctionEnvironmentProvider {
-    fun provideEnvironment(signature: FunctionDefinitionArgumentsNode, actualArgs: List<Value>, environment: Environment): Map<String, Value> {
-        val evaluator = ExpressionEvaluator()
+    private val evaluator = ExpressionEvaluator()
+
+    fun provideEnvironment(
+        signature: FunctionDefinitionArgumentsNode,
+        actualArgs: List<Value>,
+        environment: Environment
+    ): Map<String, Value> {
         return signature.items.mapIndexed { index, node ->
             when (node) {
-                is RegularFunctionDefinitionArgumentNode -> (node.identifier as IdentifierNode).token.rawValue to actualArgs[index]
-                is OptionalFunctionDefinitionArgumentNode -> (node.identifier as IdentifierNode).token.rawValue to evaluator.evaluate(
-                    node.defaultValue,
-                    environment
-                ).value!!
+                is RegularFunctionDefinitionArgumentNode -> regularArgument(node, actualArgs, index)
+                is OptionalFunctionDefinitionArgumentNode -> optionalArgument(node, environment, actualArgs, index)
                 else -> throw ShouldNeverReachThisLineException()
             }
         }.toMap()
     }
+
+    private fun regularArgument(
+        node: RegularFunctionDefinitionArgumentNode,
+        actualArgs: List<Value>,
+        index: Int
+    ) = (node.identifier as IdentifierNode).token.rawValue to actualArgs[index]
+
+    private fun optionalArgument(
+        node: OptionalFunctionDefinitionArgumentNode,
+        environment: Environment,
+        actualArgs: List<Value>,
+        index: Int
+    ) = (node.identifier as IdentifierNode).token.rawValue to
+            if (index < actualArgs.size) actualArgs[index]
+            else evaluator.evaluate(node.defaultValue, environment).value!!
+
 }
