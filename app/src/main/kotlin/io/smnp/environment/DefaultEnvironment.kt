@@ -1,5 +1,7 @@
 package io.smnp.environment
 
+import io.smnp.callable.function.Function
+import io.smnp.callable.method.Method
 import io.smnp.callable.signature.ActualSignatureFormatter.format
 import io.smnp.ext.DefaultModuleRegistry
 import io.smnp.runtime.model.CallStack
@@ -68,5 +70,13 @@ class DefaultEnvironment : Environment {
 
     override fun printCallStack() {
         callStack.pretty()
+    }
+
+    override fun defineFunction(function: Function) {
+        rootModule.addFunction(function)
+    }
+
+    override fun defineMethod(method: Method) {
+        rootModule.addMethod(method)
     }
 }

@@ -10,7 +10,11 @@ class RootEvaluator : Evaluator() {
     override fun supportedNodes() = listOf(RootNode::class)
 
     override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
-        val evaluator = ExpressionEvaluator()
+        val evaluator = oneOf(
+            ExpressionEvaluator(),
+            FunctionDefinitionEvaluator()
+        )
+
         for(child in node.children) {
             val output = evaluator.evaluate(child, environment)
             if(output.result == EvaluationResult.FAILED) {

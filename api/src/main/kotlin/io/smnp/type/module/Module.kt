@@ -32,8 +32,14 @@ class Module(
         }
     }
 
-    fun attachTo(module: Module) {
-        module.addSubmodule(this)
+    fun addFunction(function: Function) {
+        function.module = this
+        functions.add(function)
+    }
+
+    fun addMethod(method: Method) {
+        method.module = this
+        methods.add(method)
     }
 
     val canonicalName: String

@@ -3,6 +3,10 @@ package io.smnp.dsl.ast.model.node
 import io.smnp.dsl.token.model.entity.TokenPosition
 
 class FunctionDefinitionNode(identifier: Node, arguments: Node, body: Node, position: TokenPosition) : Node(3, position) {
+    operator fun component1() = children[0]
+    operator fun component2() = children[1]
+    operator fun component3() = children[2]
+
     val identifier: Node
     get() = children[0]
 
