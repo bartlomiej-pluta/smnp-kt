@@ -2,7 +2,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.3.61' apply false
 }
 
-allprojects {
+configure(subprojects - project(':modules')) {
     apply plugin: 'java'
     apply plugin: 'org.jetbrains.kotlin.jvm'
 
@@ -30,13 +30,13 @@ repositories {
     mavenCentral()
 }
 
-clean {
+task clean {
     dependsOn ':app:clean'
     dependsOn ':api:clean'
     dependsOn ':modules:clean'
 }
 
-build {
+task build {
     dependsOn ':app:jar'
     dependsOn ':api:build'
     dependsOn ':modules:build'
