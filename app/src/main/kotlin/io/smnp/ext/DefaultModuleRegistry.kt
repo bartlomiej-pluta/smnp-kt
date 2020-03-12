@@ -11,7 +11,7 @@ object DefaultModuleRegistry : ModuleRegistry {
         pluginManager.startPlugins()
 
         pluginManager.getExtensions(ModuleDefinition::class.java).forEach {
-            modules.add(Pair(it.modulePath(), Module.create(it.modulePath(), it.functions(), it.methods())))
+            modules.add(it.path to it.module())
         }
     }
 

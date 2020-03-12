@@ -37,7 +37,8 @@ class DefaultEnvironment : Environment {
         }
 
         if(foundFunctions.size > 1) {
-            throw RuntimeException("Found ${foundFunctions.size} functions with name of $foundFunctions")
+            throw RuntimeException("Found ${foundFunctions.size} functions with name of $name: [${foundFunctions.map { it.module.canonicalName }.joinToString()}]")
+
         }
 
         val function = foundFunctions[0]
@@ -56,7 +57,7 @@ class DefaultEnvironment : Environment {
         }
 
         if(foundMethods.size > 1) {
-            throw RuntimeException("Found ${foundMethods.size} methods with name of '$foundMethods' for ${format(obj)}")
+            throw RuntimeException("Found ${foundMethods.size} methods with name of $name for ${format(obj)}: [${foundMethods.map { it.module.canonicalName }.joinToString()}]")
         }
 
         val method = foundMethods[0]

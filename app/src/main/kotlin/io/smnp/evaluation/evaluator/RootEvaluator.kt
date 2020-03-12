@@ -10,12 +10,12 @@ class RootEvaluator : Evaluator() {
     override fun supportedNodes() = listOf(RootNode::class)
 
     override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
-        val evaluator = oneOf(
+        val evaluator = assert(oneOf(
             ImportEvaluator(),
             ExpressionEvaluator(),
             FunctionDefinitionEvaluator(),
             DefaultEvaluator()
-        )
+        ), "correct statement")
 
         for(child in node.children) {
             val output = evaluator.evaluate(child, environment)

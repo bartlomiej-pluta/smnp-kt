@@ -10,10 +10,10 @@ abstract class Function(val name: String) {
     private var definitions: List<FunctionDefinition> = mutableListOf()
     private var _module: Module? = null
     var module: Module
-        get() = _module ?: throw RuntimeException("Method has not set module yet")
+        get() = _module ?: throw RuntimeException("Function has not set module yet")
         set(value) {
             if (_module != null) {
-                throw RuntimeException("Module of method is already set to ${module.canonicalName}")
+                throw RuntimeException("Function of method is already set to ${module.canonicalName}")
             }
             _module = value
         }

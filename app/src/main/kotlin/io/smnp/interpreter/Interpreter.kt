@@ -5,6 +5,7 @@ import io.smnp.dsl.token.tokenizer.DefaultTokenizer
 import io.smnp.environment.DefaultEnvironment
 import io.smnp.environment.Environment
 import io.smnp.evaluation.evaluator.RootEvaluator
+import io.smnp.evaluation.model.enumeration.EvaluationResult
 import java.io.File
 
 class Interpreter {
@@ -18,7 +19,11 @@ class Interpreter {
         val ast = parser.parse(tokens)
 
         val environment = createEnvironment()
-        evaluator.evaluate(ast.node, environment)
+        val result = evaluator.evaluate(ast.node, environment)
+
+        if(result.result == EvaluationResult.FAILED) {
+            throw RuntimeException("Evaluation failed")
+        }
     }
 
     private fun createEnvironment(): Environment {

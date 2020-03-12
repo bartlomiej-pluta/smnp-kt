@@ -7,10 +7,7 @@ import io.smnp.ext.lang.method.MapAccessMethod
 import org.pf4j.Extension
 
 @Extension
-class LangModule : ModuleDefinition {
-    override fun modulePath() = "smnp.lang"
-
+class LangModule : ModuleDefinition("smnp.lang") {
     override fun functions() = listOf(DebugFunction())
-
     override fun methods() = listOf(ListAccessMethod(), MapAccessMethod())
 }

@@ -2,10 +2,12 @@ package io.smnp.ext
 
 import io.smnp.callable.function.Function
 import io.smnp.callable.method.Method
+import io.smnp.type.module.Module
 import org.pf4j.ExtensionPoint
 
-interface ModuleDefinition : ExtensionPoint {
-    fun modulePath(): String
-    fun functions(): List<Function>
-    fun methods(): List<Method>
+abstract class ModuleDefinition(val path: String) : ExtensionPoint {
+    open fun functions(): List<Function> = emptyList()
+    open fun methods(): List<Method> = emptyList()
+
+    fun module(): Module = Module.create(path, functions(), methods())
 }
