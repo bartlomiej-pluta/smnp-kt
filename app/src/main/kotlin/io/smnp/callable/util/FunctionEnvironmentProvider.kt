@@ -1,4 +1,4 @@
-package io.smnp.callable.function
+package io.smnp.callable.util
 
 import io.smnp.dsl.ast.model.node.FunctionDefinitionArgumentsNode
 import io.smnp.dsl.ast.model.node.IdentifierNode

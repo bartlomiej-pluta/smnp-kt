@@ -1,4 +1,4 @@
-package io.smnp.callable.function
+package io.smnp.callable.util
 
 import io.smnp.callable.signature.Signature
 import io.smnp.dsl.ast.model.node.*
@@ -54,7 +54,11 @@ object FunctionSignatureParser {
         val vararg =
             signature.items.indexOfFirst { it is RegularFunctionDefinitionArgumentNode && it.vararg != Node.NONE }
 
-        val metadata = SignatureMetadata(lastRegular != -1, firstOptional != -1, vararg != -1)
+        val metadata = SignatureMetadata(
+            lastRegular != -1,
+            firstOptional != -1,
+            vararg != -1
+        )
 
         if (metadata.hasVararg && metadata.hasOptional) {
             throw RuntimeException("Optional arguments and vararg cannot be mixed in same signature")
@@ -77,13 +81,19 @@ object FunctionSignatureParser {
         }
 
         if (unionTypeNode.items.size == 1) {
-            return matcherForSingleTypeNode(unionTypeNode.items[0] as SingleTypeNode)
+            return matcherForSingleTypeNode(
+                unionTypeNode.items[0] as SingleTypeNode
+            )
         }
 
-        return oneOf(*unionTypeNode.items.map { matcherForSingleTypeNode(it as SingleTypeNode) }.toTypedArray())
+        return oneOf(*unionTypeNode.items.map {
+            matcherForSingleTypeNode(
+                it as SingleTypeNode
+            )
+        }.toTypedArray())
     }
 
-    private fun matcherForSingleTypeNode(singleTypeNode: SingleTypeNode): Matcher {
+    fun matcherForSingleTypeNode(singleTypeNode: SingleTypeNode): Matcher {
         // TODO
         val type = DataType.valueOf((singleTypeNode.type as IdentifierNode).token.rawValue.toUpperCase())
         if (singleTypeNode.specifiers == Node.NONE) {
@@ -107,7 +117,11 @@ object FunctionSignatureParser {
             types.add(allTypes())
         }
 
-        listSpecifierNode.items.forEach { types.add(matcherForSingleTypeNode(it as SingleTypeNode)) }
+        listSpecifierNode.items.forEach { types.add(
+            matcherForSingleTypeNode(
+                it as SingleTypeNode
+            )
+        ) }
 
         return listOfMatchers(*types.toTypedArray())
     }
@@ -124,8 +138,16 @@ object FunctionSignatureParser {
             values.add(allTypes())
         }
 
-        keySpecifierNode.items.forEach { keys.add(matcherForSingleTypeNode(it as SingleTypeNode)) }
-        valueSpecifierNode.items.forEach { values.add(matcherForSingleTypeNode(it as SingleTypeNode)) }
+        keySpecifierNode.items.forEach { keys.add(
+            matcherForSingleTypeNode(
+                it as SingleTypeNode
+            )
+        ) }
+        valueSpecifierNode.items.forEach { values.add(
+            matcherForSingleTypeNode(
+                it as SingleTypeNode
+            )
+        ) }
 
         return mapOfMatchers(keys, values)
     }

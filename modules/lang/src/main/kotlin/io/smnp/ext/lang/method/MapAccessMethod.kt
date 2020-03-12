@@ -11,7 +11,7 @@ import io.smnp.type.model.Value
 
 class MapAccessMethod : Method(ofType(MAP), "get") {
     override fun define(new: MethodDefinitionTool) {
-        new method simple(allTypes()) define { _, obj, (key) ->
+        new method simple(allTypes()) body { _, obj, (key) ->
             val map = (obj.value!! as Map<Value, Value>)
             map[key] ?: throw RuntimeException("Key '${key.value!!}' not found")
         }

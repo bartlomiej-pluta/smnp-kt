@@ -14,6 +14,7 @@ class RootEvaluator : Evaluator() {
             ImportEvaluator(),
             ExpressionEvaluator(),
             FunctionDefinitionEvaluator(),
+            ExtendEvaluator(),
             DefaultEvaluator()
         ), "correct statement")
 
