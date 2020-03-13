@@ -10,8 +10,6 @@ class ThrowParser : Parser() {
         return allOf(
             terminal(TokenType.THROW),
             optional(SubexpressionParser())
-        ) {
-            ThrowNode(it[1])
-        }.parse(input)
+        ) { (_, value) -> ThrowNode(value) }.parse(input)
     }
 }

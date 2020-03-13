@@ -15,7 +15,7 @@ class RegularFunctionDefinitionArgumentParser : Parser() {
             optional(allOf(
                 terminal(TokenType.COLON),
                 assert(TypeParser(), "type name")
-            ) { it[1] }) { UnionTypeNode(emptyList(), TokenPosition.NONE) }
+            ) { (_, type) -> type }) { UnionTypeNode(emptyList(), TokenPosition.NONE) }
         ) { (vararg, identifier, type) ->
             RegularFunctionDefinitionArgumentNode(identifier, type, vararg)
         }.parse(input)

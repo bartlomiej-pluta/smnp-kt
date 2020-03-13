@@ -16,8 +16,6 @@ class MapEntryParser : Parser() {
             keyParser,
             terminal(TokenType.ARROW),
             assert(SubexpressionParser(), "expression")
-        ) {
-            MapEntryNode(it[0], it[1], it[2])
-        }.parse(input)
+        ) { (key, arrowToken, value) -> MapEntryNode(key, arrowToken, value) }.parse(input)
     }
 }

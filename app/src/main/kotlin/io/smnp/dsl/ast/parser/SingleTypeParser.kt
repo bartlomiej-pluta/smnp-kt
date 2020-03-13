@@ -10,8 +10,6 @@ class SingleTypeParser : Parser() {
         return allOf(
             SimpleIdentifierParser(),
             optional(repeat(TypeSpecifierParser()) { list, tokenPosition -> TypeSpecifiersNode(list, tokenPosition) })
-        ) {
-            SingleTypeNode(it[0], it[1])
-        }.parse(input)
+        ) { (identifier, specifiers) -> SingleTypeNode(identifier, specifiers) }.parse(input)
     }
 }

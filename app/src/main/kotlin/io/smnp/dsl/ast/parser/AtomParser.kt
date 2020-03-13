@@ -10,9 +10,7 @@ class AtomParser : Parser() {
             terminal(TokenType.OPEN_PAREN),
             ExpressionParser(),
             terminal(TokenType.CLOSE_PAREN)
-        ) {
-            it[1]
-        }
+        ) { (_, expression) -> expression }
 
         val literalParser = oneOf(
             parenthesesParser,

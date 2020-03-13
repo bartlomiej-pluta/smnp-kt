@@ -6,13 +6,11 @@ import io.smnp.dsl.token.model.entity.TokenList
 import io.smnp.dsl.token.model.enumeration.TokenType
 
 class AssignmentOperatorParser : Parser() {
-    override fun tryToParse(input: TokenList): ParserOutput {
-        return allOf(
-            SimpleIdentifierParser(),
-            terminal(TokenType.ASSIGN),
-            assert(ExpressionParser(), "expression")
-        ) {
-            AssignmentOperatorNode(it[0], it[1], it[2])
-        }.parse(input)
-    }
+   override fun tryToParse(input: TokenList): ParserOutput {
+      return allOf(
+         SimpleIdentifierParser(),
+         terminal(TokenType.ASSIGN),
+         assert(ExpressionParser(), "expression")
+      ) { (target, assignToken, value) -> AssignmentOperatorNode(target, assignToken, value) }.parse(input)
+   }
 }

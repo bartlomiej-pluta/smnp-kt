@@ -14,11 +14,11 @@ class OptionalFunctionDefinitionArgumentParser : Parser() {
             optional(allOf(
                 terminal(TokenType.COLON),
                 assert(TypeParser(), "type name")
-            ) { it[1] }) { UnionTypeNode(emptyList(), TokenPosition.NONE) },
+            ) { (_, type) -> type }) { UnionTypeNode(emptyList(), TokenPosition.NONE) },
             terminal(TokenType.ASSIGN),
             assert(ExpressionParser(), "expression")
-        ) {
-            OptionalFunctionDefinitionArgumentNode(it[0], it[1], it[3])
+        ) { (identifier, type, defaultValue) ->
+            OptionalFunctionDefinitionArgumentNode(identifier, type, defaultValue)
         }.parse(input)
     }
 }

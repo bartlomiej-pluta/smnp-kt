@@ -14,12 +14,12 @@ class LoopParser : Parser() {
                 mapNode(SimpleIdentifierParser()) { LoopParametersNode(listOf(it), it.position) },
                 LoopParametersParser()
             ), "loop parameters")
-        ) { it[1] }
+        ) { (_, parameters) -> parameters }
 
         val loopFilterParser = allOf(
             terminal(TokenType.PERCENT),
             assert(SubexpressionParser(), "filter as bool expression")
-        ) { it[1] }
+        ) { (_, filter) -> filter }
 
         return allOf(
             SubexpressionParser(),
@@ -27,8 +27,8 @@ class LoopParser : Parser() {
             terminal(TokenType.CARET),
             assert(StatementParser(), "statement"),
             optional(loopFilterParser)
-        ) {
-            LoopNode(it[0], it[1], it[2], it[3], it[4])
+        ) { (iterator, parameters, caretToken, statement, filter) ->
+            LoopNode(iterator, parameters, caretToken, statement, filter)
         }.parse(input)
     }
 }

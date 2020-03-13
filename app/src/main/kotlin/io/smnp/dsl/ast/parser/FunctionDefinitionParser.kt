@@ -12,8 +12,8 @@ class FunctionDefinitionParser : Parser() {
             assert(SimpleIdentifierParser(), "function/method name"),
             assert(FunctionDefinitionArgumentsParser(), "function/method arguments list"),
             assert(BlockParser(), "function/method body")
-        ) {
-            FunctionDefinitionNode(it[1], it[2], it[3], it[0].position)
+        ) { (functionToken, identifier, arguments, body) ->
+            FunctionDefinitionNode(identifier, arguments, body, functionToken.position)
         }.parse(input)
     }
 }

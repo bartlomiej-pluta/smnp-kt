@@ -16,8 +16,8 @@ class ExtendParser : Parser() {
             assert(SimpleIdentifierParser(), "identifier"),
             terminal(TokenType.WITH),
             assert(mapNode(FunctionDefinitionParser()) { BlockNode(Node.NONE, listOf(it), Node.NONE) }, "method definition")
-        ) {
-            ExtendNode(it[1], it[3], it[5], it[0].position)
+        ) { (extendToken, targetType, identifier, method) ->
+ExtendNode(targetType, identifier, method, extendToken.position)
         }
 
         val complexExtendParser = allOf(
@@ -28,8 +28,8 @@ class ExtendParser : Parser() {
             assert(loop(terminal(TokenType.OPEN_CURLY), assert(FunctionDefinitionParser(), "method definition or }"), terminal(TokenType.CLOSE_CURLY)) {
                 begin, methods, end -> BlockNode(begin, methods, end)
             }, "block with methods' definitions or 'with' keyword with single method definition")
-        ) {
-            ExtendNode(it[1], it[3], it[4], it[0].position)
+        ) { (extendToken, targetType, identifier, methods) ->
+            ExtendNode(targetType, identifier, methods, extendToken.position)
         }
 
         return oneOf(

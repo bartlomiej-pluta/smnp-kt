@@ -15,8 +15,6 @@ class StatementParser : Parser() {
                 ThrowParser()
             ),
             optional(terminal(TokenType.SEMICOLON))
-        ) {
-            it[0]
-        }.parse(input)
+        ) { (statement) -> statement }.parse(input)
     }
 }
