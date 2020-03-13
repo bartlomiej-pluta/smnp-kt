@@ -5,7 +5,7 @@ import io.smnp.callable.method.Method
 import io.smnp.type.model.Value
 
 class Module(
-    val name: String,
+    var name: String,
     functions: List<Function> = emptyList(),
     methods: List<Method> = emptyList(),
     children: List<Module> = emptyList()

@@ -7,14 +7,20 @@ abstract class LanguageModuleProvider(path: String) : ModuleProvider(path) {
    open fun files() = listOf("main.mus")
 
    override fun provideModule(interpreter: Interpreter): Module {
-      val module = Module.create(path)
-      interpreter.updateRootModule(module)
+      val segments = path.split(".")
+      val parentNodesChainPath = segments.dropLast(1).joinToString(".")
+      val moduleName = segments.last()
 
-      files()
+      val module = files()
+         .asSequence()
          .map { javaClass.classLoader.getResource(it) }
          .map { it.readText() }
-         .forEach { interpreter.run(it) }
+         .map { interpreter.run(it) }
+         .map { it.getRootModule() }
+         .reduce { acc, module -> acc.merge(module) }
 
-      return module
+      module.name = moduleName
+
+      return Module.create(parentNodesChainPath, children = listOf(module))
    }
 }

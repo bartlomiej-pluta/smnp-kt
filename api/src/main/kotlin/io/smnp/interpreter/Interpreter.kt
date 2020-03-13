@@ -1,8 +1,7 @@
 package io.smnp.interpreter
 
-import io.smnp.type.module.Module
+import io.smnp.environment.Environment
 
 interface Interpreter {
-   fun run(code: String)
-   fun updateRootModule(newRootModule: Module): Unit = throw RuntimeException("Replacing root module is not supported in this Interpreter implementation")
+   fun run(code: String): Environment
 }

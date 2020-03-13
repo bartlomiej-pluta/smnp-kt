@@ -21,26 +21,17 @@ class LanguageModuleInterpreter : Interpreter {
       ), "function definition or extend statement")
    )
 
-   override fun updateRootModule(newRootModule: Module) {
-      rootModule = newRootModule
-   }
-
-   override fun run(code: String) {
+   override fun run(code: String): Environment {
       val lines = code.split("\n")
       val tokens = tokenizer.tokenize(lines)
       val ast = parser.parse(tokens)
 
-      val environment = createEnvironment()
+      val environment = DefaultEnvironment()
       val result = evaluator.evaluate(ast.node, environment)
 
       if (result.result == EvaluationResult.FAILED) {
          throw RuntimeException("Evaluation failed")
       }
-   }
-
-   private fun createEnvironment(): Environment {
-      val environment = DefaultEnvironment(rootModule)
-      environment.loadModule("smnp.lang")
 
       return environment
    }

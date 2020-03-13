@@ -10,7 +10,8 @@ import io.smnp.runtime.model.CallStack
 import io.smnp.type.model.Value
 import io.smnp.type.module.Module
 
-class DefaultEnvironment(private val rootModule: Module = Module.create("<root>")) : Environment {
+class DefaultEnvironment : Environment {
+   private val rootModule = Module.create("<root>")
    private val loadedModules = mutableListOf<String>()
    private val callStack = CallStack()
 
@@ -105,4 +106,6 @@ class DefaultEnvironment(private val rootModule: Module = Module.create("<root>"
    override fun setVariable(name: String, value: Value) = callStack.top().setVariable(name, value)
 
    override fun getVariable(name: String) = callStack.top().getVariable(name)
+
+   override fun getRootModule() = rootModule
 }
