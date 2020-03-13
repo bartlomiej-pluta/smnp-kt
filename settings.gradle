@@ -4,4 +4,6 @@ include 'app'
 include 'modules'
 
 include 'modules:lang'
+include 'modules:debug'
 include 'modules:io'
+include 'modules:collection'

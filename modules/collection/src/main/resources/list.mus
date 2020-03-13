@@ -1,0 +1,15 @@
+function flatten(...lists: list) {
+    return _flatten(lists as list ^ _flatten(list, []), []);
+}
+
+function _flatten(list: list, output: list) {
+    list as element ^ {
+        if (typeOf(element) == "list") {
+            output = _flatten(element, output);
+        } else {
+            output = output + [element];
+        }
+    }
+
+    return output;
+}
