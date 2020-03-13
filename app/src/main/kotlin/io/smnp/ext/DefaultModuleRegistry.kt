@@ -14,7 +14,7 @@ object DefaultModuleRegistry : ModuleRegistry {
         }
     }
 
-    override fun requestModulesForPath(path: String): ModuleProvider {
+    override fun requestModuleProviderForPath(path: String): ModuleProvider {
         return modules[path] ?: throw RuntimeException("Module $path not found")
     }
 

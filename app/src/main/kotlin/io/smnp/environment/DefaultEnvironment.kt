@@ -3,7 +3,7 @@ package io.smnp.environment
 import io.smnp.callable.function.Function
 import io.smnp.callable.method.Method
 import io.smnp.callable.signature.ActualSignatureFormatter.format
-import io.smnp.ext.DefaultModuleRegistry.requestModulesForPath
+import io.smnp.ext.DefaultModuleRegistry.requestModuleProviderForPath
 import io.smnp.ext.ModuleProvider
 import io.smnp.interpreter.LanguageModuleInterpreter
 import io.smnp.runtime.model.CallStack
@@ -19,23 +19,24 @@ class DefaultEnvironment(private val rootModule: Module = Module.create("<root>"
    }
 
    override fun loadModule(path: String) {
-      requestModulesForPath(path).let {
-          loadModule(it)
-          loadDependencies(it)
+      requestModuleProviderForPath(path).let {
+         loadModule(it)
+         loadDependencies(it)
       }
    }
 
-   private fun loadModule(moduleProvider: ModuleProvider) {
-      rootModule.addSubmodule(moduleProvider.provideModule(LanguageModuleInterpreter()))
-      loadedModules.add(moduleProvider.path)
+   private fun loadModule(moduleProvider: ModuleProvider, consumer: (ModuleProvider) -> Unit = {}) {
+      if (!loadedModules.contains(moduleProvider.path)) {
+         rootModule.addSubmodule(moduleProvider.provideModule(LanguageModuleInterpreter()))
+         loadedModules.add(moduleProvider.path)
+         consumer(moduleProvider)
+      }
    }
 
    private fun loadDependencies(moduleProvider: ModuleProvider) {
-      moduleProvider.dependencies().forEach { dependencyPath ->
-         if (!loadedModules.contains(dependencyPath)) {
-            val dependency = requestModulesForPath(dependencyPath)
-            loadModule(dependency)
-            loadDependencies(dependency)
+      moduleProvider.dependencies().forEach { dependency ->
+         loadModule(requestModuleProviderForPath(dependency)) {
+            loadDependencies(it)
          }
       }
    }
