@@ -5,5 +5,7 @@ include 'modules'
 
 include 'modules:lang'
 include 'modules:debug'
+include 'modules:system'
 include 'modules:io'
 include 'modules:collection'
+include 'modules:text'

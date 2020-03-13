@@ -1,0 +1,21 @@
+extend map as this {
+    function containsKey(key) {
+        return this.keys.contains(key);
+    }
+
+    function containsValue(value) {
+        return this.values.contains(value);
+    }
+
+    function contains(key, value) {
+        return (this as (v, k) ^ v % (k == key) and (v == value)).size > 0;
+    }
+
+    function isEmpty() {
+        return this.size == 0;
+    }
+
+    function isNotEmpty() {
+        return not this.isEmpty();
+    }
+}

@@ -1,0 +1,158 @@
+extend string as this {
+    function find(char: string) {
+        if(char.length > 1) {
+            throw "Only single character can act as a pattern to be found";
+        }
+
+        this as (c, index) ^ {
+            if(c == char) {
+                return index;
+            }
+        }
+
+        return -1;
+    }
+
+    function isEmpty() {
+        return this.length == 0;
+    }
+
+    function isNotEmpty() {
+        return not this.isEmpty();
+    }
+
+    function toInt() {
+        if (this.isEmpty()) {
+            return this;
+        }
+
+        digits = {
+            "0" -> 0,
+            "1" -> 1,
+            "2" -> 2,
+            "3" -> 3,
+            "4" -> 4,
+            "5" -> 5,
+            "6" -> 6,
+            "7" -> 7,
+            "8" -> 8,
+            "9" -> 9
+        };
+
+        str = this;
+        negative = false;
+        if(str.charAt(0) == "-") {
+            negative = true;
+            str = this.substring(1, this.length);
+        }
+
+        output = 0
+        str as (char, index) ^ {
+            if(not digits.containsKey(char)) {
+                return this;
+            }
+
+            output = output + (digits.get(char) * 10 ** (str.length-index-1))
+        }
+
+        if (negative) {
+            output = -output;
+        }
+
+        return output;
+    }
+
+    function substring(startIndex: int, endIndex: int) {
+        output = ""
+        (endIndex - startIndex) as index ^ {
+            output = output + this.charAt(index + startIndex);
+        }
+
+        return output;
+    }
+
+    function split(delimiter: string) {
+        output = []
+
+        previousDelimiter = 0;
+        this as (char, index) ^ {
+            if(char == delimiter) {
+                output = output + [this.substring(previousDelimiter, index)];
+                previousDelimiter = index+1;
+            }
+        }
+
+        output = output + [this.substring(previousDelimiter, this.length)];
+
+        return output;
+    }
+
+    function toFloat() {
+        if (this.isEmpty()) {
+            return this;
+        }
+        digits = {
+            "0" -> 0,
+            "1" -> 1,
+            "2" -> 2,
+            "3" -> 3,
+            "4" -> 4,
+            "5" -> 5,
+            "6" -> 6,
+            "7" -> 7,
+            "8" -> 8,
+            "9" -> 9
+        };
+
+        str = this;
+        negative = false;
+        if(str.charAt(0) == "-") {
+            negative = true;
+            str = this.substring(1, this.length);
+        }
+
+        split = str.split(".");
+        if(split.size > 2) {
+            return this;
+        }
+
+        iStr = split.get(0);
+        dStr = split.get(1);
+
+        i = 0;
+        d = 0;
+
+        iStr as (char, index) ^ {
+            if(not digits.containsKey(char)) {
+                return this;
+            }
+
+            i = i + (digits.get(char) * 10 ** (iStr.length-index-1))
+        }
+
+        dStr as (char, index) ^ {
+            if(not digits.containsKey(char)) {
+                return this;
+            }
+
+            d = d + (digits.get(char)) * 10 ** (-index-1);
+        }
+
+        number = i + d;
+        if(negative) {
+            number = -number;
+        }
+
+        return number;
+    }
+
+    function toBool() {
+        if(this == "true") {
+            return true;
+        } else if (this == "false") {
+            return false;
+        } else {
+            return this;
+        }
+    }
+}

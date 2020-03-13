@@ -13,3 +13,33 @@ function _flatten(list: list, output: list) {
 
     return output;
 }
+
+extend list as this {
+    function toFlat() {
+        return flatten(this);
+    }
+
+    function contains(value) {
+        return (this as item ^ item % item == value).size > 0;
+    }
+
+    function join(separator: string = ", ") {
+        output = ""
+        this as (item, index) ^ {
+            output = output + item;
+            if (index < this.size - 1) {
+                output = output + separator;
+            }
+        }
+
+        return output;
+    }
+
+    function isEmpty() {
+        return this.size == 0;
+    }
+
+    function isNotEmpty() {
+        return not this.isEmpty();
+    }
+}
