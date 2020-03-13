@@ -13,9 +13,6 @@ abstract class Method(val typeMatcher: Matcher, val name: String) {
     var module: Module
         get() = _module ?: throw RuntimeException("Method has not set module yet")
         set(value) {
-            if (_module != null) {
-                throw RuntimeException("Module of method is already set to ${module.canonicalName}")
-            }
             _module = value
         }
 

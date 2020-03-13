@@ -12,9 +12,6 @@ abstract class Function(val name: String) {
     var module: Module
         get() = _module ?: throw RuntimeException("Function has not set module yet")
         set(value) {
-            if (_module != null) {
-                throw RuntimeException("Function of method is already set to ${module.canonicalName}")
-            }
             _module = value
         }
 
