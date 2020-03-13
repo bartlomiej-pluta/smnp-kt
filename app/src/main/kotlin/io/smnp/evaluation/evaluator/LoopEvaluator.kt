@@ -22,11 +22,12 @@ class LoopEvaluator : Evaluator() {
       environment.pushScope()
       val output = when (iterator.type) {
          INT -> evaluateForInt(iterator, parametersNode, statementNode, filterNode, environment)
+         STRING -> evaluateForString(iterator, parametersNode, statementNode, filterNode, environment)
          LIST -> evaluateForList(iterator, parametersNode, statementNode, filterNode, environment)
          MAP -> evaluateForMap(iterator, parametersNode, statementNode, filterNode, environment)
          BOOL -> evaluateForBool(iteratorNode, parametersNode, statementNode, filterNode, environment)
          else -> throw EvaluationException(
-            "Expected for-loop with int iterator or foreach-loop with list or map iterator or while-loop with bool iterator, found ${iterator.type.name.toLowerCase()}",
+            "Expected for-loop with int iterator or foreach-loop with string, list or map iterator or while-loop with bool iterator, found ${iterator.type.name.toLowerCase()}",
             iteratorNode.position
          )
       }
@@ -48,6 +49,29 @@ class LoopEvaluator : Evaluator() {
             parameters(parametersNode, { id -> environment.setVariable(id, Value.int(index)) })
 
             if (filter(filterNode, environment)) {
+               outputs.add(defaultEvaluator.evaluate(statementNode, environment))
+               index++
+            }
+         }
+      }
+   }
+
+   private fun evaluateForString(
+      iterator: Value,
+      parametersNode: Node,
+      statementNode: Node,
+      filterNode: Node,
+      environment: Environment
+   ): EvaluatorOutput {
+      return output { outputs ->
+         var index = 0
+         (iterator.value as String).forEach {
+            parameters(parametersNode,
+               { id -> environment.setVariable(id, Value.string(it.toString())) },
+               { id -> environment.setVariable(id, Value.int(index)) }
+            )
+
+            if(filter(filterNode, environment)) {
                outputs.add(defaultEvaluator.evaluate(statementNode, environment))
                index++
             }
