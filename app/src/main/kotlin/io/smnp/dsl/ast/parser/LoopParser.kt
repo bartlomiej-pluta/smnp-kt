@@ -10,10 +10,10 @@ class LoopParser : Parser() {
     override fun tryToParse(input: TokenList): ParserOutput {
         val loopParametersParser = allOf(
             terminal(TokenType.AS),
-            oneOf(
+            assert(oneOf(
                 mapNode(SimpleIdentifierParser()) { LoopParametersNode(listOf(it), it.position) },
                 LoopParametersParser()
-            )
+            ), "loop parameters")
         ) { it[1] }
 
         val loopFilterParser = allOf(
@@ -25,7 +25,7 @@ class LoopParser : Parser() {
             SubexpressionParser(),
             optional(loopParametersParser),
             terminal(TokenType.CARET),
-            StatementParser(),
+            assert(StatementParser(), "statement"),
             optional(loopFilterParser)
         ) {
             LoopNode(it[0], it[1], it[2], it[3], it[4])

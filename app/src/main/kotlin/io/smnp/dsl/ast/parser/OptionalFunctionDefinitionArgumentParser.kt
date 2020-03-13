@@ -13,7 +13,7 @@ class OptionalFunctionDefinitionArgumentParser : Parser() {
             SimpleIdentifierParser(),
             optional(allOf(
                 terminal(TokenType.COLON),
-                TypeParser()
+                assert(TypeParser(), "type name")
             ) { it[1] }) { UnionTypeNode(emptyList(), TokenPosition.NONE) },
             terminal(TokenType.ASSIGN),
             assert(ExpressionParser(), "expression")

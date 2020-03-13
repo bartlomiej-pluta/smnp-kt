@@ -10,7 +10,7 @@ class UnitParser : Parser() {
     override fun tryToParse(input: TokenList): ParserOutput {
         val minusOperatorParser = allOf(
             terminal(TokenType.MINUS),
-            assert(AtomParser(), "atom")
+            assert(AtomParser(), "expression")
         ) {
             MinusOperatorNode(it[0], it[1])
         }
@@ -20,7 +20,7 @@ class UnitParser : Parser() {
             AtomParser()
         )
 
-        return leftAssociativeOperator(atom2, listOf(TokenType.DOT), assert(atom2, "atom")) { lhs, operator, rhs ->
+        return leftAssociativeOperator(atom2, listOf(TokenType.DOT), assert(atom2, "property or method call")) { lhs, operator, rhs ->
             AccessOperatorNode(lhs, operator, rhs)
         }.parse(input)
     }

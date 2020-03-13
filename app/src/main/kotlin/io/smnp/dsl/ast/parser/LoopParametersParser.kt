@@ -5,7 +5,7 @@ import io.smnp.dsl.token.model.enumeration.TokenType
 
 class LoopParametersParser : AbstractIterableParser(
     TokenType.OPEN_PAREN,
-    SimpleIdentifierParser(),
+    assert(SimpleIdentifierParser(), "identifier"),
     TokenType.CLOSE_PAREN,
     { list, tokenPosition ->
         LoopParametersNode(list, tokenPosition)

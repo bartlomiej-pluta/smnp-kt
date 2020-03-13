@@ -9,9 +9,9 @@ class ReturnParser : Parser() {
     override fun tryToParse(input: TokenList): ParserOutput {
         return allOf(
             terminal(TokenType.RETURN),
-            optional(ExpressionParser())
-        ) {
-            ReturnNode(it[1])
+            optional(assert(ExpressionParser(), "expression"))
+        ) { (_, value) ->
+            ReturnNode(value)
         }.parse(input)
     }
 }

@@ -10,7 +10,7 @@ class TermParser : Parser() {
         return leftAssociativeOperator(
             FactorParser(),
             listOf(TokenType.ASTERISK, TokenType.SLASH),
-            FactorParser()
+            assert(FactorParser(), "expression")
         ) { lhs, operator, rhs ->
             ProductOperatorNode(lhs, operator, rhs)
         }.parse(input)

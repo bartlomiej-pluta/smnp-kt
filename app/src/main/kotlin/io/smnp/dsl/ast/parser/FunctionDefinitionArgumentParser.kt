@@ -5,9 +5,9 @@ import io.smnp.dsl.token.model.entity.TokenList
 
 class FunctionDefinitionArgumentParser : Parser() {
     override fun tryToParse(input: TokenList): ParserOutput {
-        return oneOf(
+        return assert(oneOf(
             OptionalFunctionDefinitionArgumentParser(),
             RegularFunctionDefinitionArgumentParser()
-        ).parse(input)
+        ), "optional or regular argument definition").parse(input)
     }
 }

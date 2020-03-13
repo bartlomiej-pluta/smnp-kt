@@ -22,7 +22,7 @@ class ImportParser : Parser() {
 
       return allOf(
          terminal(TokenType.IMPORT),
-         pathParser
+         assert(pathParser, "module canonical name")
       ) { (import, path) ->
          ImportNode(path.children, import.position)
       }.parse(input)

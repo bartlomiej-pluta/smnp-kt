@@ -11,23 +11,23 @@ class ConditionParser : Parser() {
         val ifStatementParser = allOf(
             terminal(TokenType.IF),
             terminal(TokenType.OPEN_PAREN),
-            SubexpressionParser(),
+            assert(SubexpressionParser(), "expression"),
             terminal(TokenType.CLOSE_PAREN),
-            StatementParser()
-        ) {
-            ConditionNode(it[0], it[2], it[4], Node.NONE, Node.NONE)
+            assert(StatementParser(), "statement")
+        ) { (ifToken, condition, trueBranch) ->
+            ConditionNode(ifToken, condition, trueBranch, Node.NONE, Node.NONE)
         }
 
         val ifElseStatementParser = allOf(
             terminal(TokenType.IF),
             terminal(TokenType.OPEN_PAREN),
-            SubexpressionParser(),
+            assert(SubexpressionParser(), "expression"),
             terminal(TokenType.CLOSE_PAREN),
-            StatementParser(),
+            assert(StatementParser(), "statement"),
             terminal(TokenType.ELSE),
-            StatementParser()
-        ) {
-            ConditionNode(it[0], it[2], it[4], it[5], it[6])
+            assert(StatementParser(), "statement")
+        ) { (ifToken, condition, trueBranch, elseToken, falseBranch) ->
+            ConditionNode(ifToken, condition, trueBranch, elseToken, falseBranch)
         }
 
         return oneOf(

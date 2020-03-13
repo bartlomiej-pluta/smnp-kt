@@ -7,7 +7,7 @@ import io.smnp.dsl.token.model.enumeration.TokenType
 
 class RootParser : Parser() {
     override fun tryToParse(input: TokenList): ParserOutput {
-        return repeat(
+        return assert(repeat(
             oneOf(
                 allOf(ImportParser(), optional(terminal(TokenType.SEMICOLON))) { (import, _) -> import },
                 FunctionDefinitionParser(),
@@ -16,6 +16,6 @@ class RootParser : Parser() {
             )
         ) { list, tokenPosition ->
             RootNode(list, tokenPosition)
-        }.parse(input)
+        }, "import statement, function definition, extend statement or any other statement").parse(input)
     }
 }

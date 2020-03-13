@@ -11,14 +11,14 @@ class FactorParser : Parser() {
         val factorParser = leftAssociativeOperator(
             UnitParser(),
             listOf(TokenType.DOUBLE_ASTERISK),
-            UnitParser()
+            assert(UnitParser(), "expression")
         ) { lhs, operator, rhs ->
             PowerOperatorNode(lhs, operator, rhs)
         }
 
         val notOperatorParser = allOf(
             terminal(TokenType.NOT),
-            factorParser
+            assert(factorParser, "expression")
         ) {
             NotOperatorNode(it[0], it[1])
         }
