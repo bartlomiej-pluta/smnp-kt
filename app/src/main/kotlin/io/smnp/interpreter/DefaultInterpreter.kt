@@ -8,7 +8,7 @@ import io.smnp.evaluation.evaluator.RootEvaluator
 import io.smnp.evaluation.model.enumeration.EvaluationResult
 import java.io.File
 
-class Interpreter {
+class DefaultInterpreter : Interpreter {
     private val tokenizer = DefaultTokenizer()
     private val parser = RootParser()
     private val evaluator = RootEvaluator()
@@ -46,4 +46,6 @@ class Interpreter {
         val lines = file.readLines()
         run(lines, printTokens, printAst, dryRun)
     }
+
+    override fun run(code: String) = run(code, printTokens = false, printAst = false, dryRun = false)
 }

@@ -4,13 +4,13 @@ import io.smnp.callable.function.Function
 import io.smnp.callable.method.Method
 import io.smnp.callable.signature.ActualSignatureFormatter.format
 import io.smnp.ext.DefaultModuleRegistry.requestModulesForPath
-import io.smnp.ext.ModuleDefinition
+import io.smnp.ext.ModuleProvider
+import io.smnp.interpreter.LanguageModuleInterpreter
 import io.smnp.runtime.model.CallStack
 import io.smnp.type.model.Value
 import io.smnp.type.module.Module
 
-class DefaultEnvironment : Environment {
-   private val rootModule = Module("<root>")
+class DefaultEnvironment(private val rootModule: Module = Module.create("<root>")) : Environment {
    private val loadedModules = mutableListOf<String>()
    private val callStack = CallStack()
 
@@ -25,13 +25,13 @@ class DefaultEnvironment : Environment {
       }
    }
 
-   private fun loadModule(moduleDefinition: ModuleDefinition) {
-      rootModule.addSubmodule(moduleDefinition.module())
-      loadedModules.add(moduleDefinition.path)
+   private fun loadModule(moduleProvider: ModuleProvider) {
+      rootModule.addSubmodule(moduleProvider.provideModule(LanguageModuleInterpreter()))
+      loadedModules.add(moduleProvider.path)
    }
 
-   private fun loadDependencies(moduleDefinition: ModuleDefinition) {
-      moduleDefinition.dependencies().forEach { dependencyPath ->
+   private fun loadDependencies(moduleProvider: ModuleProvider) {
+      moduleProvider.dependencies().forEach { dependencyPath ->
          if (!loadedModules.contains(dependencyPath)) {
             val dependency = requestModulesForPath(dependencyPath)
             loadModule(dependency)
