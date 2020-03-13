@@ -13,16 +13,25 @@ class Interpreter {
     private val parser = RootParser()
     private val evaluator = RootEvaluator()
 
-    fun run(code: String) {
+    fun run(code: String, printTokens: Boolean = false, printAst: Boolean = false, dryRun: Boolean = false) {
         val lines = code.split("\n")
+        run(lines, printTokens, printAst, dryRun)
+    }
+
+    private fun run(lines: List<String>, printTokens: Boolean = false, printAst: Boolean = false, dryRun: Boolean = false) {
         val tokens = tokenizer.tokenize(lines)
         val ast = parser.parse(tokens)
 
-        val environment = createEnvironment()
-        val result = evaluator.evaluate(ast.node, environment)
+        if(printTokens) println(tokens)
+        if(printAst) ast.node.pretty()
 
-        if(result.result == EvaluationResult.FAILED) {
-            throw RuntimeException("Evaluation failed")
+        if(!dryRun) {
+            val environment = createEnvironment()
+            val result = evaluator.evaluate(ast.node, environment)
+
+            if(result.result == EvaluationResult.FAILED) {
+                throw RuntimeException("Evaluation failed")
+            }
         }
     }
 
@@ -33,12 +42,8 @@ class Interpreter {
         return environment
     }
 
-    fun run(file: File) {
+    fun run(file: File, printTokens: Boolean = false, printAst: Boolean = false, dryRun: Boolean = false) {
         val lines = file.readLines()
-        val tokens = tokenizer.tokenize(lines)
-        val ast = parser.parse(tokens)
-
-        val environment = createEnvironment()
-        evaluator.evaluate(ast.node, environment)
+        run(lines, printTokens, printAst, dryRun)
     }
 }
