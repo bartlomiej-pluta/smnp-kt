@@ -2,21 +2,29 @@ package io.smnp.dsl.ast.parser
 
 import io.smnp.dsl.ast.model.entity.ParserOutput
 import io.smnp.dsl.ast.model.node.ImportNode
+import io.smnp.dsl.ast.model.node.Node
 import io.smnp.dsl.token.model.entity.TokenList
 import io.smnp.dsl.token.model.enumeration.TokenType
 
 class ImportParser : Parser() {
-    override fun tryToParse(input: TokenList): ParserOutput {
-        val pathParser = oneOf(
-            UnitParser(),
+   override fun tryToParse(input: TokenList): ParserOutput {
+      val pathParser = allOf(
+         SimpleIdentifierParser(),
+         optional(repeat(allOf(
+            terminal(TokenType.DOT),
             SimpleIdentifierParser()
-        )
+         ) { (_, child) -> child }) { segments, position ->
+            object : Node(segments, position) {}
+         })) { (firstSegment, otherSegments) ->
+         object : Node(listOf(firstSegment) + otherSegments.children, firstSegment.position) {}
+      }
 
-        return allOf(
-            terminal(TokenType.IMPORT),
-            pathParser
-        ) {
-            ImportNode(it[1], it[0].position)
-        }.parse(input)
-    }
+
+      return allOf(
+         terminal(TokenType.IMPORT),
+         pathParser
+      ) { (import, path) ->
+         ImportNode(path.children, import.position)
+      }.parse(input)
+   }
 }
