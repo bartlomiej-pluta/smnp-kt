@@ -6,10 +6,10 @@ data class TokenPosition(val line: Int, val beginCol: Int, val endCol: Int) {
     }
 
     override fun toString(): String {
-        return "[line ${line+1}, col ${beginCol}]"
+        return "[line ${line+1}, col ${beginCol+1}]"
     }
 
     fun short(): String {
-        return "${line+1}:${beginCol}"
+        return "${line+1}:${beginCol+1}"
     }
 }

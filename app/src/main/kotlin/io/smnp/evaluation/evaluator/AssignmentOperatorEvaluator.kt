@@ -4,7 +4,9 @@ import io.smnp.dsl.ast.model.node.AssignmentOperatorNode
 import io.smnp.dsl.ast.model.node.IdentifierNode
 import io.smnp.dsl.ast.model.node.Node
 import io.smnp.environment.Environment
+import io.smnp.error.EnvironmentException
 import io.smnp.error.EvaluationException
+import io.smnp.error.PositionException
 import io.smnp.evaluation.model.entity.EvaluatorOutput
 import io.smnp.type.enumeration.DataType
 
@@ -19,8 +21,11 @@ class AssignmentOperatorEvaluator : Evaluator() {
       val value = evaluator.evaluate(valueNode, environment).value!!
 
       if (value.type == DataType.VOID) {
-         throw EvaluationException(
-            "Right hand side expression of assignment operation has returned nothing",
+         throw PositionException(
+            EnvironmentException(
+               EvaluationException("Right hand side expression of assignment operation has returned nothing"),
+               environment
+            ),
             valueNode.position
          )
       }

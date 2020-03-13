@@ -2,6 +2,7 @@ package io.smnp.runtime.model
 
 import io.smnp.callable.signature.ActualSignatureFormatter
 import io.smnp.collection.Stack
+import io.smnp.error.EvaluationException
 import io.smnp.type.model.Value
 import io.smnp.type.module.Module
 
@@ -24,7 +25,7 @@ data class CallStackFrame(
     }
 
     fun getVariable(name: String): Value {
-        return scopes.lastOrNull { it.containsKey(name) }?.get(name) ?: throw RuntimeException("Undefined variable `$name`")
+        return scopes.lastOrNull { it.containsKey(name) }?.get(name) ?: throw EvaluationException("Undefined variable `$name`")
     }
 
     fun prettyScope() {

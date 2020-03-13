@@ -3,6 +3,7 @@ package io.smnp.environment
 import io.smnp.callable.function.Function
 import io.smnp.callable.method.Method
 import io.smnp.callable.signature.ActualSignatureFormatter.format
+import io.smnp.error.EvaluationException
 import io.smnp.ext.DefaultModuleRegistry.requestModuleProviderForPath
 import io.smnp.ext.ModuleProvider
 import io.smnp.interpreter.LanguageModuleInterpreter
@@ -49,11 +50,11 @@ class DefaultEnvironment : Environment {
    override fun invokeFunction(name: String, arguments: List<Value>): Value {
       val foundFunctions = rootModule.findFunction(name)
       if (foundFunctions.isEmpty()) {
-         throw RuntimeException("No function found with name of '$name'")
+         throw EvaluationException("No function found with name of '$name'")
       }
 
       if (foundFunctions.size > 1) {
-         throw RuntimeException("Found ${foundFunctions.size} functions with name of $name: [${foundFunctions.map { it.module.canonicalName }.joinToString()}]")
+         throw EvaluationException("Found ${foundFunctions.size} functions with name of $name: [${foundFunctions.map { it.module.canonicalName }.joinToString()}]")
 
       }
 
@@ -69,11 +70,19 @@ class DefaultEnvironment : Environment {
    override fun invokeMethod(obj: Value, name: String, arguments: List<Value>): Value {
       val foundMethods = rootModule.findMethod(obj, name)
       if (foundMethods.isEmpty()) {
-         throw RuntimeException("No method found with name of '$name' for ${format(obj)}")
+         throw EvaluationException(
+            "No method found with name of '$name' for ${format(
+               obj
+            )}"
+         )
       }
 
       if (foundMethods.size > 1) {
-         throw RuntimeException("Found ${foundMethods.size} methods with name of $name for ${format(obj)}: [${foundMethods.map { it.module.canonicalName }.joinToString()}]")
+         throw EvaluationException(
+            "Found ${foundMethods.size} methods with name of $name for ${format(
+               obj
+            )}: [${foundMethods.map { it.module.canonicalName }.joinToString()}]"
+         )
       }
 
       val method = foundMethods[0]
@@ -87,6 +96,10 @@ class DefaultEnvironment : Environment {
 
    override fun printCallStack() {
       callStack.pretty()
+   }
+
+   override fun stackTrace(): String {
+      return callStack.stackTrace();
    }
 
    override fun defineFunction(function: Function) {

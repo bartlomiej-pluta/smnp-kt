@@ -1,5 +1,6 @@
 package io.smnp.ext
 
+import io.smnp.error.ModuleException
 import org.pf4j.DefaultPluginManager
 
 object DefaultModuleRegistry : ModuleRegistry {
@@ -15,7 +16,7 @@ object DefaultModuleRegistry : ModuleRegistry {
     }
 
     override fun requestModuleProviderForPath(path: String): ModuleProvider {
-        return modules[path] ?: throw RuntimeException("Module $path not found")
+        return modules[path] ?: throw ModuleException("Module $path not found")
     }
 
     override fun registeredModules() = modules.keys.toList()

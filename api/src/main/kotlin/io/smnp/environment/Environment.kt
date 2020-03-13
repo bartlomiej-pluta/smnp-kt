@@ -11,6 +11,7 @@ interface Environment {
    fun invokeFunction(name: String, arguments: List<Value>): Value
    fun invokeMethod(obj: Value, name: String, arguments: List<Value>): Value
    fun printCallStack()
+   fun stackTrace(): String
    fun defineFunction(function: Function)
    fun defineMethod(method: Method)
    fun pushScope(scope: MutableMap<String, Value> = mutableMapOf())

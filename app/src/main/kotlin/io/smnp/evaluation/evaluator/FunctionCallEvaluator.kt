@@ -5,6 +5,10 @@ import io.smnp.dsl.ast.model.node.FunctionCallNode
 import io.smnp.dsl.ast.model.node.IdentifierNode
 import io.smnp.dsl.ast.model.node.Node
 import io.smnp.environment.Environment
+import io.smnp.error.EnvironmentException
+import io.smnp.error.EvaluationException
+import io.smnp.error.FunctionInvocationException
+import io.smnp.error.PositionException
 import io.smnp.evaluation.model.entity.EvaluatorOutput
 
 class FunctionCallEvaluator : Evaluator() {
@@ -16,6 +20,12 @@ class FunctionCallEvaluator : Evaluator() {
         val identifier = (identifierNode as IdentifierNode).token.rawValue
         val arguments = (argsNode as FunctionCallArgumentsNode).items.map { evaluator.evaluate(it, environment).value!! }
 
-        return EvaluatorOutput.value(environment.invokeFunction(identifier, arguments))
+        try {
+            return EvaluatorOutput.value(environment.invokeFunction(identifier, arguments))
+        } catch(e: FunctionInvocationException) {
+            throw PositionException(EnvironmentException(e, environment), node.position)
+        } catch(e: EvaluationException) {
+            throw PositionException(EnvironmentException(e, environment), node.position)
+        }
     }
 }

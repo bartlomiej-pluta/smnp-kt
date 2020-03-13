@@ -2,6 +2,7 @@ package io.smnp.callable.util
 
 import io.smnp.callable.signature.Signature
 import io.smnp.dsl.ast.model.node.*
+import io.smnp.error.InvalidSignatureException
 import io.smnp.error.ShouldNeverReachThisLineException
 import io.smnp.type.enumeration.DataType
 import io.smnp.type.matcher.Matcher
@@ -42,7 +43,7 @@ object FunctionSignatureParser {
             }
         }.eachCount().forEach {
             if (it.value > 1) {
-                throw RuntimeException("Duplicated argument name of '${it.key}'")
+                throw InvalidSignatureException("Duplicated argument name of '${it.key}'")
             }
         }
     }
@@ -61,15 +62,15 @@ object FunctionSignatureParser {
         )
 
         if (metadata.hasVararg && metadata.hasOptional) {
-            throw RuntimeException("Optional arguments and vararg cannot be mixed in same signature")
+            throw InvalidSignatureException("Optional arguments and vararg cannot be mixed in same signature")
         }
 
         if (metadata.hasRegular && metadata.hasOptional && firstOptional < lastRegular) {
-            throw RuntimeException("Optional arguments should be at the very end of arguments list")
+            throw InvalidSignatureException("Optional arguments should be at the very end of arguments list")
         }
 
         if (metadata.hasVararg && vararg != signature.items.size - 1) {
-            throw RuntimeException("Vararg arguments should be at the very end of arguments list")
+            throw InvalidSignatureException("Vararg arguments should be at the very end of arguments list")
         }
 
         return metadata
@@ -107,7 +108,7 @@ object FunctionSignatureParser {
             )
         }
 
-        throw RuntimeException("Unknown type")
+        throw ShouldNeverReachThisLineException()
     }
 
     private fun listSpecifier(listSpecifierNode: TypeSpecifierNode): Matcher {

@@ -21,4 +21,6 @@ class CallStack {
     fun pretty() {
         items.asReversed().forEachIndexed { index, item -> println("[${items.size - index - 1}] $item") }
     }
+
+    fun stackTrace() = items.asReversed().mapIndexed { index, item -> "[${items.size - index - 1}] $item" }.joinToString("\n")
 }

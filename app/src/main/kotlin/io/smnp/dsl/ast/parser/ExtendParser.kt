@@ -28,7 +28,7 @@ ExtendNode(targetType, identifier, method, extendToken.position)
             assert(loop(terminal(TokenType.OPEN_CURLY), assert(FunctionDefinitionParser(), "method definition or }"), terminal(TokenType.CLOSE_CURLY)) {
                 begin, methods, end -> BlockNode(begin, methods, end)
             }, "block with methods' definitions or 'with' keyword with single method definition")
-        ) { (extendToken, targetType, identifier, methods) ->
+        ) { (extendToken, targetType, _, identifier, methods) ->
             ExtendNode(targetType, identifier, methods, extendToken.position)
         }
 

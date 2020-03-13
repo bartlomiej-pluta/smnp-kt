@@ -4,29 +4,38 @@ import io.smnp.dsl.ast.model.node.ConditionNode
 import io.smnp.dsl.ast.model.node.Node
 import io.smnp.dsl.ast.model.node.NoneNode
 import io.smnp.environment.Environment
+import io.smnp.error.EnvironmentException
 import io.smnp.error.EvaluationException
+import io.smnp.error.PositionException
 import io.smnp.evaluation.model.entity.EvaluatorOutput
 import io.smnp.type.enumeration.DataType
 
 class ConditionEvaluator : Evaluator() {
-    override fun supportedNodes() = listOf(ConditionNode::class)
+   private val expressionEvaluator = ExpressionEvaluator()
+   private val defaultEvaluator = DefaultEvaluator()
 
-    override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
-        val expressionEvaluator = ExpressionEvaluator()
-        val defaultEvaluator = DefaultEvaluator()
-        val (conditionNode, trueBranchNode, falseBranchNode) = (node as ConditionNode)
-        val condition = expressionEvaluator.evaluate(conditionNode, environment).value!!
+   override fun supportedNodes() = listOf(ConditionNode::class)
 
-        if(condition.type != DataType.BOOL) {
-            throw EvaluationException("Condition should be of bool type, found '${condition.value}'", conditionNode.position)
-        }
+   override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
+      val (conditionNode, trueBranchNode, falseBranchNode) = (node as ConditionNode)
+      val condition = expressionEvaluator.evaluate(conditionNode, environment).value!!
 
-        if(condition.value!! as Boolean) {
-            return defaultEvaluator.evaluate(trueBranchNode, environment)
-        } else if(falseBranchNode !is NoneNode) {
-            return defaultEvaluator.evaluate(falseBranchNode, environment)
-        }
+      if (condition.type != DataType.BOOL) {
+         throw PositionException(
+            EnvironmentException(
+               EvaluationException("Condition should be of bool type, found '${condition.value}'"),
+               environment
+            ),
+            conditionNode.position
+         )
+      }
 
-        return EvaluatorOutput.ok()
-    }
+      if (condition.value!! as Boolean) {
+         return defaultEvaluator.evaluate(trueBranchNode, environment)
+      } else if (falseBranchNode !is NoneNode) {
+         return defaultEvaluator.evaluate(falseBranchNode, environment)
+      }
+
+      return EvaluatorOutput.ok()
+   }
 }

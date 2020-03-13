@@ -2,7 +2,6 @@ package io.smnp.callable.function
 
 import io.smnp.environment.Environment
 import io.smnp.error.FunctionInvocationException
-import io.smnp.error.RuntimeException
 import io.smnp.type.model.Value
 import io.smnp.type.module.Module
 
@@ -25,7 +24,7 @@ abstract class Function(val name: String) {
         val (definition, args) = definitions
             .map { Pair(it, it.signature.parse(arguments.toList())) }
             .firstOrNull { (_, args) -> args.signatureMatched }
-            ?: throw FunctionInvocationException(this, arguments)
+            ?: throw FunctionInvocationException(this, arguments, environment)
 
         return definition.body(environment, args.arguments)
     }

@@ -2,7 +2,9 @@ package io.smnp.evaluation.evaluator
 
 import io.smnp.dsl.ast.model.node.Node
 import io.smnp.environment.Environment
+import io.smnp.error.EnvironmentException
 import io.smnp.error.EvaluationException
+import io.smnp.error.PositionException
 import io.smnp.evaluation.model.entity.EvaluatorOutput
 import io.smnp.evaluation.model.enumeration.EvaluationResult
 import kotlin.reflect.KClass
@@ -62,7 +64,10 @@ abstract class Evaluator {
                val output = evaluator.evaluate(node, environment)
 
                if (output.result == EvaluationResult.FAILED) {
-                  throw EvaluationException("Expected $expected", node.position)
+                  throw PositionException(
+                     EnvironmentException(EvaluationException("Expected $expected"), environment),
+                     node.position
+                  )
                }
 
                return output

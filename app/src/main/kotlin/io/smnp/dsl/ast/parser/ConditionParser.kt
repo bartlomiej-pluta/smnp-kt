@@ -14,7 +14,7 @@ class ConditionParser : Parser() {
             assert(SubexpressionParser(), "expression"),
             terminal(TokenType.CLOSE_PAREN),
             assert(StatementParser(), "statement")
-        ) { (ifToken, condition, trueBranch) ->
+        ) { (ifToken, _, condition, _, trueBranch) ->
             ConditionNode(ifToken, condition, trueBranch, Node.NONE, Node.NONE)
         }
 
@@ -26,7 +26,7 @@ class ConditionParser : Parser() {
             assert(StatementParser(), "statement"),
             terminal(TokenType.ELSE),
             assert(StatementParser(), "statement")
-        ) { (ifToken, condition, trueBranch, elseToken, falseBranch) ->
+        ) { (ifToken, _, condition, _, trueBranch, elseToken, falseBranch) ->
             ConditionNode(ifToken, condition, trueBranch, elseToken, falseBranch)
         }
 
@@ -36,3 +36,7 @@ class ConditionParser : Parser() {
         ).parse(input)
     }
 }
+
+// It is required for destructing list of nodes in ifElseStatementParser object
+private operator fun <E> List<E>.component6() = this[5];
+private operator fun <E> List<E>.component7() = this[6];

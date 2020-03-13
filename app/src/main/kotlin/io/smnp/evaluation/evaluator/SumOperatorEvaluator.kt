@@ -5,7 +5,9 @@ import io.smnp.dsl.ast.model.node.SumOperatorNode
 import io.smnp.dsl.ast.model.node.TokenNode
 import io.smnp.dsl.token.model.enumeration.TokenType
 import io.smnp.environment.Environment
+import io.smnp.error.EnvironmentException
 import io.smnp.error.EvaluationException
+import io.smnp.error.PositionException
 import io.smnp.error.ShouldNeverReachThisLineException
 import io.smnp.evaluation.model.entity.EvaluatorOutput
 import io.smnp.evaluation.util.NumberUnification.unify
@@ -24,27 +26,31 @@ class SumOperatorEvaluator : Evaluator() {
 
       return EvaluatorOutput.value(
          when (operator) {
-            TokenType.PLUS -> plus(lhs, opNode, rhs)
-            TokenType.MINUS -> minus(lhs, opNode, rhs)
+            TokenType.PLUS -> plus(lhs, opNode, rhs, environment)
+            TokenType.MINUS -> minus(lhs, opNode, rhs, environment)
             else -> throw ShouldNeverReachThisLineException()
          }
       )
    }
 
-   private fun plus(lhs: Value, plusNode: Node, rhs: Value): Value {
+   private fun plus(lhs: Value, plusNode: Node, rhs: Value, environment: Environment): Value {
       return if (areNumeric(lhs, rhs))
          unify(lhs, rhs, int = { (l, r) -> Value.int(l + r) }, float = { (l, r) -> Value.float(l + r) })
       else if (lhs.type == DataType.STRING)
          Value.string(lhs.value!! as String + rhs.value.toString())
       else if (areLists(lhs, rhs))
          Value.list(lhs.value!! as List<Value> + rhs.value!! as List<Value>)
-      else throw EvaluationException(
-         "The ${lhs.type.name.toLowerCase()} and ${rhs.type.name.toLowerCase()} are not supported by + operator",
-         plusNode.position
+      else throw PositionException(
+         EnvironmentException(
+            EvaluationException(
+               "The ${lhs.type.name.toLowerCase()} and ${rhs.type.name.toLowerCase()} are not supported by + operator"
+            ),
+            environment
+         ), plusNode.position
       )
    }
 
-   private fun minus(lhs: Value, minusNode: Node, rhs: Value): Value {
+   private fun minus(lhs: Value, minusNode: Node, rhs: Value, environment: Environment): Value {
       return if (areNumeric(lhs, rhs))
          unify(
             lhs,
@@ -52,7 +58,13 @@ class SumOperatorEvaluator : Evaluator() {
             int = { (l, r) -> Value.int(l - r) },
             float = { (l, r) -> Value.float(l - r) }
          )
-      else throw EvaluationException("The - operator supports only numeric values", minusNode.position)
+      else throw PositionException(
+         EnvironmentException(
+            EvaluationException("The - operator supports only numeric values"),
+            environment
+         ),
+         minusNode.position
+      )
    }
 
    private fun areNumeric(lhs: Value, rhs: Value) = lhs.type.isNumeric() && rhs.type.isNumeric()

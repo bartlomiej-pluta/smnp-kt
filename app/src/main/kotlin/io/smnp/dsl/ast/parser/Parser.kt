@@ -9,6 +9,7 @@ import io.smnp.dsl.token.model.entity.TokenList
 import io.smnp.dsl.token.model.entity.TokenPosition
 import io.smnp.dsl.token.model.enumeration.TokenType
 import io.smnp.error.InvalidSyntaxException
+import io.smnp.error.PositionException
 
 abstract class Parser {
     fun parse(input: TokenList): ParserOutput {
@@ -178,7 +179,7 @@ abstract class Parser {
                     val output = parser.parse(input)
 
                     if (output.result == ParsingResult.FAILED) {
-                        throw InvalidSyntaxException("Expected $expected, got '${input.current.rawValue}'", input.currentPos())
+                        throw PositionException(InvalidSyntaxException("Expected $expected, got '${input.current.rawValue}'"), input.currentPos())
                     }
 
                     return output

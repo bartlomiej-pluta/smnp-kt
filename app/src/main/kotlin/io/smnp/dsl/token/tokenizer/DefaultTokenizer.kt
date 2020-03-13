@@ -11,6 +11,7 @@ import io.smnp.dsl.token.tokenizer.Tokenizer.Companion.mapValue
 import io.smnp.dsl.token.tokenizer.Tokenizer.Companion.regex
 import io.smnp.dsl.token.tokenizer.Tokenizer.Companion.separated
 import io.smnp.error.InvalidSyntaxException
+import io.smnp.error.PositionException
 
 class DefaultTokenizer : Tokenizer {
     private val tokenizers = listOf(
@@ -91,7 +92,7 @@ class DefaultTokenizer : Tokenizer {
                 val output = tokenize(line, current, index)
 
                 if (!output.consumed()) {
-                    throw InvalidSyntaxException("Unknown symbol ${line[current]}", TokenPosition(index, current, -1))
+                    throw PositionException(InvalidSyntaxException("Unknown symbol ${line[current]}"), TokenPosition(index, current, -1))
                 }
 
                 current += output.consumedChars

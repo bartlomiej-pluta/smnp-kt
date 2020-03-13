@@ -3,7 +3,7 @@ package io.smnp.ext.lang.method
 import io.smnp.callable.method.Method
 import io.smnp.callable.method.MethodDefinitionTool
 import io.smnp.callable.signature.Signature.Companion.simple
-import io.smnp.error.RuntimeException
+import io.smnp.error.EvaluationException
 import io.smnp.type.enumeration.DataType.INT
 import io.smnp.type.enumeration.DataType.LIST
 import io.smnp.type.matcher.Matcher.Companion.ofType
@@ -16,7 +16,7 @@ class ListAccessMethod : Method(ofType(LIST), "get") {
             val i = index.value!! as Int
 
             if(i >= list.size) {
-                throw RuntimeException("Index '$i' runs out of array bounds")
+                throw EvaluationException("Index '$i' runs out of array bounds")
             }
 
             list[i]
