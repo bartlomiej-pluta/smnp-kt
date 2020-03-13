@@ -27,6 +27,6 @@ class ConditionEvaluator : Evaluator() {
             return defaultEvaluator.evaluate(falseBranchNode, environment)
         }
 
-        return EvaluatorOutput.fail()
+        return EvaluatorOutput.ok()
     }
 }
