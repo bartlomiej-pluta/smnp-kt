@@ -29,7 +29,9 @@ class ExpressionEvaluator : Evaluator() {
             RelationOperatorEvaluator(),
             AssignmentOperatorEvaluator(),
 
-            FunctionCallEvaluator()
+            FunctionCallEvaluator(),
+
+            LoopEvaluator()
         ).evaluate(node, environment)
 
         if(output.result == EvaluationResult.OK) {

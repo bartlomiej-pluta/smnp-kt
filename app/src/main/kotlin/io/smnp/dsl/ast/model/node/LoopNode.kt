@@ -1,6 +1,11 @@
 package io.smnp.dsl.ast.model.node
 
 class LoopNode(iterator: Node, parameters: Node, operator: Node, statement: Node, filter: Node): Node(4, operator.position) {
+    operator fun component1() = children[0]
+    operator fun component2() = children[1]
+    operator fun component3() = children[2]
+    operator fun component4() = children[3]
+
     val iterator: Node
     get() = children[0]
 
