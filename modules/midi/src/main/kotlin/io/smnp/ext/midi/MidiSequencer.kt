@@ -98,4 +98,8 @@ object MidiSequencer {
    fun init() {
       sequencer.open()
    }
+
+   fun dispose() {
+      sequencer.close()
+   }
 }

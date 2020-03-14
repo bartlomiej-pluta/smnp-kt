@@ -12,4 +12,8 @@ class MidiModule : NativeModuleProvider("smnp.audio.midi") {
    override fun onModuleLoad(environment: Environment) {
       MidiSequencer.init()
    }
+
+   override fun beforeModuleDisposal(environment: Environment) {
+      MidiSequencer.dispose()
+   }
 }
