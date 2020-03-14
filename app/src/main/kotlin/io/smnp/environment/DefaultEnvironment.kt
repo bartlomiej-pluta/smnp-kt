@@ -123,12 +123,12 @@ class DefaultEnvironment : Environment {
       return value
    }
 
-   override fun printCallStack() {
-      callStack.pretty()
+   override fun printCallStack(scopes: Boolean) {
+      callStack.pretty(scopes)
    }
 
    override fun stackTrace(): String {
-      return callStack.stackTrace()
+      return callStack.stackTrace.joinToString("\n")
    }
 
    override fun defineFunction(function: Function) {

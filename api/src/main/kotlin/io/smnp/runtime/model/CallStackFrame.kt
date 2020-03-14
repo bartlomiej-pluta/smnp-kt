@@ -11,29 +11,32 @@ data class CallStackFrame(
     val name: String,
     val arguments: List<Value>
 ) {
-    private val scopes = Stack.of<MutableMap<String, Value>>(mutableMapOf())
+    private val scopesStack = Stack.of<MutableMap<String, Value>>(mutableMapOf())
 
     fun pushScope(scope: MutableMap<String, Value> = mutableMapOf()) {
-        scopes.push(scope)
+        scopesStack.push(scope)
     }
 
-    fun popScope() = scopes.pop()
+    fun popScope() = scopesStack.pop()
 
     val scopesCount: Int
-    get() = scopes.size
+    get() = scopesStack.size
 
     fun setVariable(name: String, value: Value) {
-        val scope = scopes.lastOrNull { it.containsKey(name) } ?: scopes.top()
+        val scope = scopesStack.lastOrNull { it.containsKey(name) } ?: scopesStack.top()
         scope[name] = value
     }
 
     fun getVariable(name: String): Value {
-        return scopes.lastOrNull { it.containsKey(name) }?.get(name) ?: throw EvaluationException("Undefined variable `$name`")
+        return scopesStack.lastOrNull { it.containsKey(name) }?.get(name) ?: throw EvaluationException("Undefined variable `$name`")
     }
 
     fun prettyScope() {
-        scopes.asReversed().forEachIndexed { index, item -> println("[${scopes.size - index - 1}] $item") }
+        scopes.forEach { println(it) }
     }
+
+    val scopes: List<String>
+    get() = scopesStack.asReversed().mapIndexed { index, item -> "[${scopesStack.size - index - 1}] $item" }
 
     override fun toString() = "${module.canonicalName}::$name${ActualSignatureFormatter.format(arguments.toTypedArray())}"
 }
