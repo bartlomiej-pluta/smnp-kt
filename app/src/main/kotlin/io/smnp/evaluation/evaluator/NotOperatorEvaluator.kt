@@ -16,7 +16,7 @@ class NotOperatorEvaluator : Evaluator() {
 
    override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
       val (_, operandNode) = (node as NotOperatorNode)
-      val operand = evaluator.evaluate(operandNode, environment).value!!
+      val operand = evaluator.evaluate(operandNode, environment).value
 
       if (operand.type != DataType.BOOL) {
          throw PositionException(

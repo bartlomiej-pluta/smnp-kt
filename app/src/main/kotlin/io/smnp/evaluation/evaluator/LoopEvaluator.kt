@@ -19,7 +19,7 @@ class LoopEvaluator : Evaluator() {
 
    override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
       val (iteratorNode, parametersNode, statementNode, filterNode) = node as LoopNode
-      val iterator = expressionEvaluator.evaluate(iteratorNode, environment).value!!
+      val iterator = expressionEvaluator.evaluate(iteratorNode, environment).value
 
       environment.pushScope()
       val output = when (iterator.type) {
@@ -159,7 +159,7 @@ class LoopEvaluator : Evaluator() {
       }
 
       return output { outputs ->
-         while (expressionEvaluator.evaluate(iteratorNode, environment).value!!.value as Boolean) {
+         while (expressionEvaluator.evaluate(iteratorNode, environment).value.value as Boolean) {
             outputs.add(defaultEvaluator.evaluate(statementNode, environment))
          }
       }
@@ -177,7 +177,7 @@ class LoopEvaluator : Evaluator() {
 
    private fun filter(filterNode: Node, environment: Environment): Boolean {
       if (filterNode != Node.NONE) {
-         val condition = expressionEvaluator.evaluate(filterNode, environment).value!!
+         val condition = expressionEvaluator.evaluate(filterNode, environment).value
          if (condition.type != BOOL) {
             throw PositionException(
                EnvironmentException(
@@ -200,7 +200,7 @@ class LoopEvaluator : Evaluator() {
       evaluate(outputs)
 
       return when {
-         outputs.all { it.result == EvaluationResult.VALUE } -> EvaluatorOutput.value(Value.list(outputs.map { it.value!! }))
+         outputs.all { it.result == EvaluationResult.VALUE } -> EvaluatorOutput.value(Value.list(outputs.map { it.value }))
 
          // Disclaimer: It musn't be ok() because ExpressionEvaluator expects non-ok success output from each
          // of subevaluators.

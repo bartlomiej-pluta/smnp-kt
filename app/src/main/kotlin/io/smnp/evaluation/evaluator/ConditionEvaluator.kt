@@ -18,7 +18,7 @@ class ConditionEvaluator : Evaluator() {
 
    override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
       val (conditionNode, trueBranchNode, falseBranchNode) = (node as ConditionNode)
-      val condition = expressionEvaluator.evaluate(conditionNode, environment).value!!
+      val condition = expressionEvaluator.evaluate(conditionNode, environment).value
 
       if (condition.type != DataType.BOOL) {
          throw PositionException(
@@ -30,7 +30,7 @@ class ConditionEvaluator : Evaluator() {
          )
       }
 
-      if (condition.value!! as Boolean) {
+      if (condition.value as Boolean) {
          return defaultEvaluator.evaluate(trueBranchNode, environment)
       } else if (falseBranchNode !is NoneNode) {
          return defaultEvaluator.evaluate(falseBranchNode, environment)

@@ -14,6 +14,6 @@ class ThrowEvaluator : Evaluator() {
         val valueNode = (node as ThrowNode).value
         val value = evaluator.evaluate(valueNode, environment)
 
-        throw CustomException(value.value!!.value.toString())
+        throw CustomException(value.value.value.toString())
     }
 }

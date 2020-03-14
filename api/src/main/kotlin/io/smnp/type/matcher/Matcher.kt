@@ -48,7 +48,7 @@ class Matcher(val type: DataType?, private val matcher: (Value) -> Boolean, priv
             return Matcher(
                 DataType.MAP,
                 {
-                    (it.value!! as Map<Value, Value>).entries.all { (k, v) ->
+                    (it.value as Map<Value, Value>).entries.all { (k, v) ->
                         keyMatchers.any { m -> m.match(k) } && valueMatchers.any { m ->
                             m.match(
                                 v
@@ -70,7 +70,7 @@ class Matcher(val type: DataType?, private val matcher: (Value) -> Boolean, priv
                     return matcher.match(value)
                 }
 
-                return (value.value!! as List<Value>).all { match(it) }
+                return (value.value as List<Value>).all { match(it) }
             }
 
             return Matcher(

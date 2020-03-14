@@ -20,7 +20,7 @@ class MapEvaluator : Evaluator() {
    override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
       val value = (node as MapNode).items
          .map { it as MapEntryNode }
-         .map { getKey(it.key, environment) to evaluator.evaluate(it.value, environment).value!! }
+         .map { getKey(it.key, environment) to evaluator.evaluate(it.value, environment).value }
          .toMap()
 
       return EvaluatorOutput.value(Value.map(value))
@@ -29,7 +29,7 @@ class MapEvaluator : Evaluator() {
    private fun getKey(keyNode: Node, environment: Environment): Value {
       val key = when (keyNode) {
          is IdentifierNode -> Value.string(keyNode.token.rawValue)
-         else -> evaluator.evaluate(keyNode, environment).value!!
+         else -> evaluator.evaluate(keyNode, environment).value
       }
 
       if (key.type !in listOf(BOOL, INT, NOTE, STRING)) {

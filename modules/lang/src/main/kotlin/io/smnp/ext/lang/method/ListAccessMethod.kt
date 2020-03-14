@@ -12,8 +12,8 @@ import io.smnp.type.model.Value
 class ListAccessMethod : Method(ofType(LIST), "get") {
     override fun define(new: MethodDefinitionTool) {
         new method simple(ofType(INT)) body { _, value, (index) ->
-            val list = value.value!! as List<Value>
-            val i = index.value!! as Int
+            val list = value.value as List<Value>
+            val i = index.value as Int
 
             if(i >= list.size) {
                 throw EvaluationException("Index '$i' runs out of array bounds")

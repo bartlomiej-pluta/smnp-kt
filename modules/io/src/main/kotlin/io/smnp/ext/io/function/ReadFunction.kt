@@ -11,7 +11,7 @@ import io.smnp.type.model.Value
 class ReadFunction : Function("read") {
    override fun define(new: FunctionDefinitionTool) {
       new function simple(optional(ofType(STRING))) body { _, arguments ->
-         arguments.getOrNull(0)?.let { print(it.value!!) }
+         arguments.getOrNull(0)?.let { print(it.value) }
          Value.string(readLine() ?: "")
       }
    }

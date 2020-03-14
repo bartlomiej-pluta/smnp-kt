@@ -19,7 +19,7 @@ class MinusOperatorEvaluator : Evaluator() {
       val operand = evaluator.evaluate(operandNode, environment)
 
       return EvaluatorOutput.value(
-         when (operand.value!!.type) {
+         when (operand.value.type) {
             DataType.INT -> Value.int(-1 * operand.value.value as Int)
             DataType.FLOAT -> Value.float(-1.0f * operand.value.value as Float)
             DataType.STRING -> Value.string((operand.value.value as String).reversed())

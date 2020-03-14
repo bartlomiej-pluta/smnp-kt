@@ -13,7 +13,7 @@ class ListEvaluator : Evaluator() {
         val atomEvaluator = ExpressionEvaluator()
         val items = (node as ListNode).items
             .map { atomEvaluator.evaluate(it, environment) }
-            .map { it.value!! }
+            .map { it.value }
         return EvaluatorOutput.value(Value.list(items))
     }
 }

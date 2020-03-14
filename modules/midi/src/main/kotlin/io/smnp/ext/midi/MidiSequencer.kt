@@ -48,7 +48,7 @@ object MidiSequencer {
             NOTE -> {
                note(item, channel, noteOnTick, track)
             }
-            INT -> noteOnTick + 4L * PPQ / (item.value!! as Int)
+            INT -> noteOnTick + 4L * PPQ / (item.value as Int)
             STRING -> command(item, channel, noteOnTick, track)
             else -> throw ShouldNeverReachThisLineException()
          }
@@ -56,7 +56,7 @@ object MidiSequencer {
    }
 
    private fun command(item: Value, channel: Int, beginTick: Long, track: Track): Long {
-      val instruction = item.value!! as String
+      val instruction = item.value as String
       if(instruction.isBlank()) {
          throw EvaluationException("Empty strings are not allowed here")
       }
@@ -73,7 +73,7 @@ object MidiSequencer {
    }
 
    private fun note(item: Value, channel: Int, noteOnTick: Long, track: Track): Long {
-      val note = item.value!! as Note
+      val note = item.value as Note
       val noteDuration = ((if (note.dot) 1.5 else 1.0) * 4L * PPQ / note.duration).toLong()
       val noteOffTick = noteOnTick + noteDuration
       track.add(noteOn(note, channel, noteOnTick))

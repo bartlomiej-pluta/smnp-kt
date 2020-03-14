@@ -39,6 +39,6 @@ object FunctionEnvironmentProvider {
         index: Int
     ) = (node.identifier as IdentifierNode).token.rawValue to
             if (index < actualArgs.size) actualArgs[index]
-            else evaluator.evaluate(node.defaultValue, environment).value!!
+            else evaluator.evaluate(node.defaultValue, environment).value
 
 }

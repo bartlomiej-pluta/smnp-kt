@@ -20,8 +20,8 @@ class SumOperatorEvaluator : Evaluator() {
    override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
       val evaluator = ExpressionEvaluator()
       val (lhsNode, opNode, rhsNode) = (node as SumOperatorNode)
-      val lhs = evaluator.evaluate(lhsNode, environment).value!!
-      val rhs = evaluator.evaluate(rhsNode, environment).value!!
+      val lhs = evaluator.evaluate(lhsNode, environment).value
+      val rhs = evaluator.evaluate(rhsNode, environment).value
       val operator = (opNode as TokenNode).token.type
 
       return EvaluatorOutput.value(
@@ -37,9 +37,9 @@ class SumOperatorEvaluator : Evaluator() {
       return if (areNumeric(lhs, rhs))
          unify(lhs, rhs, int = { (l, r) -> Value.int(l + r) }, float = { (l, r) -> Value.float(l + r) })
       else if (lhs.type == DataType.STRING)
-         Value.string(lhs.value!! as String + rhs.value.toString())
+         Value.string(lhs.value as String + rhs.value.toString())
       else if (areLists(lhs, rhs))
-         Value.list(lhs.value!! as List<Value> + rhs.value!! as List<Value>)
+         Value.list(lhs.value as List<Value> + rhs.value as List<Value>)
       else throw PositionException(
          EnvironmentException(
             EvaluationException(

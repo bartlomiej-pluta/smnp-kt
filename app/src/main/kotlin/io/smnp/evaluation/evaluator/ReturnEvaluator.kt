@@ -5,7 +5,6 @@ import io.smnp.dsl.ast.model.node.ReturnNode
 import io.smnp.environment.Environment
 import io.smnp.evaluation.model.entity.EvaluatorOutput
 import io.smnp.evaluation.model.exception.Return
-import io.smnp.type.model.Value
 
 class ReturnEvaluator : Evaluator() {
     override fun supportedNodes() = listOf(ReturnNode::class)
@@ -13,7 +12,7 @@ class ReturnEvaluator : Evaluator() {
     override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
         val evaluator = ExpressionEvaluator()
         val (valueNode) = node as ReturnNode
-        val value = evaluator.evaluate(valueNode, environment).value ?: Value.void()
+        val value = evaluator.evaluate(valueNode, environment).value
 
         // Disclaimer
         // Exception system usage to control program execution flow is really bad idea.

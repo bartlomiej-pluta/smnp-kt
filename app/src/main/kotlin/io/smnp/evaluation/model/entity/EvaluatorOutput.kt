@@ -3,15 +3,15 @@ package io.smnp.evaluation.model.entity
 import io.smnp.evaluation.model.enumeration.EvaluationResult
 import io.smnp.type.model.Value
 
-class EvaluatorOutput private constructor(val result: EvaluationResult, val value: Value?) {
+class EvaluatorOutput private constructor(val result: EvaluationResult, val value: Value) {
 
     override fun toString(): String {
-        return "$result(${value ?: ""})"
+        return "$result(${if(result == EvaluationResult.VALUE) value.toString() else ""})"
     }
 
     companion object {
         fun ok(): EvaluatorOutput {
-            return EvaluatorOutput(EvaluationResult.OK, null)
+            return EvaluatorOutput(EvaluationResult.OK, Value.void())
         }
 
         fun value(value: Value): EvaluatorOutput {
@@ -19,7 +19,7 @@ class EvaluatorOutput private constructor(val result: EvaluationResult, val valu
         }
 
         fun fail(): EvaluatorOutput {
-            return EvaluatorOutput(EvaluationResult.FAILED, null)
+            return EvaluatorOutput(EvaluationResult.FAILED, Value.void())
         }
     }
 }

@@ -12,7 +12,7 @@ import io.smnp.type.model.Value
 class CharAtMethod : Method(ofType(STRING),"charAt") {
    override fun define(new: MethodDefinitionTool) {
       new method simple(ofType(INT)) body { _, obj, (index) ->
-         Value.string((obj.value!! as String).getOrNull(index.value!! as Int)?.toString() ?: throw EvaluationException("Index '${index.value!!}' runs out of string bounds"))
+         Value.string((obj.value as String).getOrNull(index.value as Int)?.toString() ?: throw EvaluationException("Index '${index.value}' runs out of string bounds"))
       }
    }
 }

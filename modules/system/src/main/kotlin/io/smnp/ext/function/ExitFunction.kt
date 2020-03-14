@@ -13,7 +13,7 @@ class ExitFunction : Function("exit") {
    override fun define(new: FunctionDefinitionTool) {
       new function simple(optional(ofType(INT))) body { _, arguments ->
          val exitCode = arguments.getOrNull(0) ?: Value.int(0)
-         exitProcess(exitCode.value!! as Int)
+         exitProcess(exitCode.value as Int)
       }
    }
 }

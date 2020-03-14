@@ -19,8 +19,8 @@ class LogicOperatorEvaluator : Evaluator() {
    override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
       val evaluator = ExpressionEvaluator()
       val (lhsNode, opNode, rhsNode) = (node as LogicOperatorNode)
-      val lhs = evaluator.evaluate(lhsNode, environment).value!!
-      val rhs = evaluator.evaluate(rhsNode, environment).value!!
+      val lhs = evaluator.evaluate(lhsNode, environment).value
+      val rhs = evaluator.evaluate(rhsNode, environment).value
       val operator = (opNode as TokenNode).token.type
 
       if (lhs.type != DataType.BOOL) {

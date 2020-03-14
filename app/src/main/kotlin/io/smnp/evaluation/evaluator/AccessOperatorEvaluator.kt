@@ -14,7 +14,7 @@ class AccessOperatorEvaluator : Evaluator() {
    override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
       val evaluator = ExpressionEvaluator()
       val (lhsNode, _, rhsNode) = (node as AccessOperatorNode)
-      val lhs = evaluator.evaluate(lhsNode, environment).value!!
+      val lhs = evaluator.evaluate(lhsNode, environment).value
 
       return when (rhsNode) {
          is IdentifierNode -> {
@@ -33,7 +33,7 @@ class AccessOperatorEvaluator : Evaluator() {
             val (identifierNode, argsNode) = rhsNode
             val identifier = (identifierNode as IdentifierNode).token.rawValue
             val arguments =
-               (argsNode as FunctionCallArgumentsNode).items.map { evaluator.evaluate(it, environment).value!! }
+               (argsNode as FunctionCallArgumentsNode).items.map { evaluator.evaluate(it, environment).value }
             try {
                return EvaluatorOutput.value(environment.invokeMethod(lhs, identifier, arguments))
             } catch(e: MethodInvocationException) {

@@ -18,7 +18,7 @@ class FunctionCallEvaluator : Evaluator() {
         val evaluator = assert(ExpressionEvaluator(), "expression")
         val (identifierNode, argsNode) = node as FunctionCallNode
         val identifier = (identifierNode as IdentifierNode).token.rawValue
-        val arguments = (argsNode as FunctionCallArgumentsNode).items.map { evaluator.evaluate(it, environment).value!! }
+        val arguments = (argsNode as FunctionCallArgumentsNode).items.map { evaluator.evaluate(it, environment).value }
 
         try {
             return EvaluatorOutput.value(environment.invokeFunction(identifier, arguments))

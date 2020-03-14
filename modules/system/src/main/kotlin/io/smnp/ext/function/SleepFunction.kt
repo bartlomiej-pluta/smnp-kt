@@ -10,7 +10,7 @@ import io.smnp.type.model.Value
 class SleepFunction : Function("sleep") {
    override fun define(new: FunctionDefinitionTool) {
       new function simple(ofType(INT)) body { _, (milli) ->
-         Thread.sleep((milli.value!! as Int).toLong())
+         Thread.sleep((milli.value as Int).toLong())
          Value.void()
       }
    }

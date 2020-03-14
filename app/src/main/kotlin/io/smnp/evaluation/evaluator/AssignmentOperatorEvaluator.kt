@@ -18,7 +18,7 @@ class AssignmentOperatorEvaluator : Evaluator() {
    override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
       val (identifierNode, _, valueNode) = node as AssignmentOperatorNode
       val identifier = (identifierNode as IdentifierNode).token.rawValue
-      val value = evaluator.evaluate(valueNode, environment).value!!
+      val value = evaluator.evaluate(valueNode, environment).value
 
       if (value.type == DataType.VOID) {
          throw PositionException(

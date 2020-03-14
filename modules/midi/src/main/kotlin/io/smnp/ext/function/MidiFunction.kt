@@ -22,8 +22,8 @@ class MidiFunction : Function("midi") {
          mapOfMatchers(ofType(INT), allTypes())
       ) body { _, (config, lines) ->
 
-         val lines = (lines.value!! as List<Value>).map { it.value!! as List<Value> }
-         val parameters = configParametersMap(config.value!!)
+         val lines = (lines.value as List<Value>).map { it.value as List<Value> }
+         val parameters = configParametersMap(config.value)
          MidiSequencer.playLines(lines, parameters)
          Value.void()
       }
@@ -32,11 +32,11 @@ class MidiFunction : Function("midi") {
          mapOfMatchers(allTypes(), allTypes()),
          mapOfMatchers(ofType(INT), listOfMatchers(listOf(NOTE, INT, STRING)))
       ) body { _, (config, channels) ->
-         val channels = (channels.value!! as Map<Value, Value>).map { (key, value) ->
-            key.value!! as Int to ((value.value!! as List<Value>).map { it.value!! as List<Value> })
+         val channels = (channels.value as Map<Value, Value>).map { (key, value) ->
+            key.value as Int to ((value.value as List<Value>).map { it.value as List<Value> })
          }.toMap()
 
-         val parameters = configParametersMap(config.value!!)
+         val parameters = configParametersMap(config.value)
          MidiSequencer.playChannels(channels, parameters)
 
          Value.void()
@@ -45,10 +45,10 @@ class MidiFunction : Function("midi") {
 
    private fun configParametersMap(config: Any): Map<String, Any> {
       return (config as Map<Value, Value>)
-         .map { (key, value) -> key.value!! as String to value }
+         .map { (key, value) -> key.value as String to value }
          .map { (key, value) ->
             key to when (key) {
-               "bpm" -> if (value.type == INT) value.value!! else throw EvaluationException("Invalid parameter type: 'bpm' is supposed to be of int type")
+               "bpm" -> if (value.type == INT) value.value else throw EvaluationException("Invalid parameter type: 'bpm' is supposed to be of int type")
                else -> value
             }
          }
