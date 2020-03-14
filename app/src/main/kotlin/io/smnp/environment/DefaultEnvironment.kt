@@ -4,6 +4,7 @@ import io.smnp.callable.function.Function
 import io.smnp.callable.method.Method
 import io.smnp.callable.signature.ActualSignatureFormatter.format
 import io.smnp.error.EvaluationException
+import io.smnp.ext.DefaultModuleRegistry
 import io.smnp.ext.DefaultModuleRegistry.requestModuleProviderForPath
 import io.smnp.ext.ModuleProvider
 import io.smnp.interpreter.LanguageModuleInterpreter
@@ -15,15 +16,24 @@ class DefaultEnvironment : Environment {
    private val rootModule = Module.create("<root>")
    private val loadedModules = mutableListOf<String>()
    private val callStack = CallStack()
+   var disposed = false
+      private set
 
    init {
       callStack.push(rootModule, "<entrypoint>", emptyList())
    }
 
    override fun loadModule(path: String) {
+      assertDisposal()
       requestModuleProviderForPath(path).let {
          loadModule(it)
          loadDependencies(it)
+      }
+   }
+
+   private fun assertDisposal() {
+      if(disposed) {
+         throw RuntimeException("Disposed environment is immutable and cannot be further used as environment for evaluating program")
       }
    }
 
@@ -49,13 +59,14 @@ class DefaultEnvironment : Environment {
    }
 
    override fun invokeFunction(name: String, arguments: List<Value>): Value {
+      assertDisposal()
       val foundFunctions = rootModule.findFunction(name)
       if (foundFunctions.isEmpty()) {
          throw EvaluationException("No function found with name of '$name'")
       }
 
       if (foundFunctions.size > 1) {
-         throw EvaluationException("Found ${foundFunctions.size} functions with name of $name: [${foundFunctions.map { it.module.canonicalName }.joinToString()}]")
+         throw EvaluationException("Found ${foundFunctions.size} functions with name of $name: [${foundFunctions.joinToString { it.module.canonicalName }}]")
 
       }
 
@@ -69,6 +80,7 @@ class DefaultEnvironment : Environment {
    }
 
    override fun invokeMethod(obj: Value, name: String, arguments: List<Value>): Value {
+      assertDisposal()
       val foundMethods = rootModule.findMethod(obj, name)
       if (foundMethods.isEmpty()) {
          throw EvaluationException(
@@ -100,26 +112,51 @@ class DefaultEnvironment : Environment {
    }
 
    override fun stackTrace(): String {
-      return callStack.stackTrace();
+      return callStack.stackTrace()
    }
 
    override fun defineFunction(function: Function) {
+      assertDisposal()
       rootModule.addFunction(function)
    }
 
    override fun defineMethod(method: Method) {
+      assertDisposal()
       rootModule.addMethod(method)
    }
 
-   override fun pushScope(scope: MutableMap<String, Value>) = callStack.top().pushScope(scope)
+   override fun pushScope(scope: MutableMap<String, Value>) {
+      assertDisposal()
+      callStack.top().pushScope(scope)
+   }
 
-   override fun popScope() = callStack.top().popScope()
+   override fun popScope(): MutableMap<String, Value>? {
+      assertDisposal()
+      return callStack.top().popScope()
+   }
 
    override fun printScopes() = callStack.top().prettyScope()
 
-   override fun setVariable(name: String, value: Value) = callStack.top().setVariable(name, value)
+   override fun setVariable(name: String, value: Value) {
+      assertDisposal()
+      callStack.top().setVariable(name, value)
+   }
 
    override fun getVariable(name: String) = callStack.top().getVariable(name)
 
+   override fun dispose() {
+      assertDisposal()
+      disposed = true
+      DefaultModuleRegistry.disposeModules(this)
+   }
+
    override fun getRootModule() = rootModule
+
+   override fun toString(): String {
+      var string = "Default environment ${if(disposed) "[DISPOSED]" else ""}\n"
+      string += "- loaded modules: ${loadedModules.size}\n"
+      string += "- call stack frames: ${callStack.size}\n"
+      string += "- top frame scopes: ${callStack.top().scopesCount}\n"
+      return string
+   }
 }

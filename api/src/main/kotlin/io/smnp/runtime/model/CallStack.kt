@@ -18,6 +18,9 @@ class CallStack {
 
     fun top() = items.top()
 
+    val size: Int
+    get() = items.size
+
     fun pretty() {
         items.asReversed().forEachIndexed { index, item -> println("[${items.size - index - 1}] $item") }
     }

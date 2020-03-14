@@ -19,6 +19,9 @@ data class CallStackFrame(
 
     fun popScope() = scopes.pop()
 
+    val scopesCount: Int
+    get() = scopes.size
+
     fun setVariable(name: String, value: Value) {
         val scope = scopes.lastOrNull { it.containsKey(name) } ?: scopes.top()
         scope[name] = value

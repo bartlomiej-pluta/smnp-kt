@@ -15,6 +15,9 @@ class RootEvaluator : Evaluator() {
             FunctionDefinitionEvaluator(),
             ExtendEvaluator(),
             DefaultEvaluator()
-        ), "correct statement")).evaluate(node, environment)
+        ), "correct statement")).evaluate(node, environment).let {
+            environment.dispose()
+            it
+        }
     }
 }

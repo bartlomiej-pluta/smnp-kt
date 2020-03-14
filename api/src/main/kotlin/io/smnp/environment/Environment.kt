@@ -19,6 +19,7 @@ interface Environment {
    fun printScopes()
    fun setVariable(name: String, value: Value)
    fun getVariable(name: String): Value
+   fun dispose()
 
    fun getRootModule(): Module
 }
