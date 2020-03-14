@@ -14,13 +14,22 @@ object MidiSequencer {
       const val NOTE_OFF = 0x80
       const val NOTE_ON = 0x90
       const val PROGRAM_CHANGE = 0xC0
+      const val CONTROL_CHANGE = 0xB0
+   }
+
+   private object Data1 {
+      const val ALL_NOTES_OFF = 0x7B
+   }
+
+   private object Data2 {
+      const val ZERO = 0x00
    }
 
    fun playChannels(channels: Map<Int, List<List<Any>>>, config: Map<String, Any>) {
       val sequence = Sequence(Sequence.PPQ, PPQ)
 
       channels.forEach { (channel, lines) ->
-         lines.forEach { line -> playLine(line, channel, sequence) }
+         lines.forEach { line -> playLine(line, channel-1, sequence) }
       }
 
       sequencer.sequence = sequence
@@ -48,7 +57,7 @@ object MidiSequencer {
    private fun playLine(line: List<Any>, channel: Int, sequence: Sequence) {
       val track = sequence.createTrack()
 
-      line.fold(0L) { noteOnTick, item ->
+      val lastTick = line.fold(0L) { noteOnTick, item ->
          when (item) {
             is Note -> {
                note(item, channel, noteOnTick, track)
@@ -58,6 +67,8 @@ object MidiSequencer {
             else -> throw ShouldNeverReachThisLineException()
          }
       }
+
+      track.add(allNotesOff(channel, lastTick))
    }
 
    private fun command(instruction: String, channel: Int, beginTick: Long, track: Track): Long {
@@ -89,6 +100,10 @@ object MidiSequencer {
 
    private fun noteOff(note: Note, channel: Int, tick: Long): MidiEvent {
       return event(Command.NOTE_OFF, channel, note.intPitch() + 12, 127, tick)
+   }
+
+   private fun allNotesOff(channel: Int, tick: Long): MidiEvent {
+      return event(Command.CONTROL_CHANGE, channel, Data1.ALL_NOTES_OFF, Data2.ZERO, tick)
    }
 
    private fun event(command: Int, channel: Int, data1: Int, data2: Int, tick: Long): MidiEvent {
