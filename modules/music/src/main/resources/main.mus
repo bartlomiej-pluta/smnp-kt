@@ -1,0 +1,105 @@
+extend note as this {
+    function withOctave(octave: int) {
+        return Note(this.pitch, octave, this.duration, this.dot);
+    }
+
+    function withDuration(duration: int) {
+        return Note(this.pitch, this.octave, duration, this.dot);
+    }
+
+    function withDot(dot: bool) {
+        return Note(this.pitch, this.octave, this.duration, dot);
+    }
+
+    function transpose(value: int) {
+        return noteFromInt(this.toInt() + value, this.duration, this.dot);
+    }
+
+    function toInt() {
+        return this.octave * 12 + [
+            "C",
+            "C#",
+            "D",
+            "D#",
+            "E",
+            "F",
+            "F#",
+            "G",
+            "G#",
+            "A",
+            "A#",
+            "H"
+        ].indexOf(this.pitch);
+    }
+}
+
+function noteFromInt(intPitch: int, duration: int, dot: bool) {
+    pitch = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "H"].get(mod(intPitch, 12));
+    octave = Int(intPitch / 12);
+    return Note(pitch, octave, duration, dot);
+}
+
+function range(begin: note, end: note, filter: string = "all", duration: int = 4, dot: bool = false) {
+    filters = {
+        "all" -> ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "H"],
+        "diatonic" -> ["C", "D", "E", "F", "G", "A", "H"],
+        "chromatic" -> ["C#", "D#", "F#", "G#", "A#"]
+    };
+
+    if(not filters.containsKey(filter)) {
+        throw "Unknown filter '" + filter + "'";
+    }
+
+    currentFilter = filters.get(filter);
+
+    return (range(begin.toInt(), end.toInt()) as i ^ noteFromInt(i, duration, dot)) as n ^ n % currentFilter.contains(n.pitch);
+}
+
+function transpose(value: int, ...notes: <note, int, string>) {
+    return transpose(value, notes);
+}
+
+function transpose(value: int, notes: list<note, int, string>) {
+    output = [];
+    notes as item ^ {
+        if(typeOf(item) == "note") {
+            output = output + [item.transpose(value)];
+        } else {
+            output = output + [item];
+        }
+    }
+
+    return output;
+}
+
+function semitones(...notes: <note, int, string>) {
+    return semitones(notes);
+}
+
+function semitones(staff: list<note, int, string>) {
+    notes = _filterNotes(staff);
+    if(notes.size < 2) {
+        return [];
+    }
+
+    return ((notes.size - 1) as i ^ [notes.get(i+1).toInt() - notes.get(i).toInt()]).flatten();
+}
+
+function _filterNotes(staff: list<note, int, string>) {
+    return staff as item ^ item % typeOf(item) == "note";
+}
+
+function transposeTo(target: note, ...notes: <note, int, string>) {
+    return transposeTo(target, notes);
+}
+
+function transposeTo(target: note, staff: list<note, int, string>) {
+    notes = _filterNotes(staff);
+    if(notes.size < 1) {
+        return staff;
+    }
+
+    semitones = semitones(notes.get(0), target).get(0);
+
+    return transpose(semitones, staff);
+}

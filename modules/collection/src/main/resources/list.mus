@@ -15,12 +15,22 @@ function _flatten(list: list, output: list) {
 }
 
 extend list as this {
-    function toFlat() {
+    function flatten() {
         return flatten(this);
     }
 
     function contains(value) {
         return (this as item ^ item % item == value).size > 0;
+    }
+
+    function indexOf(value) {
+        this as (item, index) ^ {
+            if(item == value) {
+                return index;
+            }
+        }
+
+        return -1;
     }
 
     function join(separator: string = ", ") {
