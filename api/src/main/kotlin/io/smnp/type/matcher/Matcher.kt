@@ -100,7 +100,7 @@ class Matcher(val type: DataType?, private val matcher: (Value) -> Boolean, priv
             return Matcher(
                 DataType.LIST,
                 { list -> (list.value as List<Value>).all { it.type in types } },
-                "list<${types.joinToString(", ") { it.name.toLowerCase() }}>"
+                "list<${types.joinToString(", ") { it.toString() }}>"
             )
         }
 
@@ -116,12 +116,12 @@ class Matcher(val type: DataType?, private val matcher: (Value) -> Boolean, priv
             return Matcher(
                 null,
                 { it.type in types },
-                "<${types.joinToString(", ") { it.name.toLowerCase() }}>"
+                "<${types.joinToString(", ") { it.toString() }}>"
             )
         }
 
         fun ofType(type: DataType): Matcher {
-            return Matcher(null, { it.type == type }, type.name.toLowerCase())
+            return Matcher(null, { it.type == type }, type.toString())
         }
 
         fun oneOf(vararg matchers: Matcher): Matcher {

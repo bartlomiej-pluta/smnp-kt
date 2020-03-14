@@ -35,7 +35,7 @@ class MapEvaluator : Evaluator() {
       if (key.type !in listOf(BOOL, INT, NOTE, STRING)) {
          throw PositionException(
             EnvironmentException(
-               EvaluationException("Invalid map key's type ${key.type.name.toLowerCase()}"),
+               EvaluationException("Invalid map key's type ${key.typeName}"),
                environment
             ),
             keyNode.position

@@ -31,7 +31,7 @@ class LoopEvaluator : Evaluator() {
          else -> throw PositionException(
             EnvironmentException(
                EvaluationException(
-                  "Expected for-loop with int iterator or foreach-loop with string, list or map iterator or while-loop with bool iterator, found ${iterator.type.name.toLowerCase()}"
+                  "Expected for-loop with int iterator or foreach-loop with string, list or map iterator or while-loop with bool iterator, found ${iterator.typeName}"
                ),
                environment
             ), iteratorNode.position

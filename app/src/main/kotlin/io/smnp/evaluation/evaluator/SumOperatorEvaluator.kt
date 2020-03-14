@@ -43,7 +43,7 @@ class SumOperatorEvaluator : Evaluator() {
       else throw PositionException(
          EnvironmentException(
             EvaluationException(
-               "The ${lhs.type.name.toLowerCase()} and ${rhs.type.name.toLowerCase()} are not supported by + operator"
+               "The ${lhs.typeName} and ${rhs.typeName} are not supported by + operator"
             ),
             environment
          ), plusNode.position

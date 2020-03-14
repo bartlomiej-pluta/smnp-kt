@@ -26,7 +26,7 @@ class MinusOperatorEvaluator : Evaluator() {
             DataType.LIST -> Value.list((operand.value.value as List<Value>).reversed())
             else -> throw PositionException(
                EnvironmentException(
-                  EvaluationException("Type ${operand.value.type.name.toLowerCase()} does not support minus operator"),
+                  EvaluationException("Type ${operand.value.typeName} does not support minus operator"),
                   environment
                ),
                node.position

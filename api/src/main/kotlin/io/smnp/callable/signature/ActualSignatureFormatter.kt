@@ -18,7 +18,7 @@ object ActualSignatureFormatter {
                 DataType.MAP -> mapTypes(
                     argument.value as Map<Value, Value>
                 )
-                else -> argument.type.name.toLowerCase()
+                else -> argument.typeName
             })
         }
 
@@ -34,7 +34,7 @@ object ActualSignatureFormatter {
                 DataType.MAP -> mapTypes(
                     item.value as Map<Value, Value>
                 )
-                else -> item.type.name.toLowerCase()
+                else -> item.typeName
             })
         }
 
@@ -43,14 +43,14 @@ object ActualSignatureFormatter {
 
     private fun mapTypes(map: Map<Value, Value>, output: MutableMap<String, String> = mutableMapOf()): String {
         for ((k, v) in map) {
-            output[k.type.toString()] = when (v.type) {
+            output[k.typeName] = when (v.type) {
                 DataType.LIST -> listTypes(
                     v.value as List<Value>
                 )
                 DataType.MAP -> mapTypes(
                     v.value as Map<Value, Value>
                 )
-                else -> v.type.toString()
+                else -> v.typeName
             }
         }
 

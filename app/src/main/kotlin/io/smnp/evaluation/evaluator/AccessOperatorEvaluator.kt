@@ -22,7 +22,7 @@ class AccessOperatorEvaluator : Evaluator() {
             EvaluatorOutput.value(
                lhs.properties[rhs] ?: throw PositionException(
                   EnvironmentException(
-                     EvaluationException("Unknown property $rhs of type ${lhs.type.name.toLowerCase()}"),
+                     EvaluationException("Unknown property $rhs of type ${lhs.typeName}"),
                      environment
                   ),
                   rhsNode.position

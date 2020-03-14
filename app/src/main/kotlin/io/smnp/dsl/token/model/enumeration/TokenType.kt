@@ -46,5 +46,9 @@ enum class TokenType(val token: String) {
     IF("if"),
     AS("as"),
     IDENTIFIER("identifier"),
-    COMMENT("comment")
+    COMMENT("comment");
+
+    override fun toString(): String {
+        return super.name.toLowerCase()
+    }
 }

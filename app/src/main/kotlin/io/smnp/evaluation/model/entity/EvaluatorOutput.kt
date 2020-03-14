@@ -6,7 +6,7 @@ import io.smnp.type.model.Value
 class EvaluatorOutput private constructor(val result: EvaluationResult, val value: Value?) {
 
     override fun toString(): String {
-        return "${result.name.toLowerCase()}(${value ?: ""})"
+        return "$result(${value ?: ""})"
     }
 
     companion object {
