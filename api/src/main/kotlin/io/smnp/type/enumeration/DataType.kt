@@ -4,7 +4,7 @@ import io.smnp.data.entity.Note
 import io.smnp.type.model.Value
 import kotlin.reflect.KClass
 
-enum class DataType(val kotlinType: KClass<out Any>, val stringifier: (Any) -> String) {
+enum class DataType(private val kotlinType: KClass<out Any>, val stringifier: (Any) -> String) {
     INT(Int::class, { it.toString() }),
     FLOAT(Float::class, { it.toString() }),
     STRING(String::class, { it.toString() }),

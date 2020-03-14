@@ -18,17 +18,18 @@ class DefaultInterpreter : Interpreter {
 
    fun run(
       code: String,
+      environment: Environment = DefaultEnvironment(),
       printTokens: Boolean = false,
       printAst: Boolean = false,
       dryRun: Boolean = false
    ): Environment {
       val lines = code.split("\n")
-      return run(lines, printTokens, printAst, dryRun)
+      return run(lines, environment, printTokens, printAst, dryRun)
    }
 
-   private fun run(lines: List<String>, printTokens: Boolean, printAst: Boolean, dryRun: Boolean): Environment {
+   private fun run(lines: List<String>, environment: Environment, printTokens: Boolean, printAst: Boolean, dryRun: Boolean): Environment {
       try {
-         return tryToRun(lines, printTokens, printAst, dryRun)
+         return tryToRun(lines, environment, printTokens, printAst, dryRun)
       } catch (e: SmnpException) {
          printError(e)
          exitProcess(1)
@@ -40,8 +41,9 @@ class DefaultInterpreter : Interpreter {
       err.println(e.message)
    }
 
-   private fun tryToRun(lines: List<String>, printTokens: Boolean, printAst: Boolean, dryRun: Boolean): Environment {
-      val environment = createEnvironment()
+   private fun tryToRun(lines: List<String>, environment: Environment, printTokens: Boolean, printAst: Boolean, dryRun: Boolean): Environment {
+      environment.loadModule("smnp.lang")
+
       val tokens = tokenizer.tokenize(lines)
       val ast = parser.parse(tokens)
 
@@ -59,16 +61,9 @@ class DefaultInterpreter : Interpreter {
       return environment
    }
 
-   private fun createEnvironment(): Environment {
-      val environment = DefaultEnvironment()
-      environment.loadModule("smnp.lang")
-
-      return environment
-   }
-
-   fun run(file: File, printTokens: Boolean = false, printAst: Boolean = false, dryRun: Boolean = false): Environment {
+   fun run(file: File, environment: Environment = DefaultEnvironment(), printTokens: Boolean = false, printAst: Boolean = false, dryRun: Boolean = false): Environment {
       val lines = file.readLines()
-      return run(lines, printTokens, printAst, dryRun)
+      return run(lines, environment, printTokens, printAst, dryRun)
    }
 
    override fun run(code: String) = run(code, printTokens = false, printAst = false, dryRun = false)

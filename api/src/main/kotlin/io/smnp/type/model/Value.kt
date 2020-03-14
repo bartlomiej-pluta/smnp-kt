@@ -41,6 +41,20 @@ data class Value(val type: DataType, val value: Any, val properties: Map<String,
          return Value(DataType.INT, value)
       }
 
+      fun wrap(obj: Any): Value {
+         return when(obj) {
+            is Unit -> void()
+            is Int -> int(obj)
+            is Float -> float(obj)
+            is Boolean -> bool(obj)
+            is String -> string(obj)
+            is Note -> note(obj)
+            is List<*> -> list((obj as List<Any>).map { wrap(it) })
+            is Map<*, *> -> map((obj as Map<Any, Any>).map { (k, v) -> wrap(k) to wrap(v) }.toMap())
+            else -> throw ShouldNeverReachThisLineException()
+         }
+      }
+
       fun float(value: Float): Value {
          return Value(
             DataType.FLOAT,
