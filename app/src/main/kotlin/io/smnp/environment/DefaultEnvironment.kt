@@ -3,7 +3,8 @@ package io.smnp.environment
 import io.smnp.callable.function.Function
 import io.smnp.callable.method.Method
 import io.smnp.callable.signature.ActualSignatureFormatter.format
-import io.smnp.error.EvaluationException
+import io.smnp.error.FunctionInvocationException
+import io.smnp.error.MethodInvocationException
 import io.smnp.ext.DefaultModuleRegistry
 import io.smnp.ext.DefaultModuleRegistry.requestModuleProviderForPath
 import io.smnp.ext.ModuleProvider
@@ -62,15 +63,24 @@ class DefaultEnvironment : Environment {
       assertDisposal()
       val foundFunctions = rootModule.findFunction(name)
       if (foundFunctions.isEmpty()) {
-         throw EvaluationException("No function found with name of '$name'")
+         throw FunctionInvocationException("No function found with name of '$name'")
       }
 
-      if (foundFunctions.size > 1) {
-         throw EvaluationException("Found ${foundFunctions.size} functions with name of $name: [${foundFunctions.joinToString { it.module.canonicalName }}]")
-
+      val matchedFunctions = foundFunctions.filter { it.matches(arguments) }
+      if (matchedFunctions.size > 1) {
+         throw FunctionInvocationException("Found ${matchedFunctions.size} functions with name of $name, that matched provided arguments: [${matchedFunctions.joinToString { it.module.canonicalName }}]")
       }
 
-      val function = foundFunctions[0]
+      if(matchedFunctions.isEmpty()) {
+         var message = "No function matches following signature:\n   $name${format(arguments.toTypedArray())}"
+         if(foundFunctions.isNotEmpty()) {
+            message += "\nDid you mean:\n"
+            message += foundFunctions.flatMap { it.signature }.joinToString("\n") { "   $it" }
+         }
+         throw FunctionInvocationException(message)
+      }
+
+      val function = matchedFunctions[0]
 
       callStack.push(function.module, function.name, arguments)
       val value = function.call(this, *arguments.toTypedArray())
@@ -83,22 +93,28 @@ class DefaultEnvironment : Environment {
       assertDisposal()
       val foundMethods = rootModule.findMethod(obj, name)
       if (foundMethods.isEmpty()) {
-         throw EvaluationException(
+         throw MethodInvocationException(
             "No method found with name of '$name' for ${format(
                obj
             )}"
          )
       }
 
-      if (foundMethods.size > 1) {
-         throw EvaluationException(
-            "Found ${foundMethods.size} methods with name of $name for ${format(
-               obj
-            )}: [${foundMethods.map { it.module.canonicalName }.joinToString()}]"
-         )
+      val matchedMethods = foundMethods.filter { it.matches(obj, arguments) }
+      if (matchedMethods.size > 1) {
+         throw MethodInvocationException("Found ${matchedMethods.size} functions with name of $name, that matched provided arguments: [${matchedMethods.joinToString { it.module.canonicalName }}]")
       }
 
-      val method = foundMethods[0]
+      if(matchedMethods.isEmpty()) {
+         var message = "No method matches following signature:\n   ${format(obj)}.$name${format(arguments.toTypedArray())}"
+         if(foundMethods.isNotEmpty()) {
+            message += "\nDid you mean:\n"
+            message += foundMethods.flatMap { it.signature }.joinToString("\n") { "   $it" }
+         }
+         throw FunctionInvocationException(message)
+      }
+
+      val method = matchedMethods[0]
 
       callStack.push(method.module, "${method.typeMatcher}.${method.name}", arguments)
       val value = method.call(this, obj, *arguments.toTypedArray())
