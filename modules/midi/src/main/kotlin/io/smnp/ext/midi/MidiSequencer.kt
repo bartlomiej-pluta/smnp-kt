@@ -25,6 +25,9 @@ object MidiSequencer {
       const val ZERO = 0x00
    }
 
+   val instruments: List<String>
+   get() = MidiSystem.getSynthesizer().availableInstruments.map { it.toString() }
+
    fun playChannels(channels: Map<Int, List<List<Any>>>, config: Map<String, Any>) {
       val sequence = Sequence(Sequence.PPQ, PPQ)
 
