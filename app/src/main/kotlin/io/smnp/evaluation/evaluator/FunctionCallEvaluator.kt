@@ -6,9 +6,8 @@ import io.smnp.dsl.ast.model.node.IdentifierNode
 import io.smnp.dsl.ast.model.node.Node
 import io.smnp.environment.Environment
 import io.smnp.error.EnvironmentException
-import io.smnp.error.EvaluationException
-import io.smnp.error.FunctionInvocationException
 import io.smnp.error.PositionException
+import io.smnp.error.SmnpException
 import io.smnp.evaluation.model.entity.EvaluatorOutput
 
 class FunctionCallEvaluator : Evaluator() {
@@ -22,10 +21,8 @@ class FunctionCallEvaluator : Evaluator() {
 
         try {
             return EvaluatorOutput.value(environment.invokeFunction(identifier, arguments))
-        } catch(e: FunctionInvocationException) {
-            throw PositionException(EnvironmentException(e, environment), node.position)
-        } catch(e: EvaluationException) {
-            throw PositionException(EnvironmentException(e, environment), node.position)
+        } catch(e: SmnpException) {
+            throw PositionException(EnvironmentException(e, environment), identifierNode.position)
         }
     }
 }

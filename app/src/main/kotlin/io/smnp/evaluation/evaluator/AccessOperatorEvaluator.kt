@@ -4,8 +4,8 @@ import io.smnp.dsl.ast.model.node.*
 import io.smnp.environment.Environment
 import io.smnp.error.EnvironmentException
 import io.smnp.error.EvaluationException
-import io.smnp.error.MethodInvocationException
 import io.smnp.error.PositionException
+import io.smnp.error.SmnpException
 import io.smnp.evaluation.model.entity.EvaluatorOutput
 
 class AccessOperatorEvaluator : Evaluator() {
@@ -36,9 +36,7 @@ class AccessOperatorEvaluator : Evaluator() {
                (argsNode as FunctionCallArgumentsNode).items.map { evaluator.evaluate(it, environment).value }
             try {
                return EvaluatorOutput.value(environment.invokeMethod(lhs, identifier, arguments))
-            } catch(e: MethodInvocationException) {
-               throw PositionException(EnvironmentException(e, environment), identifierNode.position)
-            } catch(e: EvaluationException) {
+            } catch(e: SmnpException) {
                throw PositionException(EnvironmentException(e, environment), identifierNode.position)
             }
          }

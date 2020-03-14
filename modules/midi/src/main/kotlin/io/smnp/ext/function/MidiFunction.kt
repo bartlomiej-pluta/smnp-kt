@@ -4,7 +4,7 @@ import io.smnp.callable.function.Function
 import io.smnp.callable.function.FunctionDefinitionTool
 import io.smnp.callable.signature.Signature.Companion.simple
 import io.smnp.callable.signature.Signature.Companion.vararg
-import io.smnp.error.EvaluationException
+import io.smnp.error.CustomException
 import io.smnp.ext.midi.MidiSequencer
 import io.smnp.type.enumeration.DataType.*
 import io.smnp.type.matcher.Matcher.Companion.anyType
@@ -21,7 +21,13 @@ class MidiFunction : Function("midi") {
          listOf(NOTE, INT, STRING),
          mapOfMatchers(ofType(STRING), anyType())
       ) body { _, (config, lines) ->
-         MidiSequencer.playLines(lines.unwrap() as List<List<Any>>, unwrapConfig(config))
+         val unwrappedLines = lines.unwrap() as List<List<Any>>
+
+         if (unwrappedLines.size > 16) {
+            throw CustomException("MIDI standard supports max to 16 channels and that number has been exceeded")
+         }
+
+         MidiSequencer.playLines(unwrappedLines, unwrapConfig(config))
          Value.void()
       }
 
@@ -29,7 +35,13 @@ class MidiFunction : Function("midi") {
          mapOfMatchers(anyType(), anyType()),
          mapOfMatchers(ofType(INT), listOfMatchers(listOf(NOTE, INT, STRING)))
       ) body { _, (config, channels) ->
-         MidiSequencer.playChannels(channels.unwrap() as Map<Int, List<List<Any>>>, unwrapConfig(config))
+         val unwrappedChannels = channels.unwrap() as Map<Int, List<List<Any>>>
+
+         if (unwrappedChannels.size > 16 || unwrappedChannels.any { (k) -> k > 16 }) {
+            throw CustomException("MIDI standard supports max to 16 channels and that number has been exceeded")
+         }
+
+         MidiSequencer.playChannels(unwrappedChannels, unwrapConfig(config))
          Value.void()
       }
    }
@@ -37,8 +49,9 @@ class MidiFunction : Function("midi") {
    private fun unwrapConfig(config: Value): Map<String, Any> {
       return (config.unwrap() as Map<String, Any>)
          .map { (key, value) ->
-            key to when(key) {
-               "bpm" -> value as? Int ?: throw EvaluationException("Invalid parameter type: 'bpm' is supposed to be of int type")
+            key to when (key) {
+               "bpm" -> value as? Int
+                  ?: throw CustomException("Invalid parameter type: 'bpm' is supposed to be of int type")
                else -> value
             }
          }.toMap()
