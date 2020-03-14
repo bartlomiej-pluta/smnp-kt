@@ -20,6 +20,9 @@ class DefaultEnvironment : Environment {
    var disposed = false
       private set
 
+   val modules: List<String>
+   get() = loadedModules
+
    init {
       callStack.push(rootModule, "<entrypoint>", emptyList())
    }

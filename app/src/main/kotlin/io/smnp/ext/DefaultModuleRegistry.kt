@@ -3,9 +3,11 @@ package io.smnp.ext
 import io.smnp.environment.Environment
 import io.smnp.error.ModuleException
 import org.pf4j.DefaultPluginManager
+import java.nio.file.Paths
 
 object DefaultModuleRegistry : ModuleRegistry {
-    private val pluginManager = DefaultPluginManager()
+    private val MODULES_DIR = Paths.get(System.getProperty("smnp.modulesDir") ?: "modules")
+    private val pluginManager = DefaultPluginManager(MODULES_DIR)
     private val modules = mutableMapOf<String, ModuleProvider>()
     init {
         pluginManager.loadPlugins()

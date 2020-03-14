@@ -98,7 +98,7 @@ class Module(
         println(newPrefix + (if (first) "" else if (newLast) "└─ " else "├─ ") + name)
         newPrefix += if (newLast) "   " else "│  "
         if (printContent) {
-            val contentPrefix = newPrefix + if (children.isNotEmpty()) "|" else ""
+            val contentPrefix = newPrefix + if (children.isNotEmpty()) "│" else ""
             for ((index, function) in functions.withIndex()) {
                 println(contentPrefix + (if (index == functions.size - 1 && methods.isEmpty()) "└ " else "├ ") + "${function.name}()")
             }
