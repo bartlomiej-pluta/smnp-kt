@@ -17,7 +17,7 @@ class OptionalFunctionDefinitionArgumentParser : Parser() {
             ) { (_, type) -> type }) { UnionTypeNode(emptyList(), TokenPosition.NONE) },
             terminal(TokenType.ASSIGN),
             assert(ExpressionParser(), "expression")
-        ) { (identifier, type, defaultValue) ->
+        ) { (identifier, type, _, defaultValue) ->
             OptionalFunctionDefinitionArgumentNode(identifier, type, defaultValue)
         }.parse(input)
     }
