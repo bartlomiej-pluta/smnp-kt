@@ -11,6 +11,10 @@ data class Value(val type: DataType, val value: Any?, val properties: Map<String
         }
     }
 
+    fun stringify() = type.stringifier(value)
+
+    fun typeName() = type.toString()
+
     override fun toString(): String {
         return "$type($value)"
     }

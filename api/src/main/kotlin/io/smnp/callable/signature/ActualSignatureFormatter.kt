@@ -41,16 +41,16 @@ object ActualSignatureFormatter {
         return "list<${output.toSet().joinToString()}>"
     }
 
-    private fun mapTypes(map: Map<Value, Value>, output: MutableMap<Value, String> = mutableMapOf()): String {
+    private fun mapTypes(map: Map<Value, Value>, output: MutableMap<String, String> = mutableMapOf()): String {
         for ((k, v) in map) {
-            output[k] = when (v.type) {
+            output[k.type.toString()] = when (v.type) {
                 DataType.LIST -> listTypes(
                     v.value as List<Value>
                 )
                 DataType.MAP -> mapTypes(
                     v.value as Map<Value, Value>
                 )
-                else -> v.type.name.toLowerCase()
+                else -> v.type.toString()
             }
         }
 
