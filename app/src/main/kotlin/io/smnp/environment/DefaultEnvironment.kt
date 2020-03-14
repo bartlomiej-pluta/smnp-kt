@@ -30,6 +30,7 @@ class DefaultEnvironment : Environment {
    private fun loadModule(moduleProvider: ModuleProvider, consumer: (ModuleProvider) -> Unit = {}) {
       if (!loadedModules.contains(moduleProvider.path)) {
          rootModule.addSubmodule(moduleProvider.provideModule(LanguageModuleInterpreter()))
+         moduleProvider.onModuleLoad(this)
          loadedModules.add(moduleProvider.path)
          consumer(moduleProvider)
       }

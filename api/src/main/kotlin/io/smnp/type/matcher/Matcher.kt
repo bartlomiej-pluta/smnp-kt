@@ -40,6 +40,10 @@ class Matcher(val type: DataType?, private val matcher: (Value) -> Boolean, priv
             )
         }
 
+        fun mapOfMatchers(keyMatcher: Matcher, valueMatcher: Matcher): Matcher {
+            return mapOfMatchers(listOf(keyMatcher), listOf(valueMatcher))
+        }
+
         fun mapOfMatchers(keyMatchers: List<Matcher>, valueMatchers: List<Matcher>): Matcher {
             return Matcher(
                 DataType.MAP,

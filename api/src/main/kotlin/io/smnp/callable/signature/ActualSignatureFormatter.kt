@@ -54,6 +54,6 @@ object ActualSignatureFormatter {
             }
         }
 
-        return "map<${output.keys.toSet().joinToString()}><${output.values.toSet().joinToString()}}>"
+        return "map<${output.keys.toSet().joinToString()}><${output.values.toSet().joinToString()}>"
     }
 }
