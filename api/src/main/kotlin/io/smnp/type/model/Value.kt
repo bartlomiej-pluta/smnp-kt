@@ -16,6 +16,22 @@ data class Value(val type: DataType, val value: Any, val properties: Map<String,
    val typeName: String
       get() = type.toString()
 
+   fun unwrapCollections(): Any {
+      return when(type) {
+         DataType.LIST -> (value as List<Value>).map { it.unwrapCollections() }
+         DataType.MAP -> (value as Map<Value, Value>).map { (k, v) -> k.unwrapCollections() to v.unwrapCollections() }.toMap()
+         else -> this
+      }
+   }
+
+   fun unwrap(): Any {
+      return when(type) {
+         DataType.LIST -> (value as List<Value>).map { it.unwrap() }
+         DataType.MAP -> (value as Map<Value, Value>).map { (k, v) -> k.unwrap() to v.unwrap() }.toMap()
+         else -> value
+      }
+   }
+
    override fun toString(): String {
       return "$type($value)"
    }

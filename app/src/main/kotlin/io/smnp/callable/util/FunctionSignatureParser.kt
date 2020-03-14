@@ -6,7 +6,7 @@ import io.smnp.error.InvalidSignatureException
 import io.smnp.error.ShouldNeverReachThisLineException
 import io.smnp.type.enumeration.DataType
 import io.smnp.type.matcher.Matcher
-import io.smnp.type.matcher.Matcher.Companion.allTypes
+import io.smnp.type.matcher.Matcher.Companion.anyType
 import io.smnp.type.matcher.Matcher.Companion.listOfMatchers
 import io.smnp.type.matcher.Matcher.Companion.mapOfMatchers
 import io.smnp.type.matcher.Matcher.Companion.ofType
@@ -78,7 +78,7 @@ object FunctionSignatureParser {
 
     private fun matcherForUnionTypeNode(unionTypeNode: UnionTypeNode): Matcher {
         if (unionTypeNode.items.isEmpty()) {
-            return allTypes()
+            return anyType()
         }
 
         if (unionTypeNode.items.size == 1) {
@@ -115,7 +115,7 @@ object FunctionSignatureParser {
         val types = mutableListOf<Matcher>()
 
         if (listSpecifierNode.items.isEmpty()) {
-            types.add(allTypes())
+            types.add(anyType())
         }
 
         listSpecifierNode.items.forEach { types.add(
@@ -132,11 +132,11 @@ object FunctionSignatureParser {
         val values = mutableListOf<Matcher>()
 
         if (keySpecifierNode.items.isEmpty()) {
-            keys.add(allTypes())
+            keys.add(anyType())
         }
 
         if (valueSpecifierNode.items.isEmpty()) {
-            values.add(allTypes())
+            values.add(anyType())
         }
 
         keySpecifierNode.items.forEach { keys.add(

@@ -3,15 +3,20 @@ package io.smnp.ext.midi
 import io.smnp.data.entity.Note
 import io.smnp.error.EvaluationException
 import io.smnp.error.ShouldNeverReachThisLineException
-import io.smnp.type.enumeration.DataType.*
-import io.smnp.type.model.Value
 import javax.sound.midi.*
 
 object MidiSequencer {
    private const val PPQ = 1000
+   private const val DEFAULT_BPM = 120
    private val sequencer = MidiSystem.getSequencer()
 
-   fun playChannels(channels: Map<Int, List<List<Value>>>, config: Map<String, Any>) {
+   private object Command {
+      const val NOTE_OFF = 0x80
+      const val NOTE_ON = 0x90
+      const val PROGRAM_CHANGE = 0xC0
+   }
+
+   fun playChannels(channels: Map<Int, List<List<Any>>>, config: Map<String, Any>) {
       val sequence = Sequence(Sequence.PPQ, PPQ)
 
       channels.forEach { (channel, lines) ->
@@ -19,7 +24,7 @@ object MidiSequencer {
       }
 
       sequencer.sequence = sequence
-      sequencer.tempoInBPM = (config.getOrDefault("bpm", 120) as Int).toFloat()
+      sequencer.tempoInBPM = (config.getOrDefault("bpm", DEFAULT_BPM) as Int).toFloat()
 
 
       sequencer.start()
@@ -27,36 +32,35 @@ object MidiSequencer {
       sequencer.stop()
    }
 
-   fun playLines(lines: List<List<Value>>, config: Map<String, Any>) {
+   fun playLines(lines: List<List<Any>>, config: Map<String, Any>) {
       val sequence = Sequence(Sequence.PPQ, PPQ)
 
       lines.forEachIndexed { channel, line -> playLine(line, channel, sequence) }
 
       sequencer.sequence = sequence
-      sequencer.tempoInBPM = (config.getOrDefault("bpm", 120) as Int).toFloat()
+      sequencer.tempoInBPM = (config.getOrDefault("bpm", DEFAULT_BPM) as Int).toFloat()
 
       sequencer.start()
       while(sequencer.isRunning) Thread.sleep(20)
       sequencer.stop()
    }
 
-   private fun playLine(line: List<Value>, channel: Int, sequence: Sequence) {
+   private fun playLine(line: List<Any>, channel: Int, sequence: Sequence) {
       val track = sequence.createTrack()
 
       line.fold(0L) { noteOnTick, item ->
-         when (item.type) {
-            NOTE -> {
+         when (item) {
+            is Note -> {
                note(item, channel, noteOnTick, track)
             }
-            INT -> noteOnTick + 4L * PPQ / (item.value as Int)
-            STRING -> command(item, channel, noteOnTick, track)
+            is Int -> noteOnTick + 4L * PPQ / item
+            is String -> command(item, channel, noteOnTick, track)
             else -> throw ShouldNeverReachThisLineException()
          }
       }
    }
 
-   private fun command(item: Value, channel: Int, beginTick: Long, track: Track): Long {
-      val instruction = item.value as String
+   private fun command(instruction: String, channel: Int, beginTick: Long, track: Track): Long {
       if(instruction.isBlank()) {
          throw EvaluationException("Empty strings are not allowed here")
       }
@@ -64,16 +68,14 @@ object MidiSequencer {
       val (command, args) = if(commandWithArguments.size == 2) commandWithArguments else listOf(commandWithArguments[0], "0,0")
       val arguments = args.split(",")
       val cmdCode = when(command) {
-         "i" -> 192 + channel
-         "pitch" -> 0xE0
+         "i" -> Command.PROGRAM_CHANGE + channel
          else -> throw EvaluationException("Unknown command '$command'")
       }
       track.add(event(cmdCode, channel, arguments.getOrNull(0)?.toInt() ?: 0, arguments.getOrNull(1)?.toInt() ?: 0, beginTick))
       return beginTick
    }
 
-   private fun note(item: Value, channel: Int, noteOnTick: Long, track: Track): Long {
-      val note = item.value as Note
+   private fun note(note: Note, channel: Int, noteOnTick: Long, track: Track): Long {
       val noteDuration = ((if (note.dot) 1.5 else 1.0) * 4L * PPQ / note.duration).toLong()
       val noteOffTick = noteOnTick + noteDuration
       track.add(noteOn(note, channel, noteOnTick))
@@ -82,16 +84,15 @@ object MidiSequencer {
    }
 
    private fun noteOn(note: Note, channel: Int, tick: Long): MidiEvent {
-      return event(144, channel, note.intPitch() + 12, 127, tick)
+      return event(Command.NOTE_ON, channel, note.intPitch() + 12, 127, tick)
    }
 
    private fun noteOff(note: Note, channel: Int, tick: Long): MidiEvent {
-      return event(128, channel, note.intPitch() + 12, 127, tick)
+      return event(Command.NOTE_OFF, channel, note.intPitch() + 12, 127, tick)
    }
 
    private fun event(command: Int, channel: Int, data1: Int, data2: Int, tick: Long): MidiEvent {
-      val message = ShortMessage()
-      message.setMessage(command, channel, data1, data2)
+      val message = ShortMessage(command, channel, data1, data2)
       return MidiEvent(message, tick)
    }
 

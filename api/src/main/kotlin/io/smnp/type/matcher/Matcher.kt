@@ -104,7 +104,7 @@ class Matcher(val type: DataType?, private val matcher: (Value) -> Boolean, priv
             )
         }
 
-        fun allTypes(): Matcher {
+        fun anyType(): Matcher {
             return Matcher(
                 null,
                 { it.type != DataType.VOID },

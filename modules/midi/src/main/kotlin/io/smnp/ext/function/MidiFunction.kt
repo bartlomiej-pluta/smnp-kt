@@ -7,7 +7,7 @@ import io.smnp.callable.signature.Signature.Companion.vararg
 import io.smnp.error.EvaluationException
 import io.smnp.ext.midi.MidiSequencer
 import io.smnp.type.enumeration.DataType.*
-import io.smnp.type.matcher.Matcher.Companion.allTypes
+import io.smnp.type.matcher.Matcher.Companion.anyType
 import io.smnp.type.matcher.Matcher.Companion.listOf
 import io.smnp.type.matcher.Matcher.Companion.listOfMatchers
 import io.smnp.type.matcher.Matcher.Companion.mapOfMatchers
@@ -19,39 +19,28 @@ class MidiFunction : Function("midi") {
    override fun define(new: FunctionDefinitionTool) {
       new function vararg(
          listOf(NOTE, INT, STRING),
-         mapOfMatchers(ofType(INT), allTypes())
+         mapOfMatchers(ofType(STRING), anyType())
       ) body { _, (config, lines) ->
-
-         val lines = (lines.value as List<Value>).map { it.value as List<Value> }
-         val parameters = configParametersMap(config.value)
-         MidiSequencer.playLines(lines, parameters)
+         MidiSequencer.playLines(lines.unwrap() as List<List<Any>>, unwrapConfig(config))
          Value.void()
       }
 
       new function simple(
-         mapOfMatchers(allTypes(), allTypes()),
+         mapOfMatchers(anyType(), anyType()),
          mapOfMatchers(ofType(INT), listOfMatchers(listOf(NOTE, INT, STRING)))
       ) body { _, (config, channels) ->
-         val channels = (channels.value as Map<Value, Value>).map { (key, value) ->
-            key.value as Int to ((value.value as List<Value>).map { it.value as List<Value> })
-         }.toMap()
-
-         val parameters = configParametersMap(config.value)
-         MidiSequencer.playChannels(channels, parameters)
-
+         MidiSequencer.playChannels(channels.unwrap() as Map<Int, List<List<Any>>>, unwrapConfig(config))
          Value.void()
       }
    }
 
-   private fun configParametersMap(config: Any): Map<String, Any> {
-      return (config as Map<Value, Value>)
-         .map { (key, value) -> key.value as String to value }
+   private fun unwrapConfig(config: Value): Map<String, Any> {
+      return (config.unwrap() as Map<String, Any>)
          .map { (key, value) ->
-            key to when (key) {
-               "bpm" -> if (value.type == INT) value.value else throw EvaluationException("Invalid parameter type: 'bpm' is supposed to be of int type")
+            key to when(key) {
+               "bpm" -> value as? Int ?: throw EvaluationException("Invalid parameter type: 'bpm' is supposed to be of int type")
                else -> value
             }
-         }
-         .toMap()
+         }.toMap()
    }
 }
