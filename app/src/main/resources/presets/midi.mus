@@ -1,0 +1,50 @@
+import smnp.audio.midi;
+import smnp.io;
+import smnp.system;
+import smnp.text;
+
+if(__param__.containsKey("help")) {
+    println("Print available MIDI instruments or play notes of selected one");
+    println();
+    println("Optional parameters:");
+    println("  - instrument: int    - play notes of instrument with given ID");
+    println();
+    println("Optional parameters applied if 'instrument' parameter is passed:");
+    println("  - bpm: int [120]     - specify the BPM of playing notes");
+    println("  - begin: note [@C1]  - the lower bound of playing notes");
+    println("  - end: note [@C9]    - the upper bound of playing notes");
+    println("  - channel: int [1]   - MIDI channel to be used")
+    exit(1);
+}
+
+if(__param__.containsKey("instrument")) {
+    instrument = __param__.get("instrument").toInt();
+
+    if(typeOf(instrument) != "int") {
+        throw "Expected 'instrument' to be of int type";
+    }
+
+    bpm = __param__.getOrDefault("bpm", "120").toInt();
+    if(typeOf(bpm) != "int") {
+        throw "Expected 'bpm' to be of int type";
+    }
+
+    begin = __param__.getOrDefault("begin", "@C1").toNote();
+    if(typeOf(begin) != "note") {
+        throw "Expected 'begin' to be of note type";
+    }
+
+    end = __param__.getOrDefault("end", "@C9").toNote();
+    if(typeOf(end) != "note") {
+        throw "Expected 'end' to be of note type";
+    }
+
+    channel = __param__.getOrDefault("channel", "1").toInt();
+    if(typeOf(channel) != "int") {
+        throw "Expected 'channel' to be of int type";
+    }
+
+    midiHelp(instrument, bpm, begin, end, channel);
+} else {
+    midiHelp("instruments");
+}

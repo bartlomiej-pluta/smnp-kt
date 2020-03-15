@@ -7,10 +7,10 @@ if(__param__.containsKey("help")) {
     println("Simple metronome");
     println();
     println("Optional parameters:");
-    println("  - bpm: int       - set BPM of metronome");
-    println("  - beats: int     - set time signature of metronome (4 = 4/4, 3 = 3/4 and so on)");
-    println("  - accent: note   - set note for accent beat (General MIDI, channel 10)");
-    println("  - beat: note     - set note for regular beat (General MIDI, channel 10)");
+    println("  - bpm: int [120]      - set BPM of metronome");
+    println("  - beats: int [4]      - set time signature of metronome (4 = 4/4, 3 = 3/4 and so on)");
+    println("  - accent: note [@A#2] - set note for accent beat (General MIDI, channel 10)");
+    println("  - beat: note [@F#2]   - set note for regular beat (General MIDI, channel 10)");
     exit(1);
 }
 
