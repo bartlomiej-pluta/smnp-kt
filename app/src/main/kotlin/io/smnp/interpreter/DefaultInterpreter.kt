@@ -4,12 +4,9 @@ import io.smnp.dsl.ast.parser.RootParser
 import io.smnp.dsl.token.tokenizer.DefaultTokenizer
 import io.smnp.environment.DefaultEnvironment
 import io.smnp.environment.Environment
-import io.smnp.error.SmnpException
 import io.smnp.evaluation.evaluator.RootEvaluator
 import io.smnp.evaluation.model.enumeration.EvaluationResult
 import java.io.File
-import java.lang.System.err
-import kotlin.system.exitProcess
 
 class DefaultInterpreter : Interpreter {
    private val tokenizer = DefaultTokenizer()
@@ -28,20 +25,6 @@ class DefaultInterpreter : Interpreter {
    }
 
    private fun run(lines: List<String>, environment: Environment, printTokens: Boolean, printAst: Boolean, dryRun: Boolean): Environment {
-      try {
-         return tryToRun(lines, environment, printTokens, printAst, dryRun)
-      } catch (e: SmnpException) {
-         printError(e)
-         exitProcess(1)
-      }
-   }
-
-   private fun printError(e: SmnpException) {
-      err.println(e.friendlyName)
-      err.println(e.message)
-   }
-
-   private fun tryToRun(lines: List<String>, environment: Environment, printTokens: Boolean, printAst: Boolean, dryRun: Boolean): Environment {
       environment.loadModule("smnp.lang")
 
       val tokens = tokenizer.tokenize(lines)
