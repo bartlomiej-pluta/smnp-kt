@@ -3,6 +3,7 @@ package io.smnp.cli.model.entity
 import com.xenomachina.argparser.ArgParser
 import com.xenomachina.argparser.default
 import io.smnp.cli.model.enumeration.ModulesPrintMode
+import io.smnp.preset.PresetProvider
 import java.io.File
 
 class Arguments(parser: ArgParser) {
@@ -30,6 +31,14 @@ class Arguments(parser: ArgParser) {
          }
       }
    }
+   val preset by parser.storing(
+      "-p",
+      "--preset",
+      argName = "NAME",
+      help = "load preset by name and execute it. Preset is a predefined snippet of SMNP code that allows user to " +
+         "perform some useful action without having to script it himself. Presets are located in SMNP executable JAR " +
+         "file. Available presets: ${PresetProvider.presets.joinToString()}"
+   ).default<String?>(null)
 
    val code by parser.storing("-c", "--code", help = "inline code to be executed").default<String?>(null)
    val file by parser.positional(

@@ -59,7 +59,7 @@ extend string as this {
             output = -output;
         }
 
-        return output;
+        return Int(output);
     }
 
     function substring(startIndex: int, endIndex: int) {

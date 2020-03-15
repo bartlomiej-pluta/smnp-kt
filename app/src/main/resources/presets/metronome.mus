@@ -1,0 +1,15 @@
+import smnp.music.tools;
+import smnp.text;
+
+bpm = __param__.getOrDefault("bpm", "120").toInt();
+if(typeOf(bpm) != "int") {
+    throw "Expected 'bpm' to be of int type";
+}
+
+beats = __param__.getOrDefault("beats", "4").toInt();
+if(typeOf(beats) != "int") {
+    throw "Expected 'beats' to be of int type";
+}
+
+metronome(bpm, beats);
+

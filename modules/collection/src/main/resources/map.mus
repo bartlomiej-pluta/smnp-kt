@@ -18,4 +18,12 @@ extend map as this {
     function isNotEmpty() {
         return not this.isEmpty();
     }
+
+    function getOrDefault(key, default) {
+        if(this.containsKey(key)) {
+            return this.get(key);
+        }
+
+        return default;
+    }
 }

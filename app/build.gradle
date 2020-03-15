@@ -9,7 +9,25 @@ dependencies {
     compile "com.xenomachina:kotlin-argparser:2.0.7"
 }
 
+ext.generatedResourcesDir = file("$buildDir/generated-resources")
+task generateResources {
+    doLast {
+        generatedResourcesDir.mkdir()
+        generatePresetsIndex()
+    }
+}
+sourceSets.main.output.dir generatedResourcesDir, builtBy: generateResources
+
+private void generatePresetsIndex() {
+    def presets = new File(sourceSets.main.resources.srcDirs[0], "presets")
+    def index = new PrintWriter(new FileWriter(new File(generatedResourcesDir, "presets.index")))
+    presets.listFiles().each { index.println(it.name) }
+    index.close()
+}
+
 jar {
+    dependsOn generateResources
+
     zip64 true
     manifest {
         attributes 'Main-Class': 'io.smnp.SMNPKt'

@@ -1,0 +1,16 @@
+import smnp.music.tools;
+import smnp.text;
+
+infinite = __param__.containsKey("cycles");
+melody = __param__.getOrDefault("melody", "beep");
+
+if(infinite) {
+    cycles = __param__.get("cycles").toInt();
+    if(typeOf(cycles) != "int") {
+        throw "Expected 'cycles' to be of int type";
+    }
+
+    alert(cycles, melody);
+} else {
+    alert(melody);
+}

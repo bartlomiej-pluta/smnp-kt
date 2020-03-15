@@ -7,6 +7,7 @@ import io.smnp.cli.model.enumeration.ModulesPrintMode
 import io.smnp.environment.DefaultEnvironment
 import io.smnp.ext.DefaultModuleRegistry
 import io.smnp.interpreter.DefaultInterpreter
+import io.smnp.preset.PresetProvider.providePresetCode
 import io.smnp.type.model.Value
 
 fun main(args: Array<String>): Unit = mainBody {
@@ -19,6 +20,7 @@ fun main(args: Array<String>): Unit = mainBody {
       when {
          file != null -> interpreter.run(file!!, environment, printTokens, printAst, dryRun)
          code != null -> interpreter.run(code!!, environment, printTokens, printAst, dryRun)
+         preset != null -> interpreter.run(providePresetCode(preset!!), environment, printTokens, printAst, dryRun)
          else -> null
       }?.let { it as DefaultEnvironment }?.let { disposedEnvironment ->
          if(loadedModules != null) {
