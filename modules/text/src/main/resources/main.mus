@@ -155,4 +155,73 @@ extend string as this {
             return this;
         }
     }
+
+    function toNote() {
+        pitch = "";
+        octave = 4;
+        duration = 4;
+        dot = false;
+
+        consumed = 0;
+        if(this.length < 2) {
+            return this;
+        }
+
+        # Note begin tag
+        if(this.charAt(consumed) == "@") {
+            consumed = consumed + 1;
+
+            # Base pitch
+            availablePitch = ["c", "d", "e", "f", "g", "a", "h", "b", "C", "D", "E", "F", "G", "A", "H", "B"]
+            if((consumed < this.length) and availablePitch.contains(this.charAt(consumed))) {
+                pitch = pitch + this.charAt(consumed);
+                consumed = consumed + 1;
+
+                # Flat or sharp
+                if((consumed < this.length) and ["b", "#"].contains(this.charAt(consumed))) {
+                    pitch = pitch + this.charAt(consumed);
+                    consumed = consumed + 1;
+                }
+
+                # Octave
+                if(consumed < this.length) {
+                    octave = this.charAt(consumed).toInt();
+                    if(typeOf(octave) == "int") {
+                        consumed = consumed + 1;
+                    } else {
+                        octave = 4;
+                    }
+                }
+
+                # Duration start symbol
+                if((consumed < this.length) and (this.charAt(consumed) == ":")) {
+                    consumed = consumed + 1;
+                    _duration = "";
+                    (consumed < this.length and typeOf(this.charAt(consumed).toInt()) == "int") ^ {
+                        _duration = _duration + this.charAt(consumed);
+                        consumed = consumed + 1;
+                    }
+                    duration = _duration.toInt();
+
+                    if(_duration.isEmpty()) {
+                        return this;
+                    }
+
+                    dot = (consumed < this.length) and this.charAt(consumed) == "d";
+                    if(dot) {
+                        consumed = consumed+1;
+                    }
+
+                    # If some trailing characters remained
+                    if(consumed != this.length) {
+                        return this;
+                    }
+                }
+            }
+
+            return Note(pitch, octave, duration, dot);
+        }
+
+        return this;
+    }
 }
