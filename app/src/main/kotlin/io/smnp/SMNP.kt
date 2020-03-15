@@ -5,6 +5,8 @@ import com.xenomachina.argparser.mainBody
 import io.smnp.cli.model.entity.Arguments
 import io.smnp.cli.model.enumeration.ModulesPrintMode
 import io.smnp.environment.DefaultEnvironment
+import io.smnp.error.EnvironmentException
+import io.smnp.error.PositionException
 import io.smnp.error.SmnpException
 import io.smnp.ext.DefaultModuleRegistry
 import io.smnp.interpreter.DefaultInterpreter
@@ -41,8 +43,13 @@ fun main(args: Array<String>): Unit = mainBody {
             DefaultModuleRegistry.registeredModules().forEach { println(it) }
          }
       } catch (e: SmnpException) {
-         System.err.println(e.friendlyName)
+         val position = e.exceptionChain.mapNotNull { it as? PositionException }.lastOrNull()?.position ?: ""
+         val stacktrace = e.exceptionChain.mapNotNull { it as? EnvironmentException }.lastOrNull()?.let {
+            "\nStack trace:\n${it.environment.stackTrace()}"
+         } ?: ""
+         System.err.println(e.friendlyName + " " + position)
          System.err.println(e.message)
+         System.err.println(stacktrace)
          exitProcess(1)
       }
    }

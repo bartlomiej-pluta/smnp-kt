@@ -24,7 +24,13 @@ class DefaultInterpreter : Interpreter {
       return run(lines, environment, printTokens, printAst, dryRun)
    }
 
-   private fun run(lines: List<String>, environment: Environment, printTokens: Boolean, printAst: Boolean, dryRun: Boolean): Environment {
+   private fun run(
+      lines: List<String>,
+      environment: Environment,
+      printTokens: Boolean,
+      printAst: Boolean,
+      dryRun: Boolean
+   ): Environment {
       environment.loadModule("smnp.lang")
 
       val tokens = tokenizer.tokenize(lines)
@@ -44,7 +50,13 @@ class DefaultInterpreter : Interpreter {
       return environment
    }
 
-   fun run(file: File, environment: Environment = DefaultEnvironment(), printTokens: Boolean = false, printAst: Boolean = false, dryRun: Boolean = false): Environment {
+   fun run(
+      file: File,
+      environment: Environment = DefaultEnvironment(),
+      printTokens: Boolean = false,
+      printAst: Boolean = false,
+      dryRun: Boolean = false
+   ): Environment {
       val lines = file.readLines()
       return run(lines, environment, printTokens, printAst, dryRun)
    }
