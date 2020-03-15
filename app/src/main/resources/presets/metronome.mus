@@ -1,5 +1,18 @@
 import smnp.music.tools;
 import smnp.text;
+import smnp.io;
+import smnp.system;
+
+if(__param__.containsKey("help")) {
+    println("Simple metronome");
+    println();
+    println("Optional parameters:");
+    println("  - bpm: int       - set BPM of metronome");
+    println("  - beats: int     - set time signature of metronome (4 = 4/4, 3 = 3/4 and so on)");
+    println("  - accent: note   - set note for accent beat (General MIDI, channel 10)");
+    println("  - beat: note     - set note for regular beat (General MIDI, channel 10)");
+    exit(1);
+}
 
 bpm = __param__.getOrDefault("bpm", "120").toInt();
 if(typeOf(bpm) != "int") {
@@ -17,7 +30,7 @@ if(typeOf(accent) != "note") {
 }
 
 beat = __param__.getOrDefault("beat", "@F#2").toNote();
-if(typeOf(accent) != "note") {
+if(typeOf(beat) != "note") {
     throw "Expected 'beat' to be of note type";
 }
 

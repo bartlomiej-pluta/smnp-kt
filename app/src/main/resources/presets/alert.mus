@@ -1,5 +1,22 @@
 import smnp.music.tools;
 import smnp.text;
+import smnp.io;
+import smnp.system;
+
+if(__param__.containsKey("help")) {
+    println("Run sound alarm");
+    println();
+    println("Optional parameters:");
+    println("  - cycles: int    - set number of cycles that running alarm has to reach to get quiet");
+    println("                     infinite on absence of argument");
+    println("  - melody: string - set melody of alert");
+    println("                     available melodies:");
+    println("                      - beep (default)");
+    println("                      - bell");
+    println("                      - alarm1");
+    println("                      - alarm2");
+    exit(1);
+}
 
 infinite = __param__.containsKey("cycles");
 melody = __param__.getOrDefault("melody", "beep");
