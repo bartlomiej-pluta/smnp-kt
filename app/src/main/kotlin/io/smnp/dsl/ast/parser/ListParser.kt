@@ -5,7 +5,7 @@ import io.smnp.dsl.token.model.enumeration.TokenType
 
 class ListParser : AbstractIterableParser(
     TokenType.OPEN_SQUARE,
-    assert(SubexpressionParser(), "expression"),
+    assert(ExpressionParser(), "expression"),
     TokenType.CLOSE_SQUARE,
     { list, tokenPosition ->
         ListNode(list, tokenPosition)
