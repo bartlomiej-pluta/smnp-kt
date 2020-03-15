@@ -183,6 +183,11 @@ extend string as this {
                     consumed = consumed + 1;
                 }
 
+                # Exclude some invalid combination that passed previous filters
+                if(["Bb", "bb", "Hb"].contains(pitch)) {
+                    return this;
+                }
+
                 # Octave
                 if(consumed < this.length) {
                     octave = this.charAt(consumed).toInt();
@@ -211,15 +216,15 @@ extend string as this {
                     if(dot) {
                         consumed = consumed+1;
                     }
-
-                    # If some trailing characters remained
-                    if(consumed != this.length) {
-                        return this;
-                    }
                 }
-            }
 
-            return Note(pitch, octave, duration, dot);
+                # If some trailing characters remained
+                if(consumed != this.length) {
+                    return this;
+                }
+
+                return Note(pitch, octave, duration, dot);
+            }
         }
 
         return this;
