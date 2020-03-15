@@ -15,7 +15,10 @@ function alert(melody: string = "beep") {
         throw "Unknown melody with name of '" + melody + "'";
     }
 
-    true ^ midi({ bpm -> 400 }, melodies.get(melody));
+    A = melodies.get(melody);
+    B = transpose(6, melodies.get(melody));
+
+    true ^ midi({ bpm -> 400 }, A, B);
 }
 
 function alert(cycles: int, melody: string = "beep") {
@@ -29,5 +32,9 @@ function alert(cycles: int, melody: string = "beep") {
     if(not melodies.containsKey(melody)) {
         throw "Unknown melody with name of '" + melody + "'";
     }
-    cycles ^ midi({ bpm -> 400 }, melodies.get(melody));
+
+    A = melodies.get(melody);
+    B = transpose(6, melodies.get(melody));
+
+    cycles ^ midi({ bpm -> 400 }, A, B);
 }
