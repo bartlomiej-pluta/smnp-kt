@@ -11,5 +11,15 @@ if(typeOf(beats) != "int") {
     throw "Expected 'beats' to be of int type";
 }
 
-metronome(bpm, beats);
+accent = __param__.getOrDefault("accent", "@A#2").toNote();
+if(typeOf(accent) != "note") {
+    throw "Expected 'accent' to be of note type";
+}
+
+beat = __param__.getOrDefault("beat", "@F#2").toNote();
+if(typeOf(accent) != "note") {
+    throw "Expected 'beat' to be of note type";
+}
+
+metronome(bpm, beats, accent, beat);
 
