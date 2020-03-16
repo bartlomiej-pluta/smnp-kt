@@ -22,5 +22,21 @@ class NoteConstructor : Function("Note") {
          val note = Note(pitch, octave.value as Int, Fraction(1, duration.value as Int), dot.value as Boolean)
          Value.note(note)
       }
+
+      new function simple(
+         ofType(STRING),
+         ofType(INT),
+         ofType(INT),
+         ofType(INT)
+      ) body { _, (pitchString, octave, durationNumerator, durationDenominator) ->
+         val pitch = Pitch.parse((pitchString.value as String).toLowerCase())
+         val note = Note(
+            pitch,
+            octave.value as Int,
+            Fraction(durationNumerator.value as Int, durationDenominator.value as Int),
+            false
+         )
+         Value.note(note)
+      }
    }
 }

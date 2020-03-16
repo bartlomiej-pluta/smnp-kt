@@ -1,18 +1,18 @@
 extend note as this {
     function withOctave(octave: int) {
-        return Note(this.pitch, octave, this.duration, this.dot);
+        return Note(this.pitch, octave, this.duration.get("numerator"), this.duration.get("denominator"));
     }
 
     function withDuration(duration: int) {
-        return Note(this.pitch, this.octave, duration, this.dot);
+        return Note(this.pitch, this.octave, duration, false);
     }
 
-    function withDot(dot: bool) {
-        return Note(this.pitch, this.octave, this.duration, dot);
+    function withDuration(numerator: int, denominator: int) {
+        return Note(this.pitch, this.octave, numerator, denominator)
     }
 
     function transpose(value: int) {
-        return noteFromInt(this.toInt() + value, this.duration, this.dot);
+        return noteFromInt(this.toInt() + value, this.duration.get("numerator"), this.duration.get("denominator"));
     }
 
     function toInt() {
@@ -31,6 +31,12 @@ extend note as this {
             "H"
         ].indexOf(this.pitch);
     }
+}
+
+function noteFromInt(intPitch: int, numerator: int, denominator: int) {
+    pitch = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "H"].get(mod(intPitch, 12));
+    octave = Int(intPitch / 12);
+    return Note(pitch, octave, numerator, denominator);
 }
 
 function noteFromInt(intPitch: int, duration: int, dot: bool) {
@@ -70,6 +76,18 @@ function transpose(value: int, notes: list<note, int, string>) {
     }
 
     return output;
+}
+
+function triplet(a: note, b: note, c: note) {
+    return tuplet(2, a, b, c);
+}
+
+function quintuplet(a: note, b: note, c: note, d: note, e: note) {
+    return tuplet(4, a, b, c, d, e);
+}
+
+function tuplet(sub: int, ...notes: note) {
+    return notes as note ^ note.withDuration(note.duration.get("numerator") * sub, note.duration.get("denominator") * notes.size);
 }
 
 function semitones(...notes: <note, int, string>) {

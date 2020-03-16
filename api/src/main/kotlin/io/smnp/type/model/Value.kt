@@ -17,7 +17,7 @@ data class Value(val type: DataType, val value: Any, val properties: Map<String,
       get() = type.toString()
 
    fun unwrapCollections(): Any {
-      return when(type) {
+      return when (type) {
          DataType.LIST -> (value as List<Value>).map { it.unwrapCollections() }
          DataType.MAP -> (value as Map<Value, Value>).map { (k, v) -> k.unwrapCollections() to v.unwrapCollections() }.toMap()
          else -> this
@@ -25,7 +25,7 @@ data class Value(val type: DataType, val value: Any, val properties: Map<String,
    }
 
    fun unwrap(): Any {
-      return when(type) {
+      return when (type) {
          DataType.LIST -> (value as List<Value>).map { it.unwrap() }
          DataType.MAP -> (value as Map<Value, Value>).map { (k, v) -> k.unwrap() to v.unwrap() }.toMap()
          else -> value
@@ -42,7 +42,7 @@ data class Value(val type: DataType, val value: Any, val properties: Map<String,
       }
 
       fun wrap(obj: Any): Value {
-         return when(obj) {
+         return when (obj) {
             is Unit -> void()
             is Int -> int(obj)
             is Float -> float(obj)
@@ -73,7 +73,7 @@ data class Value(val type: DataType, val value: Any, val properties: Map<String,
       fun string(value: String): Value {
          return Value(
             DataType.STRING, value, hashMapOf(
-               Pair("length", int(value.length))
+               "length" to int(value.length)
             )
          )
       }
@@ -81,7 +81,7 @@ data class Value(val type: DataType, val value: Any, val properties: Map<String,
       fun list(value: List<Value>): Value {
          return Value(
             DataType.LIST, value, hashMapOf(
-               Pair("size", int(value.size))
+               "size" to int(value.size)
             )
          )
       }
@@ -89,9 +89,9 @@ data class Value(val type: DataType, val value: Any, val properties: Map<String,
       fun map(value: Map<Value, Value>): Value {
          return Value(
             DataType.MAP, value, hashMapOf(
-               Pair("size", int(value.size)),
-               Pair("keys", list(value.keys.toList())),
-               Pair("values", list(value.values.toList()))
+               "size" to int(value.size),
+               "keys" to list(value.keys.toList()),
+               "values" to list(value.values.toList())
             )
          )
       }
@@ -99,9 +99,14 @@ data class Value(val type: DataType, val value: Any, val properties: Map<String,
       fun note(value: Note): Value {
          return Value(
             DataType.NOTE, value, hashMapOf(
-               Pair("pitch", string(value.pitch.toString())),
-               Pair("octave", int(value.octave)),
-               Pair("duration", float((value.duration.numerator / value.duration.denominator).toFloat()))
+               "pitch" to string(value.pitch.toString()),
+               "octave" to int(value.octave),
+               "duration" to map(
+                  mapOf(
+                     string("numerator") to int(value.duration.numerator),
+                     string("denominator") to int(value.duration.denominator)
+                  )
+               )
             )
          )
       }
