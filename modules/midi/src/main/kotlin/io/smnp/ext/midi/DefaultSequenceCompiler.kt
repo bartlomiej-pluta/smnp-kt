@@ -13,7 +13,7 @@ class DefaultSequenceCompiler : SequenceCompiler() {
       track: Track,
       ppq: Int
    ): Long {
-      val noteDuration = ((if (item.dot) 1.5 else 1.0) * 4L * ppq / item.duration).toLong()
+      val noteDuration = (4L * ppq * item.duration.decimal).toLong()
       val noteOffTick = noteOnTick + noteDuration
       track.add(noteOn(item, channel, noteOnTick))
       track.add(noteOff(item, channel, noteOffTick))

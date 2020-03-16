@@ -7,6 +7,7 @@ import io.smnp.data.entity.Note
 import io.smnp.data.enumeration.Pitch
 import io.smnp.error.CustomException
 import io.smnp.ext.midi.Midi
+import io.smnp.math.Fraction
 import io.smnp.type.enumeration.DataType.*
 import io.smnp.type.matcher.Matcher.Companion.ofType
 import io.smnp.type.matcher.Matcher.Companion.optional
@@ -33,8 +34,8 @@ class MidiHelpFunction : Function("midiHelp") {
       ) body { environment, args ->
          val instrument = args[0].value as Int
          val bpm = args.getOrNull(1)?.value as Int? ?: 120
-         val begin = args.getOrNull(2) ?: Value.note(Note(Pitch.C, 1, 4, false))
-         val end = args.getOrNull(3) ?: Value.note(Note(Pitch.H, 9, 4, false))
+         val begin = args.getOrNull(2) ?: Value.note(Note(Pitch.C, 1, Fraction(1, 4), false))
+         val end = args.getOrNull(3) ?: Value.note(Note(Pitch.H, 9, Fraction(1, 4), false))
          val channel = args.getOrNull(4)?.value as Int? ?: 1
 
          if(channel > 16) {

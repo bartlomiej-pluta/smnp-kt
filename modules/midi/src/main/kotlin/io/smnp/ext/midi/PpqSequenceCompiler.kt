@@ -13,7 +13,7 @@ class PpqSequenceCompiler : SequenceCompiler() {
       track: Track,
       ppq: Int
    ): Long {
-      val noteOffTick = noteOnTick + item.duration
+      val noteOffTick = noteOnTick + item.duration.denominator
       track.add(noteOn(item, channel, noteOnTick))
       track.add(noteOff(item, channel, noteOffTick))
       return noteOffTick

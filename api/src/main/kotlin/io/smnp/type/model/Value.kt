@@ -101,8 +101,7 @@ data class Value(val type: DataType, val value: Any, val properties: Map<String,
             DataType.NOTE, value, hashMapOf(
                Pair("pitch", string(value.pitch.toString())),
                Pair("octave", int(value.octave)),
-               Pair("duration", int(value.duration)),
-               Pair("dot", bool(value.dot))
+               Pair("duration", float((value.duration.numerator / value.duration.denominator).toFloat()))
             )
          )
       }
