@@ -5,7 +5,7 @@ import io.smnp.callable.function.FunctionDefinitionTool
 import io.smnp.callable.signature.Signature.Companion.simple
 import io.smnp.callable.signature.Signature.Companion.vararg
 import io.smnp.error.CustomException
-import io.smnp.ext.midi.MidiSequencer
+import io.smnp.ext.midi.Midi
 import io.smnp.type.enumeration.DataType.*
 import io.smnp.type.matcher.Matcher.Companion.anyType
 import io.smnp.type.matcher.Matcher.Companion.listOf
@@ -27,7 +27,8 @@ class MidiFunction : Function("midi") {
             throw CustomException("MIDI standard supports max to 16 channels and that number has been exceeded")
          }
 
-         MidiSequencer.playLines(unwrappedLines, unwrapConfig(config))
+         Midi.with(unwrapConfig(config)).run(unwrappedLines)
+
          Value.void()
       }
 
@@ -41,7 +42,8 @@ class MidiFunction : Function("midi") {
             throw CustomException("MIDI standard supports max to 16 channels and that number has been exceeded")
          }
 
-         MidiSequencer.playChannels(unwrappedChannels, unwrapConfig(config))
+         Midi.with(unwrapConfig(config)).run(unwrappedChannels)
+
          Value.void()
       }
    }
@@ -52,6 +54,8 @@ class MidiFunction : Function("midi") {
             key to when (key) {
                "bpm" -> value as? Int
                   ?: throw CustomException("Invalid parameter type: 'bpm' is supposed to be of int type")
+               "ppq" -> value as? Int
+                  ?: throw CustomException("Invalid parameter type: 'ppq' is supposed to be of int type")
                else -> value
             }
          }.toMap()

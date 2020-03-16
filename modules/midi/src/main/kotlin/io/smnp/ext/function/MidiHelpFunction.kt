@@ -6,7 +6,7 @@ import io.smnp.callable.signature.Signature.Companion.simple
 import io.smnp.data.entity.Note
 import io.smnp.data.enumeration.Pitch
 import io.smnp.error.CustomException
-import io.smnp.ext.midi.MidiSequencer
+import io.smnp.ext.midi.Midi
 import io.smnp.type.enumeration.DataType.*
 import io.smnp.type.matcher.Matcher.Companion.ofType
 import io.smnp.type.matcher.Matcher.Companion.optional
@@ -17,7 +17,7 @@ class MidiHelpFunction : Function("midiHelp") {
       new function simple(ofType(STRING)) body { _, (command) ->
          val cmd = command.value as String
          when (cmd.toLowerCase()) {
-            "instruments" -> MidiSequencer.instruments.forEachIndexed { index, instrument -> println("$index: $instrument") }
+            "instruments" -> Midi.instruments.forEachIndexed { index, instrument -> println("$index: $instrument") }
             else -> throw CustomException("Unknown command '$cmd' - available commands: 'instruments', '<instrumentId>'")
          }
 
@@ -48,7 +48,7 @@ class MidiHelpFunction : Function("midiHelp") {
             ).value as List<Value>
          ).unwrap() as List<Any>
 
-         println(MidiSequencer.instruments[instrument])
+         println(Midi.instruments[instrument])
          println("Channel: $channel")
          println("BPM: $bpm")
          println("Range: ${begin.value} - ${end.value}")
@@ -56,7 +56,9 @@ class MidiHelpFunction : Function("midiHelp") {
          notes.forEachIndexed { index, it ->
             if (index > 0) {
                println(it)
-               MidiSequencer.playChannels(mapOf(channel to listOf(listOf("i:$instrument", it))), mapOf("bpm" to bpm))
+               Midi
+                  .with(mapOf("bpm" to bpm))
+                  .run(mapOf(channel to listOf(listOf("i:$instrument", it))))
                Thread.sleep(100)
             }
          }
