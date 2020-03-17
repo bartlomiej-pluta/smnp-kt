@@ -85,6 +85,10 @@ class MidiFunction : Function("midi") {
                   ?: throw CustomException("Invalid parameter type: 'bpm' is supposed to be of int type")
                "ppq" -> value as? Int
                   ?: throw CustomException("Invalid parameter type: 'ppq' is supposed to be of int type")
+               "output" -> value as? String
+                  ?: throw CustomException("Invalid parameter type: 'output' is supposed to be of string type")
+               "play" -> value as? Boolean
+                  ?: throw CustomException("Invalid parameter type: 'play' is supposed to be of bool type")
                else -> value
             }
          }.toMap()

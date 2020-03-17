@@ -8,11 +8,12 @@ import javax.sound.midi.Sequencer
 object Midi {
    private const val DEFAULT_PPQ = 1000
    private const val DEFAULT_BPM = 120
+   private const val MIDI_FILE_TYPE = 1
    private val sequencer = MidiSystem.getSequencer()
    private val synthesizer = MidiSystem.getSynthesizer()
 
    val instruments: List<String>
-   get() = synthesizer.availableInstruments.map { it.toString() }
+      get() = synthesizer.availableInstruments.map { it.toString() }
 
    fun playFile(file: String) {
       playSequence(MidiSystem.getSequence(File(file)))
@@ -35,15 +36,24 @@ object Midi {
          val sequence = Sequence(Sequence.PPQ, (config.getOrDefault("ppq", DEFAULT_PPQ) as Int))
          provideCompiler(config).compileLines(lines, sequence)
          play(sequence)
+         writeToFile(sequence)
       }
 
       private fun provideCompiler(config: Map<String, Any>): SequenceCompiler =
-         if(config.containsKey("ppq")) PpqSequenceCompiler()
+         if (config.containsKey("ppq")) PpqSequenceCompiler()
          else DefaultSequenceCompiler()
 
       private fun play(sequence: Sequence) {
-         playSequence(sequence) {
-            Midi.sequencer.tempoInBPM = (config.getOrDefault("bpm", DEFAULT_BPM) as Int).toFloat()
+         (config.getOrDefault("play", true) as Boolean).takeIf { it }?.let {
+            playSequence(sequence) {
+               Midi.sequencer.tempoInBPM = (config.getOrDefault("bpm", DEFAULT_BPM) as Int).toFloat()
+            }
+         }
+      }
+
+      private fun writeToFile(sequence: Sequence) {
+         config.getOrDefault("output", null)?.let {
+            MidiSystem.write(sequence, MIDI_FILE_TYPE, File(it as String))
          }
       }
 
@@ -51,6 +61,7 @@ object Midi {
          val sequence = Sequence(Sequence.PPQ, (config.getOrDefault("ppq", DEFAULT_PPQ) as Int))
          provideCompiler(config).compileChannels(channels, sequence)
          play(sequence)
+         writeToFile(sequence)
       }
    }
 
