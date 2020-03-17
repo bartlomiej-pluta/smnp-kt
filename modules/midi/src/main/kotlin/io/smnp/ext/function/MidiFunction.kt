@@ -32,8 +32,20 @@ class MidiFunction : Function("midi") {
          Value.void()
       }
 
+      new function vararg(listOf(NOTE, INT, STRING)) body { _, (lines) ->
+         val unwrappedLines = lines.unwrap() as List<List<Any>>
+
+         if (unwrappedLines.size > 16) {
+            throw CustomException("MIDI standard supports max to 16 channels and that number has been exceeded")
+         }
+
+         Midi.with(emptyMap()).run(unwrappedLines)
+
+         Value.void()
+      }
+
       new function simple(
-         mapOfMatchers(anyType(), anyType()),
+         mapOfMatchers(ofType(STRING), anyType()),
          mapOfMatchers(ofType(INT), listOfMatchers(listOf(NOTE, INT, STRING)))
       ) body { _, (config, channels) ->
          val unwrappedChannels = channels.unwrap() as Map<Int, List<List<Any>>>
@@ -43,6 +55,18 @@ class MidiFunction : Function("midi") {
          }
 
          Midi.with(unwrapConfig(config)).run(unwrappedChannels)
+
+         Value.void()
+      }
+
+      new function simple(mapOfMatchers(ofType(INT), listOfMatchers(listOf(NOTE, INT, STRING)))) body { _, (channels) ->
+         val unwrappedChannels = channels.unwrap() as Map<Int, List<List<Any>>>
+
+         if (unwrappedChannels.size > 16 || unwrappedChannels.any { (k) -> k > 16 }) {
+            throw CustomException("MIDI standard supports max to 16 channels and that number has been exceeded")
+         }
+
+         Midi.with(emptyMap()).run(unwrappedChannels)
 
          Value.void()
       }
