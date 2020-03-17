@@ -7,7 +7,7 @@ import io.smnp.dsl.token.model.enumeration.TokenType
 import io.smnp.math.Fraction
 
 class NoteTokenizer : Tokenizer {
-   override fun tokenize(input: String, current: Int, line: Int): TokenizerOutput {
+   override fun tokenize(input: String, current: Int, line: Int, source: String): TokenizerOutput {
       var consumedChars = 0
       var notePitch: String
       var octave: Int? = null
@@ -64,7 +64,7 @@ class NoteTokenizer : Tokenizer {
 
             val note = Note(Pitch.parse(notePitch), octave ?: 4, Fraction(1, duration?.toInt() ?: 4), dot)
 
-            return TokenizerOutput.produce(consumedChars, note, rawValue, TokenType.NOTE, line, current)
+            return TokenizerOutput.produce(consumedChars, note, rawValue, TokenType.NOTE, source, line, current)
          }
       }
 

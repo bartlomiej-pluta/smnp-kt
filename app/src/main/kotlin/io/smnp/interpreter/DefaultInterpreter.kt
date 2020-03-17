@@ -8,7 +8,7 @@ import io.smnp.evaluation.evaluator.RootEvaluator
 import io.smnp.evaluation.model.enumeration.EvaluationResult
 import java.io.File
 
-class DefaultInterpreter : Interpreter {
+class DefaultInterpreter  {
    private val tokenizer = DefaultTokenizer()
    private val parser = RootParser()
    private val evaluator = RootEvaluator()
@@ -21,11 +21,12 @@ class DefaultInterpreter : Interpreter {
       dryRun: Boolean = false
    ): Environment {
       val lines = code.split("\n")
-      return run(lines, environment, printTokens, printAst, dryRun)
+      return run(lines, "<inline>", environment, printTokens, printAst, dryRun)
    }
 
    private fun run(
       lines: List<String>,
+      source: String,
       environment: Environment,
       printTokens: Boolean,
       printAst: Boolean,
@@ -33,7 +34,7 @@ class DefaultInterpreter : Interpreter {
    ): Environment {
       environment.loadModule("smnp.lang")
 
-      val tokens = tokenizer.tokenize(lines)
+      val tokens = tokenizer.tokenize(lines, source)
       val ast = parser.parse(tokens)
 
       if (printTokens) println(tokens)
@@ -58,8 +59,6 @@ class DefaultInterpreter : Interpreter {
       dryRun: Boolean = false
    ): Environment {
       val lines = file.readLines()
-      return run(lines, environment, printTokens, printAst, dryRun)
+      return run(lines, file.canonicalPath, environment, printTokens, printAst, dryRun)
    }
-
-   override fun run(code: String) = run(code, printTokens = false, printAst = false, dryRun = false)
 }

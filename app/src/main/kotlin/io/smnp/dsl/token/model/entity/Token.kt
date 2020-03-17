@@ -14,6 +14,6 @@ data class Token(val type: TokenType, val value: Any, val rawValue: String, val 
     }
 
     override fun toString(): String {
-        return "($type, »$rawValue«, ${position.short})"
+        return "($type, »$rawValue«, $position)"
     }
 }

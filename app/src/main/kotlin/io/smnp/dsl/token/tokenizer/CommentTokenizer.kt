@@ -4,7 +4,7 @@ import io.smnp.dsl.token.model.entity.TokenizerOutput
 import io.smnp.dsl.token.model.enumeration.TokenType
 
 class CommentTokenizer : Tokenizer {
-    override fun tokenize(input: String, current: Int, line: Int): TokenizerOutput {
+    override fun tokenize(input: String, current: Int, line: Int, source: String): TokenizerOutput {
         if (input[current] == '#') {
             var consumedChars = 0
             var value = ""
@@ -13,7 +13,7 @@ class CommentTokenizer : Tokenizer {
                 consumedChars += 1
             }
 
-            return TokenizerOutput.produce(consumedChars, value.substring(1).trim(), value, TokenType.COMMENT, line, current)
+            return TokenizerOutput.produce(consumedChars, value.substring(1).trim(), value, TokenType.COMMENT, source, line, current)
         }
 
         return TokenizerOutput.NONE

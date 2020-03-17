@@ -8,7 +8,7 @@ import io.smnp.error.MethodInvocationException
 import io.smnp.ext.DefaultModuleRegistry
 import io.smnp.ext.DefaultModuleRegistry.requestModuleProviderForPath
 import io.smnp.ext.ModuleProvider
-import io.smnp.interpreter.LanguageModuleInterpreter
+import io.smnp.interpreter.DefaultLanguageModuleInterpreter
 import io.smnp.runtime.model.CallStack
 import io.smnp.type.model.Value
 import io.smnp.type.module.Module
@@ -43,7 +43,7 @@ class DefaultEnvironment : Environment {
 
    private fun loadModule(moduleProvider: ModuleProvider, consumer: (ModuleProvider) -> Unit = {}) {
       if (!loadedModules.contains(moduleProvider.path)) {
-         rootModule.addSubmodule(moduleProvider.provideModule(LanguageModuleInterpreter()))
+         rootModule.addSubmodule(moduleProvider.provideModule(DefaultLanguageModuleInterpreter()))
          moduleProvider.onModuleLoad(this)
          loadedModules.add(moduleProvider.path)
          consumer(moduleProvider)

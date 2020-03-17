@@ -18,12 +18,12 @@ data class TokenizerOutput(val consumedChars: Int, val token: Token) {
             return if (consumedChars > 0) TokenizerOutput(consumedChars, token) else NONE
         }
 
-        fun produce(consumedChars: Int, value: String, tokenType: TokenType, line: Int, beginCol: Int): TokenizerOutput {
-            return produce(consumedChars, Token(tokenType, value, TokenPosition(line, beginCol, beginCol + consumedChars)))
+        fun produce(consumedChars: Int, value: String, tokenType: TokenType, source: String, line: Int, beginCol: Int): TokenizerOutput {
+            return produce(consumedChars, Token(tokenType, value, TokenPosition(source, line, beginCol, beginCol + consumedChars)))
         }
 
-        fun produce(consumedChars: Int, value: Any, rawValue: String, tokenType: TokenType, line: Int, beginCol: Int): TokenizerOutput {
-            return produce(consumedChars, Token(tokenType, value, rawValue, TokenPosition(line, beginCol, beginCol + consumedChars)))
+        fun produce(consumedChars: Int, value: Any, rawValue: String, tokenType: TokenType, source: String, line: Int, beginCol: Int): TokenizerOutput {
+            return produce(consumedChars, Token(tokenType, value, rawValue, TokenPosition(source, line, beginCol, beginCol + consumedChars)))
         }
     }
 }

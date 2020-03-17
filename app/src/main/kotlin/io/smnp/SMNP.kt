@@ -43,13 +43,13 @@ fun main(args: Array<String>): Unit = mainBody {
             DefaultModuleRegistry.registeredModules().forEach { println(it) }
          }
       } catch (e: SmnpException) {
-         val position = e.exceptionChain.mapNotNull { it as? PositionException }.lastOrNull()?.position ?: ""
-         val stacktrace = e.exceptionChain.mapNotNull { it as? EnvironmentException }.lastOrNull()?.let {
-            "\nStack trace:\n${it.environment.stackTrace()}"
-         } ?: ""
-         System.err.println(e.friendlyName + " " + position)
+         System.err.println(e.friendlyName)
+         e.exceptionChain.mapNotNull { it as? PositionException }.lastOrNull()?.let { System.err.println(it.position.fullString) }
+         System.err.println()
          System.err.println(e.message)
-         System.err.println(stacktrace)
+         e.exceptionChain.mapNotNull { it as? EnvironmentException }.lastOrNull()?.let {
+            System.err.println("\nStack trace:\n${it.environment.stackTrace()}")
+         }
          exitProcess(1)
       }
    }

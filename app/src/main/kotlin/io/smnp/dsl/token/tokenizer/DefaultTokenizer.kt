@@ -83,16 +83,16 @@ class DefaultTokenizer : Tokenizer {
 
     private val tokenizer = Tokenizer.firstOf(tokenizers)
 
-    fun tokenize(lines: List<String>): TokenList {
+    fun tokenize(lines: List<String>, source: String): TokenList {
         val tokens: MutableList<Token> = mutableListOf()
 
         for ((index, line) in lines.withIndex()) {
             var current = 0
             while (current < line.length) {
-                val output = tokenize(line, current, index)
+                val output = tokenize(line, current, index, source)
 
                 if (!output.consumed()) {
-                    throw PositionException(InvalidSyntaxException("Unknown symbol ${line[current]}"), TokenPosition(index, current, -1))
+                    throw PositionException(InvalidSyntaxException("Unknown symbol ${line[current]}"), TokenPosition(source, index, current, -1))
                 }
 
                 current += output.consumedChars
@@ -108,7 +108,7 @@ class DefaultTokenizer : Tokenizer {
         return tokens.filter { token -> filters.all { filter -> filter(token) } }
     }
 
-    override fun tokenize(input: String, current: Int, line: Int): TokenizerOutput {
-        return tokenizer.tokenize(input, current, line)
+    override fun tokenize(input: String, current: Int, line: Int, source: String): TokenizerOutput {
+        return tokenizer.tokenize(input, current, line, source)
     }
 }

@@ -8,10 +8,8 @@ import io.smnp.evaluation.evaluator.Evaluator
 import io.smnp.evaluation.evaluator.ExtendEvaluator
 import io.smnp.evaluation.evaluator.FunctionDefinitionEvaluator
 import io.smnp.evaluation.model.enumeration.EvaluationResult
-import io.smnp.type.module.Module
 
-class LanguageModuleInterpreter : Interpreter {
-   private var rootModule = Module.create("<root>")
+class DefaultLanguageModuleInterpreter : LanguageModuleInterpreter {
    private val tokenizer = DefaultTokenizer()
    private val parser = RootParser()
    private val evaluator = Evaluator.repeat(
@@ -21,9 +19,9 @@ class LanguageModuleInterpreter : Interpreter {
       ), "function definition or extend statement")
    )
 
-   override fun run(code: String): Environment {
+   override fun run(code: String, source: String): Environment {
       val lines = code.split("\n")
-      val tokens = tokenizer.tokenize(lines)
+      val tokens = tokenizer.tokenize(lines, source)
       val ast = parser.parse(tokens)
 
       val environment = DefaultEnvironment()
