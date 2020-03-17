@@ -2,7 +2,10 @@ package io.smnp.evaluation.evaluator
 
 import io.smnp.callable.method.CustomMethod
 import io.smnp.callable.util.FunctionSignatureParser
-import io.smnp.dsl.ast.model.node.*
+import io.smnp.dsl.ast.model.node.ExtendNode
+import io.smnp.dsl.ast.model.node.FunctionDefinitionNode
+import io.smnp.dsl.ast.model.node.Node
+import io.smnp.dsl.ast.model.node.SingleTypeNode
 import io.smnp.environment.Environment
 import io.smnp.error.EnvironmentException
 import io.smnp.error.PositionException
@@ -13,12 +16,11 @@ class ExtendEvaluator : Evaluator() {
    override fun supportedNodes() = listOf(ExtendNode::class)
 
    override fun tryToEvaluate(node: Node, environment: Environment): EvaluatorOutput {
-      val (typeNode, identifierNode, methodsNode) = node as ExtendNode
+      val (typeNode, methodsNode) = node as ExtendNode
       val type = FunctionSignatureParser.matcherForSingleTypeNode(typeNode as SingleTypeNode)
-      val identifier = (identifierNode as IdentifierNode).token.rawValue
 
       methodsNode.children
-         .map { it to CustomMethod.create(type, identifier, it as FunctionDefinitionNode) }
+         .map { it to CustomMethod.create(type, it as FunctionDefinitionNode) }
          .forEach {
             try {
                environment.defineMethod(it.second)

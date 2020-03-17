@@ -1,4 +1,4 @@
-extend map as this {
+extend map {
     function containsKey(key) {
         return this.keys.contains(key);
     }

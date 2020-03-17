@@ -1,4 +1,4 @@
-extend string as this {
+extend string {
     function find(char: string) {
         if(char.length > 1) {
             throw "Only single character can act as a pattern to be found";

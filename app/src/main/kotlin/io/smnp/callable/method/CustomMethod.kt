@@ -11,7 +11,7 @@ import io.smnp.type.matcher.Matcher
 import io.smnp.type.model.Value
 
 object CustomMethod {
-    fun create(type: Matcher, objectIdentifier: String, node: FunctionDefinitionNode): Method {
+    fun create(type: Matcher, node: FunctionDefinitionNode): Method {
         val identifier = (node.identifier as IdentifierNode).token.rawValue
 
         return object : Method(type, identifier) {
@@ -23,7 +23,7 @@ object CustomMethod {
                 new method signature body { env, obj, args ->
                     val boundArguments =
                         FunctionEnvironmentProvider.provideEnvironment(argumentsNode, args, env).toMutableMap()
-                    boundArguments[objectIdentifier] = obj
+                    boundArguments["this"] = obj
 
                     try {
                         env.pushScope(boundArguments)

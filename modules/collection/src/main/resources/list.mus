@@ -14,7 +14,7 @@ function _flatten(list: list, output: list) {
     return output;
 }
 
-extend list as this {
+extend list {
     function flatten() {
         return flatten(this);
     }

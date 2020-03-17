@@ -8,33 +8,38 @@ import io.smnp.dsl.token.model.entity.TokenList
 import io.smnp.dsl.token.model.enumeration.TokenType
 
 class ExtendParser : Parser() {
-    override fun tryToParse(input: TokenList): ParserOutput {
-        val simpleExtendParser = allOf(
-            terminal(TokenType.EXTEND),
-            assert(SingleTypeParser(), "type to be extended"),
-            assert(terminal(TokenType.AS), "'as' keyword with identifier"),
-            assert(SimpleIdentifierParser(), "identifier"),
-            terminal(TokenType.WITH),
-            assert(mapNode(FunctionDefinitionParser()) { BlockNode(Node.NONE, listOf(it), Node.NONE) }, "method definition")
-        ) { (extendToken, targetType, identifier, method) ->
-ExtendNode(targetType, identifier, method, extendToken.position)
-        }
+   override fun tryToParse(input: TokenList): ParserOutput {
+      val simpleExtendParser = allOf(
+         terminal(TokenType.EXTEND),
+         assert(SingleTypeParser(), "type to be extended"),
+         terminal(TokenType.WITH),
+         assert(
+            mapNode(FunctionDefinitionParser()) { BlockNode(Node.NONE, listOf(it), Node.NONE) },
+            "method definition"
+         )
+      ) { (extendToken, targetType, _, method) ->
+         ExtendNode(targetType, method, extendToken.position)
+      }
 
-        val complexExtendParser = allOf(
-            terminal(TokenType.EXTEND),
-            assert(SingleTypeParser(), "type to be extended"),
-            assert(terminal(TokenType.AS), "'as' keyword with identifier"),
-            assert(SimpleIdentifierParser(), "identifier"),
-            assert(loop(terminal(TokenType.OPEN_CURLY), assert(FunctionDefinitionParser(), "method definition or }"), terminal(TokenType.CLOSE_CURLY)) {
-                begin, methods, end -> BlockNode(begin, methods, end)
-            }, "block with methods' definitions or 'with' keyword with single method definition")
-        ) { (extendToken, targetType, _, identifier, methods) ->
-            ExtendNode(targetType, identifier, methods, extendToken.position)
-        }
+      val complexExtendParser = allOf(
+         terminal(TokenType.EXTEND),
+         assert(SingleTypeParser(), "type to be extended"),
+         assert(
+            loop(
+               terminal(TokenType.OPEN_CURLY),
+               assert(FunctionDefinitionParser(), "method definition or }"),
+               terminal(TokenType.CLOSE_CURLY)
+            ) { begin, methods, end ->
+               BlockNode(begin, methods, end)
+            }, "block with methods' definitions or 'with' keyword with single method definition"
+         )
+      ) { (extendToken, targetType, methods) ->
+         ExtendNode(targetType, methods, extendToken.position)
+      }
 
-        return oneOf(
-            simpleExtendParser,
-            complexExtendParser
-        ).parse(input)
-    }
+      return oneOf(
+         simpleExtendParser,
+         complexExtendParser
+      ).parse(input)
+   }
 }

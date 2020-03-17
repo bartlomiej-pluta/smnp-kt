@@ -1,4 +1,4 @@
-extend note as this {
+extend note {
     function withOctave(octave: int) {
         return Note(this.pitch, octave, this.duration.get("numerator"), this.duration.get("denominator"));
     }
