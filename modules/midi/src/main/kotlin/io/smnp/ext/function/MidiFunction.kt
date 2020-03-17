@@ -27,7 +27,7 @@ class MidiFunction : Function("midi") {
             throw CustomException("MIDI standard supports max to 16 channels and that number has been exceeded")
          }
 
-         Midi.with(unwrapConfig(config)).run(unwrappedLines)
+         Midi.with(unwrapConfig(config)).play(unwrappedLines)
 
          Value.void()
       }
@@ -39,7 +39,7 @@ class MidiFunction : Function("midi") {
             throw CustomException("MIDI standard supports max to 16 channels and that number has been exceeded")
          }
 
-         Midi.with(emptyMap()).run(unwrappedLines)
+         Midi.with(emptyMap()).play(unwrappedLines)
 
          Value.void()
       }
@@ -54,7 +54,7 @@ class MidiFunction : Function("midi") {
             throw CustomException("MIDI standard supports max to 16 channels and that number has been exceeded")
          }
 
-         Midi.with(unwrapConfig(config)).run(unwrappedChannels)
+         Midi.with(unwrapConfig(config)).play(unwrappedChannels)
 
          Value.void()
       }
@@ -66,8 +66,13 @@ class MidiFunction : Function("midi") {
             throw CustomException("MIDI standard supports max to 16 channels and that number has been exceeded")
          }
 
-         Midi.with(emptyMap()).run(unwrappedChannels)
+         Midi.with(emptyMap()).play(unwrappedChannels)
 
+         Value.void()
+      }
+
+      new function simple(ofType(STRING)) body { _, (file) ->
+         Midi.playFile(file.value as String)
          Value.void()
       }
    }

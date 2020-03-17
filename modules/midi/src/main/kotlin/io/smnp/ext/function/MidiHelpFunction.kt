@@ -59,7 +59,7 @@ class MidiHelpFunction : Function("midiHelp") {
                println(it)
                Midi
                   .with(mapOf("bpm" to bpm))
-                  .run(mapOf(channel to listOf(listOf("i:$instrument", it))))
+                  .play(mapOf(channel to listOf(listOf("i:$instrument", it))))
                Thread.sleep(100)
             }
          }
