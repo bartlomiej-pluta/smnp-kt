@@ -1,0 +1,11 @@
+import smnp.audio.mic;
+import smnp.io;
+import smnp.collection;
+import smnp.system;
+
+if(__param__.containsKey("help")) {
+    println("Display microphone level in real time in order to check and adjust noise and silence thresholds in wait() function");
+    exit(1);
+}
+
+micLevel();
