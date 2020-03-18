@@ -20,6 +20,7 @@ object Midi {
    }
 
    private fun playSequence(sequence: Sequence, prepare: (Sequencer) -> Unit = {}) {
+      prepare(sequencer)
       sequencer.sequence = sequence
 
       sequencer.start()
