@@ -14,6 +14,16 @@ function _flatten(list: list, output: list) {
     return output;
 }
 
+function shuffle(list: list) {
+    shuffled = list;
+    list.size-1 as first ^ {
+        second = random(0, list.size);
+        shuffled = shuffled.swap(first, second);
+    }
+
+    return shuffled;
+}
+
 extend list {
     function flatten() {
         return flatten(this);
@@ -51,5 +61,42 @@ extend list {
 
     function isNotEmpty() {
         return not this.isEmpty();
+    }
+
+    function dropIndex(index: int) {
+        output = [];
+        i = 0;
+        this as item ^ {
+            if(index != i) {
+                output = output + [this.get(i)];
+            }
+
+            i = i + 1;
+        }
+
+        return output;
+    }
+
+    function put(index: int, value) {
+        return (index as i ^ this.get(i)) + [value] + ((this.size-index) as i ^ this.get(i+index));
+    }
+
+    function replace(index: int, value) {
+        return this
+            .dropIndex(index)
+            .put(index, value);
+    }
+
+    function swap(a: int, b: int) {
+        A = this.get(a);
+        B = this.get(b);
+
+        return this
+            .replace(a, B)
+            .replace(b, A);
+    }
+
+    function shuffle() {
+        return shuffle(this);
     }
 }

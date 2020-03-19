@@ -1,0 +1,82 @@
+function random(min: int, max: int) {
+    return Int(random() * (max-min) + min)
+}
+
+function random(min: float, max: float) {
+    return random() * (max-min) + min
+}
+
+function min(numbers: list<int, float>) {
+    if(numbers.isEmpty()) {
+        throw "Empty lists are not supported";
+    }
+
+    min = numbers.get(0);
+    numbers as number ^ {
+        if(number < min) {
+            min = number;
+        }
+    }
+
+    return min;
+}
+
+function max(numbers: list<int, float>) {
+    if(numbers.isEmpty()) {
+        throw "Empty lists are not supported";
+    }
+
+    max = numbers.get(0);
+    numbers as number ^ {
+        if(number > max) {
+            max = number;
+        }
+    }
+
+    return max;
+}
+
+function sample(list: list) {
+    return list.get(random(0, list.size));
+}
+
+function pick(...items: map<string><>) {
+    return pick(items);
+}
+
+function pick(items: list<map<string><>>) {
+    acc = 0;
+
+    items as (item, index) ^ {
+        if(item.size != 2) {
+            throw "Expected lists with two items: 'chance' and 'value'";
+        }
+
+        if(not item.containsKey("chance")) {
+            throw "Item " + (index+1) + " does not have 'chance' key";
+        }
+
+        if(not item.containsKey("value")) {
+            throw "Item " + (index+1) + " does not have 'value' key";
+        }
+
+        if(typeOf(item.get("chance")) != "int") {
+            throw "Expected 'chance' to be of int type";
+        }
+
+        acc = acc + item.get("chance");
+    }
+
+    if(acc != 100) {
+        throw "The total sum of each item ('chance' key) should be equal to 100";
+    }
+
+    acc = 0;
+    random = random(0, 100);
+    items as item ^ {
+        acc = acc + item.get("chance");
+        if(random < acc) {
+            return item.get("value");
+        }
+    }
+}
