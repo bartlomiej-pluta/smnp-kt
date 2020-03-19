@@ -10,6 +10,7 @@ abstract class AbstractIterableParser(
    private val beginTokenType: TokenType,
    private val itemParser: Parser,
    private val endTokenType: TokenType,
+   private val separator: TokenType = TokenType.COMMA,
    private val createNode: (List<Node>, TokenPosition) -> Node
 ) : Parser() {
    override fun tryToParse(input: TokenList): ParserOutput {
@@ -23,7 +24,7 @@ abstract class AbstractIterableParser(
          allOf(
             itemParser,
             optional(repeat(allOf(
-               terminal(TokenType.COMMA),
+               terminal(separator),
                itemParser
             ) { (_, item) -> item }) { list, position -> object : Node(list, position) {} }
             )) { (firstItem, otherAggregatedItems) ->
