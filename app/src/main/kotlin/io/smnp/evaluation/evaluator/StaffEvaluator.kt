@@ -21,39 +21,62 @@ class StaffEvaluator : Evaluator() {
       var currentSignature: Fraction? = null
 
       val list = measures.map { it as MeasureNode }.flatMap { measure ->
-         val evaluatedMeasure = measure.items.mapNotNull {
+         val evaluatedMeasure = measure.items.mapIndexedNotNull { index, it ->
             when (it) {
                is TimeSignatureNode -> {
+                  assertTimeSignaturePosition(index, environment, it)
                   currentSignature = Fraction(
                      (it.numerator as IntegerLiteralNode).token.value as Int,
                      (it.denominator as IntegerLiteralNode).token.value as Int
                   )
-
                   null
                }
-
                else -> evaluator.evaluate(it, environment).value
             }
          }
 
-         val evaluatedSignature = calculateTimeSignature(evaluatedMeasure)
-
-         currentSignature?.let {
-            if (evaluatedSignature != it) {
-               val simplified = evaluatedSignature.simplified
-               throw PositionException(
-                  EnvironmentException(
-                     EvaluationException("Invalid time signature: expected ${it.numerator}/${it.denominator}, got ${simplified.numerator}/${simplified.denominator}"),
-                     environment
-                  ), measure.position
-               )
-            }
-         }
+         assertTimeSignature(evaluatedMeasure, currentSignature, environment, measure)
 
          evaluatedMeasure
       }
 
       return EvaluatorOutput.value(Value.list(list))
+   }
+
+   private fun assertTimeSignaturePosition(
+      index: Int,
+      environment: Environment,
+      it: Node
+   ) {
+      if (index != 0) {
+         throw PositionException(
+            EnvironmentException(
+               EvaluationException("Time signature can be placed only at the beginning of measure"),
+               environment
+            ), it.position
+         )
+      }
+   }
+
+   private fun assertTimeSignature(
+      evaluatedMeasure: List<Value>,
+      currentSignature: Fraction?,
+      environment: Environment,
+      measure: MeasureNode
+   ) {
+      val evaluatedSignature = calculateTimeSignature(evaluatedMeasure)
+
+      currentSignature?.let {
+         if (evaluatedSignature != it) {
+            val simplified = evaluatedSignature.simplified
+            throw PositionException(
+               EnvironmentException(
+                  EvaluationException("Invalid time signature: expected ${it.numerator}/${it.denominator}, got ${simplified.numerator}/${simplified.denominator}"),
+                  environment
+               ), measure.position
+            )
+         }
+      }
    }
 
    private fun calculateTimeSignature(values: List<Value>): Fraction {
