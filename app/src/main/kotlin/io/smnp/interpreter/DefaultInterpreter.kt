@@ -35,9 +35,9 @@ class DefaultInterpreter  {
       environment.loadModule("smnp.lang")
 
       val tokens = tokenizer.tokenize(lines, source)
-      val ast = parser.parse(tokens)
-
       if (printTokens) println(tokens)
+
+      val ast = parser.parse(tokens)
       if (printAst) ast.node.pretty()
 
       if (!dryRun) {

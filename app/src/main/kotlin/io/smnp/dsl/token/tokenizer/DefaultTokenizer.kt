@@ -21,6 +21,9 @@ class DefaultTokenizer : Tokenizer {
         keywords(TokenType.RELATION, "==", "!=", "<=", ">="),
         default(TokenType.DOUBLE_ASTERISK),
 
+        // Double-character tokens
+        default(TokenType.DOUBLE_PIPE),
+
         // Characters
         default(TokenType.OPEN_CURLY),
         default(TokenType.CLOSE_CURLY),
@@ -33,6 +36,7 @@ class DefaultTokenizer : Tokenizer {
         default(TokenType.SEMICOLON),
         default(TokenType.ASTERISK),
         default(TokenType.PERCENT),
+        default(TokenType.DOLLAR),
         default(TokenType.ASSIGN),
         default(TokenType.COLON),
         default(TokenType.COMMA),
@@ -41,6 +45,7 @@ class DefaultTokenizer : Tokenizer {
         default(TokenType.PLUS),
         default(TokenType.CARET),
         default(TokenType.DOTS),
+        default(TokenType.PIPE),
         default(TokenType.AMP),
         default(TokenType.DOT),
 
