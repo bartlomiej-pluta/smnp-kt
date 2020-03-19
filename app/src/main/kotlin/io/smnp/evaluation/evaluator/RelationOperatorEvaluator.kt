@@ -4,11 +4,9 @@ import io.smnp.dsl.ast.model.node.Node
 import io.smnp.dsl.ast.model.node.RelationOperatorNode
 import io.smnp.dsl.ast.model.node.TokenNode
 import io.smnp.environment.Environment
-import io.smnp.error.EnvironmentException
-import io.smnp.error.EvaluationException
-import io.smnp.error.PositionException
 import io.smnp.error.ShouldNeverReachThisLineException
 import io.smnp.evaluation.model.entity.EvaluatorOutput
+import io.smnp.evaluation.util.ContextExceptionFactory.contextEvaluationException
 import io.smnp.evaluation.util.NumberUnification.unify
 import io.smnp.type.model.Value
 
@@ -32,13 +30,7 @@ class RelationOperatorEvaluator : Evaluator() {
       }
 
       if (!lhs.type.isNumeric() || !rhs.type.isNumeric()) {
-         throw PositionException(
-            EnvironmentException(
-               EvaluationException("Operator $operator supports only numeric types"),
-               environment
-            ),
-            node.position
-         )
+         throw contextEvaluationException("Operator $operator supports only numeric types", node.position, environment)
       }
 
       return EvaluatorOutput.value(

@@ -5,11 +5,9 @@ import io.smnp.dsl.ast.model.node.Node
 import io.smnp.dsl.ast.model.node.TokenNode
 import io.smnp.dsl.token.model.enumeration.TokenType
 import io.smnp.environment.Environment
-import io.smnp.error.EnvironmentException
-import io.smnp.error.EvaluationException
-import io.smnp.error.PositionException
 import io.smnp.error.ShouldNeverReachThisLineException
 import io.smnp.evaluation.model.entity.EvaluatorOutput
+import io.smnp.evaluation.util.ContextExceptionFactory.contextEvaluationException
 import io.smnp.type.enumeration.DataType
 import io.smnp.type.model.Value
 
@@ -24,8 +22,16 @@ class LogicOperatorEvaluator : Evaluator() {
       return EvaluatorOutput.value(
          Value.bool(
             when (operator) {
-               TokenType.AND -> if(evalOperand(lhsNode, operator, environment)) evalOperand(rhsNode, operator, environment) else false
-               TokenType.OR -> if (evalOperand(lhsNode, operator, environment)) true else evalOperand(rhsNode, operator, environment)
+               TokenType.AND -> if (evalOperand(lhsNode, operator, environment)) evalOperand(
+                  rhsNode,
+                  operator,
+                  environment
+               ) else false
+               TokenType.OR -> if (evalOperand(lhsNode, operator, environment)) true else evalOperand(
+                  rhsNode,
+                  operator,
+                  environment
+               )
                else -> throw ShouldNeverReachThisLineException()
             }
          )
@@ -36,12 +42,10 @@ class LogicOperatorEvaluator : Evaluator() {
       val value = evaluator.evaluate(operand, environment).value
 
       if (value.type != DataType.BOOL) {
-         throw PositionException(
-            EnvironmentException(
-               EvaluationException("Operator '${operator.token}' supports only bool types, found ${value.typeName}"),
-               environment
-            ),
-            operand.position
+         throw contextEvaluationException(
+            "Operator '${operator.token}' supports only bool types, found ${value.typeName}",
+            operand.position,
+            environment
          )
       }
 

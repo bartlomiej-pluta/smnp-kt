@@ -7,10 +7,9 @@ import io.smnp.dsl.ast.model.node.FunctionDefinitionNode
 import io.smnp.dsl.ast.model.node.Node
 import io.smnp.dsl.ast.model.node.SingleTypeNode
 import io.smnp.environment.Environment
-import io.smnp.error.EnvironmentException
-import io.smnp.error.PositionException
 import io.smnp.error.SmnpException
 import io.smnp.evaluation.model.entity.EvaluatorOutput
+import io.smnp.evaluation.util.ContextExceptionFactory.wrapWithContext
 
 class ExtendEvaluator : Evaluator() {
    override fun supportedNodes() = listOf(ExtendNode::class)
@@ -25,7 +24,7 @@ class ExtendEvaluator : Evaluator() {
             try {
                environment.defineMethod(it.second)
             } catch (e: SmnpException) {
-               throw PositionException(EnvironmentException(e, environment), it.first.position)
+               throw wrapWithContext(e, it.first.position, environment)
             }
          }
 

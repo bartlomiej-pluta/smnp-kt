@@ -4,10 +4,8 @@ import io.smnp.dsl.ast.model.node.ConditionNode
 import io.smnp.dsl.ast.model.node.Node
 import io.smnp.dsl.ast.model.node.NoneNode
 import io.smnp.environment.Environment
-import io.smnp.error.EnvironmentException
-import io.smnp.error.EvaluationException
-import io.smnp.error.PositionException
 import io.smnp.evaluation.model.entity.EvaluatorOutput
+import io.smnp.evaluation.util.ContextExceptionFactory.contextEvaluationException
 import io.smnp.type.enumeration.DataType
 
 class ConditionEvaluator : Evaluator() {
@@ -21,12 +19,10 @@ class ConditionEvaluator : Evaluator() {
       val condition = expressionEvaluator.evaluate(conditionNode, environment).value
 
       if (condition.type != DataType.BOOL) {
-         throw PositionException(
-            EnvironmentException(
-               EvaluationException("Condition should be of bool type, found '${condition.value}'"),
-               environment
-            ),
-            conditionNode.position
+         throw contextEvaluationException(
+            "Condition should be of bool type, found '${condition.value}'",
+            conditionNode.position,
+            environment
          )
       }
 

@@ -3,10 +3,8 @@ package io.smnp.evaluation.evaluator
 import io.smnp.data.entity.Note
 import io.smnp.dsl.ast.model.node.*
 import io.smnp.environment.Environment
-import io.smnp.error.EnvironmentException
-import io.smnp.error.EvaluationException
-import io.smnp.error.PositionException
 import io.smnp.evaluation.model.entity.EvaluatorOutput
+import io.smnp.evaluation.util.ContextExceptionFactory.contextEvaluationException
 import io.smnp.math.Fraction
 import io.smnp.type.enumeration.DataType
 import io.smnp.type.model.Value
@@ -49,11 +47,10 @@ class StaffEvaluator : Evaluator() {
       it: Node
    ) {
       if (index != 0) {
-         throw PositionException(
-            EnvironmentException(
-               EvaluationException("Time signature can be placed only at the beginning of measure"),
-               environment
-            ), it.position
+         throw contextEvaluationException(
+            "Time signature can be placed only at the beginning of measure",
+            it.position,
+            environment
          )
       }
    }
@@ -69,11 +66,10 @@ class StaffEvaluator : Evaluator() {
       currentSignature?.let {
          if (evaluatedSignature != it) {
             val simplified = evaluatedSignature.simplified
-            throw PositionException(
-               EnvironmentException(
-                  EvaluationException("Invalid time signature: expected ${it.numerator}/${it.denominator}, got ${simplified.numerator}/${simplified.denominator}"),
-                  environment
-               ), measure.position
+            throw contextEvaluationException(
+               "Invalid time signature: expected ${it.numerator}/${it.denominator}, got ${simplified.numerator}/${simplified.denominator}",
+               measure.position,
+               environment
             )
          }
       }

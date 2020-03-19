@@ -4,11 +4,9 @@ import io.smnp.dsl.ast.model.node.IdentifierNode
 import io.smnp.dsl.ast.model.node.LoopNode
 import io.smnp.dsl.ast.model.node.Node
 import io.smnp.environment.Environment
-import io.smnp.error.EnvironmentException
-import io.smnp.error.EvaluationException
-import io.smnp.error.PositionException
 import io.smnp.evaluation.model.entity.EvaluatorOutput
 import io.smnp.evaluation.model.enumeration.EvaluationResult
+import io.smnp.evaluation.util.ContextExceptionFactory.contextEvaluationException
 import io.smnp.type.enumeration.DataType.*
 import io.smnp.type.model.Value
 
@@ -28,13 +26,10 @@ class LoopEvaluator : Evaluator() {
          LIST -> evaluateForList(iterator, parametersNode, statementNode, filterNode, environment)
          MAP -> evaluateForMap(iterator, parametersNode, statementNode, filterNode, environment)
          BOOL -> evaluateForBool(iteratorNode, parametersNode, statementNode, filterNode, environment)
-         else -> throw PositionException(
-            EnvironmentException(
-               EvaluationException(
-                  "Expected for-loop with int iterator or foreach-loop with string, list or map iterator or while-loop with bool iterator, found ${iterator.typeName}"
-               ),
-               environment
-            ), iteratorNode.position
+         else -> throw contextEvaluationException(
+            "Expected for-loop with int iterator or foreach-loop with string, list or map iterator or while-loop with bool iterator, found ${iterator.typeName}",
+            iteratorNode.position,
+            environment
          )
       }
       environment.popScope()
@@ -140,21 +135,18 @@ class LoopEvaluator : Evaluator() {
       environment: Environment
    ): EvaluatorOutput {
       if (parametersNode != Node.NONE) {
-         throw PositionException(
-            EnvironmentException(
-               EvaluationException("Parameters are not supported in the while-loop"),
-               environment
-            ),
-            parametersNode.position
+         throw contextEvaluationException(
+            "Parameters are not supported in the while-loop",
+            parametersNode.position,
+            environment
          )
       }
 
       if (filterNode != Node.NONE) {
-         throw PositionException(
-            EnvironmentException(
-               EvaluationException("Filter is not supported in the while-loop"),
-               environment
-            ), filterNode.position
+         throw contextEvaluationException(
+            "Filter is not supported in the while-loop",
+            filterNode.position,
+            environment
          )
       }
 
@@ -179,14 +171,10 @@ class LoopEvaluator : Evaluator() {
       if (filterNode != Node.NONE) {
          val condition = expressionEvaluator.evaluate(filterNode, environment).value
          if (condition.type != BOOL) {
-            throw PositionException(
-               EnvironmentException(
-                  EvaluationException(
-                     "Filter condition should be evaluated to bool type"
-                  ),
-                  environment
-               ),
-               filterNode.position
+            throw contextEvaluationException(
+               "Filter condition should be evaluated to bool type",
+               filterNode.position,
+               environment
             )
          }
          return condition.value as Boolean

@@ -6,11 +6,9 @@ import io.smnp.dsl.ast.model.node.SumOperatorNode
 import io.smnp.dsl.ast.model.node.TokenNode
 import io.smnp.dsl.token.model.enumeration.TokenType
 import io.smnp.environment.Environment
-import io.smnp.error.EnvironmentException
-import io.smnp.error.EvaluationException
-import io.smnp.error.PositionException
 import io.smnp.error.ShouldNeverReachThisLineException
 import io.smnp.evaluation.model.entity.EvaluatorOutput
+import io.smnp.evaluation.util.ContextExceptionFactory.contextEvaluationException
 import io.smnp.evaluation.util.NumberUnification.unify
 import io.smnp.math.Fraction
 import io.smnp.type.enumeration.DataType.*
@@ -40,17 +38,18 @@ class SumOperatorEvaluator : Evaluator() {
 
    private fun plus(lhs: Value, plusNode: Node, rhs: Value, environment: Environment): Value {
       return when {
-         areNumeric(lhs, rhs) -> unify(lhs, rhs, int = { (l, r) -> Value.int(l + r) }, float = { (l, r) -> Value.float(l + r) })
+         areNumeric(lhs, rhs) -> unify(
+            lhs,
+            rhs,
+            int = { (l, r) -> Value.int(l + r) },
+            float = { (l, r) -> Value.float(l + r) })
          lhs.type == STRING -> string(lhs.value as String + rhs.value.toString())
          areLists(lhs, rhs) -> list(lhs.value as List<Value> + rhs.value as List<Value>)
          lhs.type == NOTE && rhs.type == INT -> note(lhs.value as Note + Fraction(1, rhs.value as Int))
-         else -> throw PositionException(
-            EnvironmentException(
-               EvaluationException(
-                  "The ${lhs.typeName} and ${rhs.typeName} are not supported by + operator"
-               ),
-               environment
-            ), plusNode.position
+         else -> throw contextEvaluationException(
+            "The ${lhs.typeName} and ${rhs.typeName} are not supported by + operator",
+            plusNode.position,
+            environment
          )
       }
    }
@@ -63,12 +62,10 @@ class SumOperatorEvaluator : Evaluator() {
             int = { (l, r) -> Value.int(l - r) },
             float = { (l, r) -> Value.float(l - r) }
          )
-      else throw PositionException(
-         EnvironmentException(
-            EvaluationException("The - operator supports only numeric values"),
-            environment
-         ),
-         minusNode.position
+      else throw contextEvaluationException(
+         "The - operator supports only numeric values",
+         minusNode.position,
+         environment
       )
    }
 

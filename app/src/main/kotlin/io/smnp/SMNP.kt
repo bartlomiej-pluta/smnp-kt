@@ -16,10 +16,10 @@ import kotlin.system.exitProcess
 
 fun main(args: Array<String>): Unit = mainBody {
    ArgParser(args).parseInto(::Arguments).run {
-      try {
-         val interpreter = DefaultInterpreter()
-         val environment = DefaultEnvironment()
+      val interpreter = DefaultInterpreter()
+      val environment = DefaultEnvironment()
 
+      try {
          environment.setVariable("__param__", Value.wrap(parameters.toMap()))
 
          when {
@@ -51,6 +51,10 @@ fun main(args: Array<String>): Unit = mainBody {
             System.err.println("\nStack trace:\n${it.environment.stackTrace()}")
          }
          exitProcess(1)
+      } finally {
+         if(!environment.disposed) {
+            environment.dispose()
+         }
       }
    }
 }

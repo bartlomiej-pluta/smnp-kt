@@ -2,11 +2,10 @@ package io.smnp.evaluation.evaluator
 
 import io.smnp.dsl.ast.model.node.*
 import io.smnp.environment.Environment
-import io.smnp.error.EnvironmentException
-import io.smnp.error.EvaluationException
-import io.smnp.error.PositionException
 import io.smnp.error.SmnpException
 import io.smnp.evaluation.model.entity.EvaluatorOutput
+import io.smnp.evaluation.util.ContextExceptionFactory
+import io.smnp.evaluation.util.ContextExceptionFactory.contextEvaluationException
 
 class AccessOperatorEvaluator : Evaluator() {
    override fun supportedNodes() = listOf(AccessOperatorNode::class)
@@ -20,12 +19,10 @@ class AccessOperatorEvaluator : Evaluator() {
          is IdentifierNode -> {
             val rhs = rhsNode.token.rawValue
             EvaluatorOutput.value(
-               lhs.properties[rhs] ?: throw PositionException(
-                  EnvironmentException(
-                     EvaluationException("Unknown property $rhs of type ${lhs.typeName}"),
-                     environment
-                  ),
-                  rhsNode.position
+               lhs.properties[rhs] ?: throw contextEvaluationException(
+                  "Unknown property $rhs of type ${lhs.typeName}",
+                  rhsNode.position,
+                  environment
                )
             )
          }
@@ -36,16 +33,15 @@ class AccessOperatorEvaluator : Evaluator() {
                (argsNode as FunctionCallArgumentsNode).items.map { evaluator.evaluate(it, environment).value }
             try {
                return EvaluatorOutput.value(environment.invokeMethod(lhs, identifier, arguments))
-            } catch(e: SmnpException) {
-               throw PositionException(EnvironmentException(e, environment), identifierNode.position)
+            } catch (e: SmnpException) {
+               throw ContextExceptionFactory.wrapWithContext(e, identifierNode.position, environment)
             }
          }
          else -> {
-            throw PositionException(
-               EnvironmentException(
-                  EvaluationException("Invalid property access type - only property name and method call are allowed"),
-                  environment
-               ), rhsNode.position
+            throw contextEvaluationException(
+               "Invalid property access type - only property name and method call are allowed",
+               rhsNode.position,
+               environment
             )
          }
       }

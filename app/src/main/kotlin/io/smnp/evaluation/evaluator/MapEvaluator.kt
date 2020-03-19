@@ -5,10 +5,8 @@ import io.smnp.dsl.ast.model.node.MapEntryNode
 import io.smnp.dsl.ast.model.node.MapNode
 import io.smnp.dsl.ast.model.node.Node
 import io.smnp.environment.Environment
-import io.smnp.error.EnvironmentException
-import io.smnp.error.EvaluationException
-import io.smnp.error.PositionException
 import io.smnp.evaluation.model.entity.EvaluatorOutput
+import io.smnp.evaluation.util.ContextExceptionFactory.contextEvaluationException
 import io.smnp.type.enumeration.DataType.*
 import io.smnp.type.model.Value
 
@@ -33,13 +31,7 @@ class MapEvaluator : Evaluator() {
       }
 
       if (key.type !in listOf(BOOL, INT, NOTE, STRING)) {
-         throw PositionException(
-            EnvironmentException(
-               EvaluationException("Invalid map key's type ${key.typeName}"),
-               environment
-            ),
-            keyNode.position
-         )
+         throw contextEvaluationException("Invalid map key's type ${key.typeName}", keyNode.position, environment)
       }
 
       return key
