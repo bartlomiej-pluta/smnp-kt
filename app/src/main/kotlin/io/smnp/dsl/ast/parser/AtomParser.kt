@@ -15,6 +15,7 @@ class AtomParser : Parser() {
         val literalParser = oneOf(
             parenthesesParser,
             ComplexIdentifierParser(),
+            StaffParser(),
             ListParser(),
             LiteralParser(),
             MapParser()
