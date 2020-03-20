@@ -7,8 +7,10 @@ import io.smnp.ext.synth.Synthesizer
 import org.pf4j.Extension
 
 @Extension
-class SynthModule : NativeModuleProvider("smnp.audio.synth") {
+class SynthModule : HybridModuleProvider("smnp.audio.synth") {
    override fun functions() = listOf(WaveFunction(), SynthFunction())
+
+   override fun files() = listOf("envelope.mus")
 
    override fun onModuleLoad(environment: Environment) {
       Synthesizer.init()
