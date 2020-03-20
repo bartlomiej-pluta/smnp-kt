@@ -3,7 +3,7 @@ package io.smnp.util.config
 import io.smnp.error.ShouldNeverReachThisLineException
 import io.smnp.type.model.Value
 
-class MapConfig(private val map: Map<Value, Value>) {
+class ConfigMap(private val map: Map<Value, Value>) {
    private val raw by lazy { map.map { (key, value) -> key.unwrap() to value }.toMap() as Map<String, Value> }
 
    operator fun get(key: String): Value {
@@ -19,6 +19,6 @@ class MapConfig(private val map: Map<Value, Value>) {
    }
 
    companion object {
-      val EMPTY = MapConfig(emptyMap())
+      val EMPTY = ConfigMap(emptyMap())
    }
 }

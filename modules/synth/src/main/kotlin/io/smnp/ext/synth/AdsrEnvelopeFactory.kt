@@ -3,10 +3,10 @@ package io.smnp.ext.synth
 import io.smnp.type.enumeration.DataType.FLOAT
 import io.smnp.type.matcher.Matcher.Companion.ofType
 import io.smnp.type.model.Value
-import io.smnp.util.config.MapConfigSchema
+import io.smnp.util.config.ConfigMapSchema
 
 object AdsrEnvelopeFactory : EnvelopeFactory {
-   private val schema = MapConfigSchema()
+   private val schema = ConfigMapSchema()
       .required("p1", ofType(FLOAT))
       .required("p2", ofType(FLOAT))
       .required("p3", ofType(FLOAT))

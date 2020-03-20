@@ -7,12 +7,12 @@ import io.smnp.math.Fraction
 import io.smnp.type.enumeration.DataType
 import io.smnp.type.matcher.Matcher
 import io.smnp.type.model.Value
-import io.smnp.util.config.MapConfigSchema
+import io.smnp.util.config.ConfigMapSchema
 import kotlin.math.pow
 
 class WaveCompiler(config: Value, private val samplingRate: Double) {
    private val semitone = 2.0.pow(1.0 / 12.0)
-   private val schema = MapConfigSchema()
+   private val schema = ConfigMapSchema()
       .optional("bpm", Matcher.ofType(DataType.INT), Value.int(120))
       .optional(
          "overtones", Matcher.listOf(DataType.FLOAT), Value.list(

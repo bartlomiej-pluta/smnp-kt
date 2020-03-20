@@ -13,12 +13,12 @@ import io.smnp.type.matcher.Matcher.Companion.listOfMatchers
 import io.smnp.type.matcher.Matcher.Companion.mapOfMatchers
 import io.smnp.type.matcher.Matcher.Companion.ofType
 import io.smnp.type.model.Value
-import io.smnp.util.config.MapConfig
-import io.smnp.util.config.MapConfigSchema
+import io.smnp.util.config.ConfigMap
+import io.smnp.util.config.ConfigMapSchema
 
 
 class MidiFunction : Function("midi") {
-   private val schema = MapConfigSchema()
+   private val schema = ConfigMapSchema()
       .optional("bpm", ofType(INT), Value.int(120))
       .optional("ppq", ofType(INT))
       .optional("output", ofType(STRING))
@@ -47,7 +47,7 @@ class MidiFunction : Function("midi") {
             throw CustomException("MIDI standard supports max to 16 channels and that number has been exceeded")
          }
 
-         Midi.with(MapConfig.EMPTY).play(unwrappedLines)
+         Midi.with(ConfigMap.EMPTY).play(unwrappedLines)
 
          Value.void()
       }
@@ -74,7 +74,7 @@ class MidiFunction : Function("midi") {
             throw CustomException("MIDI standard supports max to 16 channels and that number has been exceeded")
          }
 
-         Midi.with(MapConfig.EMPTY).play(unwrappedChannels)
+         Midi.with(ConfigMap.EMPTY).play(unwrappedChannels)
 
          Value.void()
       }

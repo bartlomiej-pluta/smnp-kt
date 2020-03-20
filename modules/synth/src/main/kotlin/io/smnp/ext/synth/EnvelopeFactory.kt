@@ -4,13 +4,13 @@ import io.smnp.error.CustomException
 import io.smnp.type.enumeration.DataType
 import io.smnp.type.matcher.Matcher
 import io.smnp.type.model.Value
-import io.smnp.util.config.MapConfigSchema
+import io.smnp.util.config.ConfigMapSchema
 
 interface EnvelopeFactory {
    fun createEnvelope(config: Value): Envelope
 
    companion object {
-      private val schema = MapConfigSchema()
+      private val schema = ConfigMapSchema()
          .required("name", Matcher.ofType(DataType.STRING))
 
       private val factories = mapOf(

@@ -14,13 +14,20 @@ import io.smnp.type.model.Value
 
 class WaveFunction : Function("wave") {
 
-
    override fun define(new: FunctionDefinitionTool) {
       new function Signature.vararg(
          listOf(NOTE, INT, STRING),
          mapOfMatchers(ofType(STRING), anyType())
       ) body { _, (config, vararg) ->
          val compiler = WaveCompiler(config, Synthesizer.SAMPLING_RATE)
+
+         val wave = compiler.compileLines(vararg.unwrapCollections() as List<List<Value>>)
+
+         Value.list(wave.bytes.map { Value.int(it.toInt()) }.toList())
+      }
+
+      new function Signature.vararg(listOf(NOTE, INT, STRING)) body { _, (vararg) ->
+         val compiler = WaveCompiler(Value.map(emptyMap()), Synthesizer.SAMPLING_RATE)
 
          val wave = compiler.compileLines(vararg.unwrapCollections() as List<List<Value>>)
 

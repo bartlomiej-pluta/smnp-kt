@@ -1,6 +1,6 @@
 package io.smnp.ext.midi
 
-import io.smnp.util.config.MapConfig
+import io.smnp.util.config.ConfigMap
 import java.io.File
 import javax.sound.midi.MidiSystem
 import javax.sound.midi.Sequence
@@ -28,11 +28,11 @@ object Midi {
       sequencer.stop()
    }
 
-   fun with(config: MapConfig): SequenceExecutor {
+   fun with(config: ConfigMap): SequenceExecutor {
       return SequenceExecutor(sequencer, config)
    }
 
-   class SequenceExecutor(private val sequencer: Sequencer, private val config: MapConfig) {
+   class SequenceExecutor(private val sequencer: Sequencer, private val config: ConfigMap) {
       fun play(lines: List<List<Any>>) {
          val sequence = Sequence(Sequence.PPQ, config.getUnwrappedOrDefault("ppq", DEFAULT_PPQ))
          provideCompiler(config).compileLines(lines, sequence)
@@ -40,7 +40,7 @@ object Midi {
          writeToFile(sequence)
       }
 
-      private fun provideCompiler(config: MapConfig): SequenceCompiler =
+      private fun provideCompiler(config: ConfigMap): SequenceCompiler =
          if (config.containsKey("ppq")) PpqSequenceCompiler()
          else DefaultSequenceCompiler()
 
