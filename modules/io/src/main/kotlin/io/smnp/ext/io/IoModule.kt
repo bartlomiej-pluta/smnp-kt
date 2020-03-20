@@ -1,6 +1,6 @@
 package io.smnp.ext.io
 
-import io.smnp.ext.NativeModuleProvider
+import io.smnp.ext.provider.NativeModuleProvider
 import io.smnp.ext.io.function.PrintlnFunction
 import io.smnp.ext.io.function.ReadFunction
 import org.pf4j.Extension

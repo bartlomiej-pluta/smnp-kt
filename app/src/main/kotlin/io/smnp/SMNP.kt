@@ -8,7 +8,7 @@ import io.smnp.environment.DefaultEnvironment
 import io.smnp.error.EnvironmentException
 import io.smnp.error.PositionException
 import io.smnp.error.SmnpException
-import io.smnp.ext.DefaultModuleRegistry
+import io.smnp.ext.registry.DefaultModuleRegistry
 import io.smnp.interpreter.DefaultInterpreter
 import io.smnp.preset.PresetProvider.providePresetCode
 import io.smnp.type.model.Value

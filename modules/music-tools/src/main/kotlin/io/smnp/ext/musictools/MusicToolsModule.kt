@@ -1,6 +1,6 @@
 package io.smnp.ext.musictools
 
-import io.smnp.ext.LanguageModuleProvider
+import io.smnp.ext.provider.LanguageModuleProvider
 import org.pf4j.Extension
 
 @Extension

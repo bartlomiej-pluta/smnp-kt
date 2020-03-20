@@ -1,6 +1,6 @@
 package io.smnp.ext.lang
 
-import io.smnp.ext.NativeModuleProvider
+import io.smnp.ext.provider.NativeModuleProvider
 import io.smnp.ext.lang.constructor.IntConstructor
 import io.smnp.ext.lang.constructor.NoteConstructor
 import io.smnp.ext.lang.function.TypeOfFunction

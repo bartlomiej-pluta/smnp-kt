@@ -5,9 +5,9 @@ import io.smnp.callable.method.Method
 import io.smnp.callable.signature.ActualSignatureFormatter.format
 import io.smnp.error.FunctionInvocationException
 import io.smnp.error.MethodInvocationException
-import io.smnp.ext.DefaultModuleRegistry
-import io.smnp.ext.DefaultModuleRegistry.requestModuleProviderForPath
-import io.smnp.ext.ModuleProvider
+import io.smnp.ext.registry.DefaultModuleRegistry
+import io.smnp.ext.registry.DefaultModuleRegistry.requestModuleProviderForPath
+import io.smnp.ext.provider.ModuleProvider
 import io.smnp.interpreter.DefaultLanguageModuleInterpreter
 import io.smnp.runtime.model.CallStack
 import io.smnp.type.model.Value
