@@ -1,5 +1,6 @@
 package io.smnp.ext.midi
 
+import io.smnp.util.config.MapConfig
 import java.io.File
 import javax.sound.midi.MidiSystem
 import javax.sound.midi.Sequence
@@ -7,7 +8,6 @@ import javax.sound.midi.Sequencer
 
 object Midi {
    private const val DEFAULT_PPQ = 1000
-   private const val DEFAULT_BPM = 120
    private const val MIDI_FILE_TYPE = 1
    private val sequencer = MidiSystem.getSequencer()
    private val synthesizer = MidiSystem.getSynthesizer()
@@ -28,38 +28,38 @@ object Midi {
       sequencer.stop()
    }
 
-   fun with(config: Map<String, Any>): SequenceExecutor {
+   fun with(config: MapConfig): SequenceExecutor {
       return SequenceExecutor(sequencer, config)
    }
 
-   class SequenceExecutor(private val sequencer: Sequencer, private val config: Map<String, Any>) {
+   class SequenceExecutor(private val sequencer: Sequencer, private val config: MapConfig) {
       fun play(lines: List<List<Any>>) {
-         val sequence = Sequence(Sequence.PPQ, (config.getOrDefault("ppq", DEFAULT_PPQ) as Int))
+         val sequence = Sequence(Sequence.PPQ, config.getUnwrappedOrDefault("ppq", DEFAULT_PPQ))
          provideCompiler(config).compileLines(lines, sequence)
          play(sequence)
          writeToFile(sequence)
       }
 
-      private fun provideCompiler(config: Map<String, Any>): SequenceCompiler =
+      private fun provideCompiler(config: MapConfig): SequenceCompiler =
          if (config.containsKey("ppq")) PpqSequenceCompiler()
          else DefaultSequenceCompiler()
 
       private fun play(sequence: Sequence) {
-         (config.getOrDefault("play", true) as Boolean).takeIf { it }?.let {
+         config.getUnwrappedOrDefault("play", true).takeIf { it }?.let {
             playSequence(sequence) {
-               Midi.sequencer.tempoInBPM = (config.getOrDefault("bpm", DEFAULT_BPM) as Int).toFloat()
+               sequencer.tempoInBPM = (config["bpm"].value as Int).toFloat()
             }
          }
       }
 
       private fun writeToFile(sequence: Sequence) {
-         config.getOrDefault("output", null)?.let {
-            MidiSystem.write(sequence, MIDI_FILE_TYPE, File(it as String))
+         config.getUnwrappedOrDefault<String?>("output", null)?.let {
+            MidiSystem.write(sequence, MIDI_FILE_TYPE, File(it))
          }
       }
 
       fun play(channels: Map<Int, List<List<Any>>>) {
-         val sequence = Sequence(Sequence.PPQ, (config.getOrDefault("ppq", DEFAULT_PPQ) as Int))
+         val sequence = Sequence(Sequence.PPQ, config.getUnwrappedOrDefault("ppq", DEFAULT_PPQ))
          provideCompiler(config).compileChannels(channels, sequence)
          play(sequence)
          writeToFile(sequence)

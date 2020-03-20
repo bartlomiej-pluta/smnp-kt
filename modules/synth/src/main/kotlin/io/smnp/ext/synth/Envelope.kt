@@ -3,7 +3,7 @@ package io.smnp.ext.synth
 import org.knowm.xchart.QuickChart
 import org.knowm.xchart.SwingWrapper
 
-abstract class Envelope() {
+abstract class Envelope {
    abstract fun eval(x: Double, length: Int): Double
    protected abstract fun name(): String
 

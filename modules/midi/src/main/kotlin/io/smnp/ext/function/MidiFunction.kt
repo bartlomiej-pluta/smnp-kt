@@ -13,9 +13,17 @@ import io.smnp.type.matcher.Matcher.Companion.listOfMatchers
 import io.smnp.type.matcher.Matcher.Companion.mapOfMatchers
 import io.smnp.type.matcher.Matcher.Companion.ofType
 import io.smnp.type.model.Value
+import io.smnp.util.config.MapConfig
+import io.smnp.util.config.MapConfigSchema
 
 
 class MidiFunction : Function("midi") {
+   private val schema = MapConfigSchema()
+      .optional("bpm", ofType(INT), Value.int(120))
+      .optional("ppq", ofType(INT))
+      .optional("output", ofType(STRING))
+      .optional("play", ofType(BOOL))
+
    override fun define(new: FunctionDefinitionTool) {
       new function vararg(
          listOf(NOTE, INT, STRING),
@@ -27,7 +35,7 @@ class MidiFunction : Function("midi") {
             throw CustomException("MIDI standard supports max to 16 channels and that number has been exceeded")
          }
 
-         Midi.with(unwrapConfig(config)).play(unwrappedLines)
+         Midi.with(schema.parse(config)).play(unwrappedLines)
 
          Value.void()
       }
@@ -39,7 +47,7 @@ class MidiFunction : Function("midi") {
             throw CustomException("MIDI standard supports max to 16 channels and that number has been exceeded")
          }
 
-         Midi.with(emptyMap()).play(unwrappedLines)
+         Midi.with(MapConfig.EMPTY).play(unwrappedLines)
 
          Value.void()
       }
@@ -54,7 +62,7 @@ class MidiFunction : Function("midi") {
             throw CustomException("MIDI standard supports max to 16 channels and that number has been exceeded")
          }
 
-         Midi.with(unwrapConfig(config)).play(unwrappedChannels)
+         Midi.with(schema.parse(config)).play(unwrappedChannels)
 
          Value.void()
       }
@@ -66,7 +74,7 @@ class MidiFunction : Function("midi") {
             throw CustomException("MIDI standard supports max to 16 channels and that number has been exceeded")
          }
 
-         Midi.with(emptyMap()).play(unwrappedChannels)
+         Midi.with(MapConfig.EMPTY).play(unwrappedChannels)
 
          Value.void()
       }
@@ -75,22 +83,5 @@ class MidiFunction : Function("midi") {
          Midi.playFile(file.value as String)
          Value.void()
       }
-   }
-
-   private fun unwrapConfig(config: Value): Map<String, Any> {
-      return (config.unwrap() as Map<String, Any>)
-         .map { (key, value) ->
-            key to when (key) {
-               "bpm" -> value as? Int
-                  ?: throw CustomException("Invalid parameter type: 'bpm' is supposed to be of int type")
-               "ppq" -> value as? Int
-                  ?: throw CustomException("Invalid parameter type: 'ppq' is supposed to be of int type")
-               "output" -> value as? String
-                  ?: throw CustomException("Invalid parameter type: 'output' is supposed to be of string type")
-               "play" -> value as? Boolean
-                  ?: throw CustomException("Invalid parameter type: 'play' is supposed to be of bool type")
-               else -> value
-            }
-         }.toMap()
    }
 }

@@ -12,6 +12,7 @@ import io.smnp.type.enumeration.DataType.*
 import io.smnp.type.matcher.Matcher.Companion.ofType
 import io.smnp.type.matcher.Matcher.Companion.optional
 import io.smnp.type.model.Value
+import io.smnp.util.config.MapConfig
 
 class MidiHelpFunction : Function("midiHelp") {
    override fun define(new: FunctionDefinitionTool) {
@@ -58,7 +59,7 @@ class MidiHelpFunction : Function("midiHelp") {
             if (index > 0) {
                println(it)
                Midi
-                  .with(mapOf("bpm" to bpm))
+                  .with(MapConfig(mapOf(Value.string("bpm") to Value.int(bpm))))
                   .play(mapOf(channel to listOf(listOf("i:$instrument", it))))
                Thread.sleep(100)
             }
