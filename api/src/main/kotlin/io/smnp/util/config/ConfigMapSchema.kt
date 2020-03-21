@@ -36,4 +36,6 @@ class ConfigMapSchema {
          else Value.string(name) to value
       }.toMap())
    }
+
+   fun empty(): ConfigMap = parse(Value.map(emptyMap()))
 }

@@ -17,8 +17,4 @@ class ConfigMap(private val map: Map<Value, Value>) {
    fun containsKey(key: String): Boolean {
       return raw.containsKey(key)
    }
-
-   companion object {
-      val EMPTY = ConfigMap(emptyMap())
-   }
 }

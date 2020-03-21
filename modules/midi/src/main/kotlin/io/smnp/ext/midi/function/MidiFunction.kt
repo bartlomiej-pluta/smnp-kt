@@ -13,7 +13,6 @@ import io.smnp.type.matcher.Matcher.Companion.listOfMatchers
 import io.smnp.type.matcher.Matcher.Companion.mapOfMatchers
 import io.smnp.type.matcher.Matcher.Companion.ofType
 import io.smnp.type.model.Value
-import io.smnp.util.config.ConfigMap
 import io.smnp.util.config.ConfigMapSchema
 
 
@@ -47,7 +46,7 @@ class MidiFunction : Function("midi") {
             throw CustomException("MIDI standard supports max to 16 channels and that number has been exceeded")
          }
 
-         Midi.with(ConfigMap.EMPTY).play(unwrappedLines)
+         Midi.with(schema.empty()).play(unwrappedLines)
 
          Value.void()
       }
@@ -74,7 +73,7 @@ class MidiFunction : Function("midi") {
             throw CustomException("MIDI standard supports max to 16 channels and that number has been exceeded")
          }
 
-         Midi.with(ConfigMap.EMPTY).play(unwrappedChannels)
+         Midi.with(schema.empty()).play(unwrappedChannels)
 
          Value.void()
       }
