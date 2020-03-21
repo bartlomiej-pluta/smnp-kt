@@ -38,14 +38,17 @@ subprojects {
                     'Plugin-Provider': "${pluginProvider}",
                     'Plugin-Dependencies': "${pluginDependencies}"
         }
+    }
 
-        from configurations.compile.collect {
-            // We already have kotlin stdlib in app module
-            // so it is important to exclude in order
-            // to prevent conflicts
-            exclude "kotlin/**"
-            it.isDirectory() ? it : zipTree(it)
+    task plugin(type: Jar) {
+        archiveBaseName = "plugin-${pluginId}"
+        into('classes') {
+            with jar
         }
+        into('lib') {
+            from configurations.compile
+        }
+        archiveExtension = 'zip'
     }
 
     task assemblePlugin(type: Copy) {
