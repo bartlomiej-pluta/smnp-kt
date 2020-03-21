@@ -17,4 +17,10 @@ class ConfigMap(private val map: Map<Value, Value>) {
    fun containsKey(key: String): Boolean {
       return raw.containsKey(key)
    }
+
+   fun <T> ifPresent(key: String, consumer: (T) -> Unit) {
+      if(containsKey(key)) {
+         consumer(get(key).unwrap() as T)
+      }
+   }
 }
