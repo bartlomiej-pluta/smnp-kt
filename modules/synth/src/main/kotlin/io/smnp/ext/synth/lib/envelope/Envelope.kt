@@ -1,27 +1,9 @@
 package io.smnp.ext.synth.lib.envelope
 
 import io.smnp.ext.synth.lib.wave.Wave
-import org.knowm.xchart.QuickChart
-import org.knowm.xchart.SwingWrapper
 
 abstract class Envelope {
    abstract fun eval(x: Double, length: Int): Double
-   protected abstract fun name(): String
-
-   fun plot() {
-      val max = 100
-      val x = IntRange(0, max).map { it.toDouble() }
-      val chart = QuickChart.getChart(
-         name(),
-         "x",
-         "y",
-         "y(x)",
-         x,
-         x.map { eval(it, max) }
-      )
-
-      SwingWrapper(chart).displayChart()
-   }
 
    fun apply(wave: Wave): Wave {
       return Wave(wave.bytes.mapIndexed { index, byte ->

@@ -1,25 +1,10 @@
 package io.smnp.ext.synth.lib.wave
 
-import org.knowm.xchart.QuickChart
-import org.knowm.xchart.SwingWrapper
 import java.io.ByteArrayOutputStream
 import kotlin.math.roundToInt
 import kotlin.math.sin
 
 class Wave(val bytes: ByteArray) {
-
-   fun plot() {
-      val chart = QuickChart.getChart(
-         "Sine wave",
-         "X",
-         "Y",
-         "y(x)",
-         IntRange(0, bytes.size - 1).map { it.toDouble() }.toList(),
-         bytes.toList()
-      )
-
-      SwingWrapper(chart).displayChart()
-   }
 
    operator fun plus(wave: Wave): Wave {
       val stream = ByteArrayOutputStream()

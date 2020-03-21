@@ -19,8 +19,5 @@ class AdsrEnvelope(private val p1: Double, private val p2: Double, private val p
       } else {
          f3(x)
       }
-
    }
-
-   override fun name() = "ADSR"
 }
