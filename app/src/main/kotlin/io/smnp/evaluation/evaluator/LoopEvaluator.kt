@@ -51,8 +51,9 @@ class LoopEvaluator : Evaluator() {
 
             if (filter(filterNode, environment)) {
                outputs.add(defaultEvaluator.evaluate(statementNode, environment))
-               index++
             }
+
+            index++
          }
       }
    }
@@ -74,8 +75,9 @@ class LoopEvaluator : Evaluator() {
 
             if (filter(filterNode, environment)) {
                outputs.add(defaultEvaluator.evaluate(statementNode, environment))
-               index++
             }
+
+            index++
          }
       }
    }
@@ -97,8 +99,9 @@ class LoopEvaluator : Evaluator() {
 
             if (filter(filterNode, environment)) {
                outputs.add(defaultEvaluator.evaluate(statementNode, environment))
-               index++
             }
+
+            index++
          }
       }
    }
@@ -121,8 +124,9 @@ class LoopEvaluator : Evaluator() {
 
             if (filter(filterNode, environment)) {
                outputs.add(defaultEvaluator.evaluate(statementNode, environment))
-               index++
             }
+
+            index++
          }
       }
    }
