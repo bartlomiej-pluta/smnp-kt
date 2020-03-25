@@ -80,3 +80,7 @@ function pick(items: list<map<string><>>) {
         }
     }
 }
+
+function range(begin: int, end: int, step: int = 1) {
+    return ((end-begin) as i ^ begin + i * step) as i ^ i % i < end;
+}

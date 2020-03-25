@@ -99,4 +99,8 @@ extend list {
     function shuffle() {
         return shuffle(this);
     }
+
+    function countBy(value) {
+        return (this as item ^ item % item == value).size;
+    }
 }
