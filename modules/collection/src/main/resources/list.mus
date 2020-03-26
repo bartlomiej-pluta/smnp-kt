@@ -55,6 +55,10 @@ extend list {
         return output;
     }
 
+    function sublist(beginIndex: int, endIndex: int) {
+        return this as (item, index) ^ item % index >= beginIndex and index < endIndex;
+    }
+
     function isEmpty() {
         return this.size == 0;
     }
