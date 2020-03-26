@@ -58,7 +58,7 @@ function range(begin: note, end: note, filter: string = "all", duration: int = 4
 
     currentFilter = filters.get(filter);
 
-    return (range(begin.toInt(), end.toInt()) as i ^ noteFromInt(i, duration, dot)) as n ^ n % currentFilter.contains(n.pitch);
+    return (range(begin.toInt(), end.toInt()+1) as i ^ noteFromInt(i, duration, dot)) as n ^ n % currentFilter.contains(n.pitch);
 }
 
 function transpose(value: int, ...notes: <note, int, string>) {
