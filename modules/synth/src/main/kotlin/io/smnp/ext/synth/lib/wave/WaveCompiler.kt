@@ -19,10 +19,10 @@ class WaveCompiler(config: Value, private val samplingRate: Double) {
       .optional(
          "overtones", Matcher.listOf(DataType.FLOAT), Value.list(
             listOf(
-               Value.float(0.1F),
-               Value.float(0.3F),
+               Value.float(1.0F),
                Value.float(0.7F),
-               Value.float(0.8F)
+               Value.float(0.5F),
+               Value.float(0.3F)
             )
          )
       )
