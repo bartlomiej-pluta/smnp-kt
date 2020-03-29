@@ -64,14 +64,19 @@ class StaffEvaluator : Evaluator() {
       val evaluatedSignature = calculateTimeSignature(evaluatedMeasure)
 
       currentSignature?.let {
-         if (evaluatedSignature != it) {
-            val simplified = evaluatedSignature.simplified
-            throw contextEvaluationException(
-               "Invalid time signature: expected ${it.numerator}/${it.denominator}, got ${simplified.numerator}/${simplified.denominator}",
-               measure.position,
-               environment
-            )
+         when {
+            it.numerator == 0 -> return
+            evaluatedSignature != it -> {
+               val simplified = evaluatedSignature.simplified
+               throw contextEvaluationException(
+                  "Invalid time signature: expected ${it.numerator}/${it.denominator}, got ${simplified.numerator}/${simplified.denominator}",
+                  measure.position,
+                  environment
+               )
+            }
          }
+
+         null
       }
    }
 
