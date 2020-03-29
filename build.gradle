@@ -31,13 +31,20 @@ repositories {
 }
 
 task clean {
-    dependsOn ':app:clean'
     dependsOn ':api:clean'
+    dependsOn ':core:clean'
+    dependsOn ':app:clean'
     dependsOn ':modules:clean'
 }
 
 task build {
-    dependsOn ':app:jar'
     dependsOn ':api:build'
+    dependsOn ':core:build'
     dependsOn ':modules:build'
+    dependsOn ':app:build'
+}
+
+task jar {
+    dependsOn build
+    dependsOn ':app:jar'
 }
