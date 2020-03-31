@@ -129,12 +129,10 @@ abstract class Parser {
                     val items = mutableListOf<Node>()
                     while (true) {
                         val output = itemParser.parse(input)
-                        if (output.result == ParsingResult.OK) {
-                            items += output.node
-                        } else if (items.isEmpty()) {
-                            return ParserOutput.fail()
-                        } else {
-                            return ParserOutput.ok(createNode(items, items.first().position))
+                        when {
+                           output.result == ParsingResult.OK -> items += output.node
+                           items.isEmpty() -> return ParserOutput.fail()
+                           else -> return ParserOutput.ok(createNode(items, items.first().position))
                         }
                     }
                 }

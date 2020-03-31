@@ -5,7 +5,6 @@ import io.smnp.dsl.token.tokenizer.DefaultTokenizer
 import io.smnp.environment.DefaultEnvironment
 import io.smnp.environment.Environment
 import io.smnp.evaluation.evaluator.RootEvaluator
-import io.smnp.evaluation.model.enumeration.EvaluationResult
 import java.io.File
 
 class DefaultInterpreter  {
@@ -35,18 +34,15 @@ class DefaultInterpreter  {
       environment.loadModule("smnp.lang")
 
       val tokens = tokenizer.tokenize(lines, source)
-      if (printTokens) println(tokens)
 
       val ast = parser.parse(tokens)
-      if (printAst) ast.node.pretty()
 
       if (!dryRun) {
-         val result = evaluator.evaluate(ast.node, environment)
-
-         if (result.result == EvaluationResult.FAILED) {
-            throw RuntimeException("Evaluation failed")
-         }
+         evaluator.evaluate(ast.node, environment)
       }
+
+      if (printTokens) println(tokens)
+      if (printAst) ast.node.pretty()
 
       return environment
    }
