@@ -15,15 +15,9 @@ enum class DataType(private val kotlinType: KClass<out Any>, val stringifier: (A
     TYPE(DataType::class, { it.toString() }),
     VOID(Unit::class, { "void" });
 
-    fun isInstance(value: Any): Boolean {
-        return kotlinType.isInstance(value)
-    }
+    fun isInstance(value: Any) = kotlinType.isInstance(value)
 
-    fun isNumeric(): Boolean {
-        return this == INT || this == FLOAT
-    }
+    fun isNumeric() = this == INT || this == FLOAT
 
-    override fun toString(): String {
-        return super.toString().toLowerCase()
-    }
+    override fun toString() = super.toString().toLowerCase()
 }
