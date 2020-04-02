@@ -41,10 +41,27 @@ task build {
     dependsOn ':api:build'
     dependsOn ':core:build'
     dependsOn ':modules:build'
-    dependsOn ':app:build'
+    dependsOn ':app:jar'
 }
 
-task jar {
+task pack(type: Zip) {
     dependsOn build
-    dependsOn ':app:jar'
+
+    file('modules').eachDir { module ->
+        from(new File(module, "build/libs")) {
+            include "*.jar"
+            into "/modules/"
+        }
+    }
+
+    from("app/build/libs") {
+        include "*.jar"
+        into "/"
+    }
+
+    def outputDir = file('build/zip')
+    outputDir.mkdir()
+
+    archiveName 'smnp.zip'
+    destinationDir(outputDir)
 }
