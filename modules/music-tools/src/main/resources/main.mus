@@ -18,7 +18,7 @@ function alert(melody: string = "beep") {
     A = melodies.get(melody);
     B = transpose(6, melodies.get(melody));
 
-    true ^ midi({ bpm -> 400 }, A, B);
+    true ^ synth({ bpm -> 400 }, A, B);
 }
 
 function alert(cycles: int, melody: string = "beep") {
@@ -36,5 +36,5 @@ function alert(cycles: int, melody: string = "beep") {
     A = melodies.get(melody);
     B = transpose(6, melodies.get(melody));
 
-    cycles ^ midi({ bpm -> 400 }, A, B);
+    cycles ^ synth({ bpm -> 400 }, A, B);
 }
