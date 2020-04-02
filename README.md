@@ -1,10 +1,10 @@
 # Simple Music Notation Processor
-SMNP is a command line tool aimed on doing music stuff using custom domain-specific language.
+SMNP is a command line tool aimed at doing music stuff using custom domain-specific language.
 You are able to create music (both monophonic and polyphonic) using simple notation 
 and then synthesize it with custom settings, plot the signal, evaluate DFT on it and so on.
-Music tools can be used not only to create music but also to prepare kind of scenarios 
-of ear trainings like recognizing intervals etc.
-Apart of that developed domain-specific language offers you tools known from most popular 
+Music tools can be used not only to create music but also to prepare a number of scenarios 
+of ear training like recognizing intervals etc.
+Apart from that developed domain-specific language offers you the tools known from most popular 
 programming languages like conditional statements, loops, variable mechanism, 
 functions (including defining custom ones) etc.
   
@@ -14,17 +14,17 @@ Please don't be surprised if a great part of the _README_ or documentation is 1:
 The main purposes and general design are kept so there simply is no need to change these parts.
 
 ## For what?
-You might ask whether such kind of tool including design of custom language isn't 
+You may ask whether this kind of tool including design of custom language isn't 
 over-engineering of ear-training problem. There are a lot of ear-training tools developed even
 on mobile platforms which can make them more convenient to use because of their portability feature.  
 
 The reasons for this tool are:
-* I'm Java developer and I just wanted to get know more ~~Python~~ Kotlin (...)
+* I'm a Java developer, and I just wanted to get know more ~~Python~~ Kotlin (...)
 Besides, I'm kind of interested in technical side of programming languages that I'm using at work, 
 so designing and implementing a custom language from scratch would be a nice experience. 
-* I'm musician also and no one of available tools is suitable for me. 
-I'm church organist and most of my work is based on dialogue between me and priest. He can
-sing melodies in different keys and it requires me to answer keeping the same key. 
+* I'm a musician also and no one of available tools is suitable for me. 
+I'm church organist, and most of my work bases on dialogue between me and priest. He can
+sing melodies in different keys, and it requires me to answer keeping the same key. 
 My tool allows me to create scenarios that can pick one key randomly and play melody 
 waiting for my answer (basing on input from microphone).
 * As a musician I'm also keen on physic nature of sounds and relations between them. 
@@ -39,7 +39,7 @@ Documentation has been edited with _GitHub Wiki Pages_ and is available [here](h
 
 ## Disclaimers
 1. Readability of the code and its structure is one of most important things
-related to educational aspect of the project. And in spite of having huge negative impact 
+related to educational aspect of the project. In spite of having huge negative impact 
 on efficiency of the tool, according to one of the assumptions 
 it has much higher priority. So don't be surprised 
 if the tool turns out to be extremely slow or ineffective.
