@@ -27,7 +27,7 @@ class Fraction(val numerator: Int, val denominator: Int) : Comparable<Fraction> 
       else {
          val numerator = numerator * second.denominator + second.numerator * denominator
          val denominator = denominator * second.denominator
-         Fraction(numerator, denominator)
+         Fraction(numerator, denominator).simplified
       }
 
    operator fun minus(second: Fraction) = (this + (-second))
