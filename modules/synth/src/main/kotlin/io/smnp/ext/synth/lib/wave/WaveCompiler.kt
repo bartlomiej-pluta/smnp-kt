@@ -8,6 +8,7 @@ import io.smnp.type.enumeration.DataType
 import io.smnp.type.matcher.Matcher
 import io.smnp.type.model.Value
 import io.smnp.util.config.ConfigMapSchema
+import kotlin.math.log
 import kotlin.math.pow
 
 class WaveCompiler(config: Value, private val samplingRate: Double) {
@@ -77,6 +78,6 @@ class WaveCompiler(config: Value, private val samplingRate: Double) {
          Wave.sine(frequency * (overtone + 1), duration, samplingRate) * ratio
       }.toTypedArray())
 
-      return parameters.envelope.apply(wave) * parameters.velocity.toDouble()
+      return parameters.envelope.apply(wave) * log(parameters.velocity.toDouble() + 1.0, 2.0)
    }
 }
