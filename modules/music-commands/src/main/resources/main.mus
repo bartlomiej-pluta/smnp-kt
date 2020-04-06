@@ -1,0 +1,12 @@
+function vel(value: float) {
+    return { velocity -> value };
+}
+
+function cresc(begin: float, end: float, ...notes: <note, int>) {
+    return cresc(begin, end, notes);
+}
+
+function cresc(begin: float, end: float, notes: list<note, int>) {
+    return (notes as (item, index) ^ [vel((index+1) * (end-begin)/notes.size + begin), item]).flatten();
+}
+
