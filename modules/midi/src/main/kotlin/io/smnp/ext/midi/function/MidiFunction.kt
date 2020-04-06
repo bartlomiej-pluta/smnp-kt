@@ -25,7 +25,7 @@ class MidiFunction : Function("midi") {
 
    override fun define(new: FunctionDefinitionTool) {
       new function vararg(
-         listOf(NOTE, INT, STRING),
+         listOfMatchers(ofType(NOTE), ofType(INT), mapOfMatchers(ofType(STRING), anyType())),
          mapOfMatchers(ofType(STRING), anyType())
       ) body { _, (config, lines) ->
          val unwrappedLines = lines.unwrap() as List<List<Any>>
@@ -39,7 +39,7 @@ class MidiFunction : Function("midi") {
          Value.void()
       }
 
-      new function vararg(listOf(NOTE, INT, STRING)) body { _, (lines) ->
+      new function vararg(listOfMatchers(ofType(NOTE), ofType(INT), mapOfMatchers(ofType(STRING), anyType()))) body { _, (lines) ->
          val unwrappedLines = lines.unwrap() as List<List<Any>>
 
          if (unwrappedLines.size > 16) {
