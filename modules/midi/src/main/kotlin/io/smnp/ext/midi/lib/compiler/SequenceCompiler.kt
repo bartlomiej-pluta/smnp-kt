@@ -1,7 +1,7 @@
 package io.smnp.ext.midi.lib.compiler
 
 import io.smnp.data.entity.Note
-import io.smnp.error.EvaluationException
+import io.smnp.error.CustomException
 import io.smnp.error.ShouldNeverReachThisLineException
 import javax.sound.midi.MidiEvent
 import javax.sound.midi.Sequence
@@ -33,6 +33,7 @@ abstract class SequenceCompiler {
 
    protected abstract fun compileNote(
       item: Note,
+      velocity: Int,
       channel: Int,
       noteOnTick: Long,
       track: Track,
@@ -44,11 +45,25 @@ abstract class SequenceCompiler {
    private fun compileLine(line: List<Any>, channel: Int, sequence: Sequence) {
       val track = sequence.createTrack()
 
+      var velocity = 127
       val lastTick = line.fold(0L) { noteOnTick, item ->
          when (item) {
-            is Note -> compileNote(item, channel, noteOnTick, track, sequence.resolution)
+            is Note -> compileNote(item, velocity, channel, noteOnTick, track, sequence.resolution)
             is Int -> compileRest(noteOnTick, item, sequence.resolution)
-            is String -> command(item, channel, noteOnTick, track)
+            is Map<*, *> -> {
+               val command = item as Map<String, Any>
+               command["instrument"]?.let {
+                  val value = it as? Int ?: throw CustomException("Invalid parameter type: 'instrument' is supposed to be of int type")
+                  track.add(event(Command.PROGRAM_CHANGE + channel, channel, value, 0, noteOnTick))
+               }
+
+               command["velocity"]?.let {
+                  val value = it as? Float ?: throw CustomException("Invalid parameter type: 'velocity' is supposed to be of float type")
+                  velocity = (127.0 * value).toInt()
+               }
+
+               noteOnTick
+            }
             else -> throw ShouldNeverReachThisLineException()
          }
       }
@@ -56,38 +71,12 @@ abstract class SequenceCompiler {
       track.add(allNotesOff(channel, lastTick))
    }
 
-   private fun command(instruction: String, channel: Int, beginTick: Long, track: Track): Long {
-      if (instruction.isBlank()) {
-         throw EvaluationException("Empty strings are not allowed here")
-      }
-      val commandWithArguments = instruction.split(":")
-      val (command, args) = if (commandWithArguments.size == 2) commandWithArguments else listOf(
-         commandWithArguments[0],
-         "0,0"
-      )
-      val arguments = args.split(",")
-      val cmdCode = when (command) {
-         "i" -> Command.PROGRAM_CHANGE + channel
-         else -> throw EvaluationException("Unknown command '$command'")
-      }
-      track.add(
-         event(
-            cmdCode,
-            channel,
-            arguments.getOrNull(0)?.toInt() ?: 0,
-            arguments.getOrNull(1)?.toInt() ?: 0,
-            beginTick
-         )
-      )
-      return beginTick
+   protected fun noteOn(note: Note, velocity: Int, channel: Int, tick: Long): MidiEvent {
+      return event(Command.NOTE_ON, channel, note.intPitch() + 12, velocity, tick)
    }
 
-   protected fun noteOn(note: Note, channel: Int, tick: Long): MidiEvent {
-      return event(Command.NOTE_ON, channel, note.intPitch() + 12, 127, tick)
-   }
-
-   protected fun noteOff(note: Note, channel: Int, tick: Long): MidiEvent {
-      return event(Command.NOTE_OFF, channel, note.intPitch() + 12, 127, tick)
+   protected fun noteOff(note: Note, velocity: Int, channel: Int, tick: Long): MidiEvent {
+      return event(Command.NOTE_OFF, channel, note.intPitch() + 12, velocity, tick)
    }
 
    private fun allNotesOff(channel: Int, tick: Long): MidiEvent {

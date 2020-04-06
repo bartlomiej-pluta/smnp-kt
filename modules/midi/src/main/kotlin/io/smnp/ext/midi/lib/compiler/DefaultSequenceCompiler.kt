@@ -8,6 +8,7 @@ class DefaultSequenceCompiler : SequenceCompiler() {
 
    override fun compileNote(
       item: Note,
+      velocity: Int,
       channel: Int,
       noteOnTick: Long,
       track: Track,
@@ -15,8 +16,8 @@ class DefaultSequenceCompiler : SequenceCompiler() {
    ): Long {
       val noteDuration = (4L * ppq * item.duration.decimal).toLong()
       val noteOffTick = noteOnTick + noteDuration
-      track.add(noteOn(item, channel, noteOnTick))
-      track.add(noteOff(item, channel, noteOffTick))
+      track.add(noteOn(item, velocity, channel, noteOnTick))
+      track.add(noteOff(item, velocity, channel, noteOffTick))
       return noteOffTick
    }
 }

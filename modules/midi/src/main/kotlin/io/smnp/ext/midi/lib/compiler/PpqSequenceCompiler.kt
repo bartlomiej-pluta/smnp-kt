@@ -8,14 +8,15 @@ class PpqSequenceCompiler : SequenceCompiler() {
 
    override fun compileNote(
       item: Note,
+      velocity: Int,
       channel: Int,
       noteOnTick: Long,
       track: Track,
       ppq: Int
    ): Long {
       val noteOffTick = noteOnTick + item.duration.denominator
-      track.add(noteOn(item, channel, noteOnTick))
-      track.add(noteOff(item, channel, noteOffTick))
+      track.add(noteOn(item, velocity, channel, noteOnTick))
+      track.add(noteOff(item, velocity, channel, noteOffTick))
       return noteOffTick
    }
 }
