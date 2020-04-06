@@ -20,11 +20,13 @@ class ConfigMapSchema {
       return this
    }
 
-   fun parse(config: Value): ConfigMap {
+   fun parse(config: Value, vararg cascade: ConfigMap): ConfigMap {
       val configMap = config.value as Map<Value, Value>
-
       return ConfigMap(parameters.mapNotNull { (name, parameter) ->
-         val value = configMap[Value.string(name)]
+         val key = Value.string(name)
+
+         val value = configMap[key]
+            ?: cascade.flatMap { it.entries } .firstOrNull { it.key == name } ?.value
             ?: if (parameter.required) throw CustomException("The '$name' parameter of ${parameter.matcher} is required")
             else parameter.default
 

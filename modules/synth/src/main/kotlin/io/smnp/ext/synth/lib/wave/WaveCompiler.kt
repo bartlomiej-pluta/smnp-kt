@@ -1,10 +1,8 @@
 package io.smnp.ext.synth.lib.wave
 
 import io.smnp.data.entity.Note
-import io.smnp.data.enumeration.Pitch
 import io.smnp.error.CustomException
-import io.smnp.ext.synth.lib.envelope.Envelope
-import io.smnp.ext.synth.lib.envelope.EnvelopeFactory
+import io.smnp.ext.synth.lib.model.CompilationParameters
 import io.smnp.math.Fraction
 import io.smnp.type.enumeration.DataType
 import io.smnp.type.matcher.Matcher
@@ -13,7 +11,6 @@ import io.smnp.util.config.ConfigMapSchema
 import kotlin.math.pow
 
 class WaveCompiler(config: Value, private val samplingRate: Double) {
-   private val semitone = 2.0.pow(1.0 / 12.0)
    private val schema = ConfigMapSchema()
       .optional("bpm", Matcher.ofType(DataType.INT), Value.int(120))
       .optional(
@@ -39,52 +36,46 @@ class WaveCompiler(config: Value, private val samplingRate: Double) {
          )
       )
 
-   private val bpm: Int
-   private val envelope: Envelope
-   private val tuningTable: Map<Pitch, Double>
-   private val overtones: List<Double>
-
-   init {
-      schema.parse(config).let { configMap ->
-         envelope = EnvelopeFactory.provideEnvelope(configMap["envelope"])
-         overtones = (configMap["overtones"].unwrap() as List<Float>).map { it.toDouble() }
-         bpm = configMap["bpm"].value as Int
-         tuningTable = Pitch.values()
-            .mapIndexed { index, pitch -> pitch to (configMap["tuning"].value as Float).toDouble() / semitone.pow(57 - index) }
-            .toMap()
-      }
-   }
+   private val globalConfig = schema.parse(config)
 
    fun compileLines(lines: List<List<Value>>): Wave {
-      return Wave.merge(*lines.map { compileLine(it) }.toTypedArray())
+      return Wave.merge(*lines.parallelStream().map { compileLine(it) }.toArray { Array(it) { Wave.EMPTY } })
    }
 
    private fun compileLine(line: List<Value>): Wave {
+      var config = globalConfig
+      var parameters = CompilationParameters(config)
+
       return line.fold(Wave.EMPTY) { acc, value ->
          acc + when (value.type) {
-            DataType.NOTE -> compileNote(value.value as Note)
-            DataType.INT -> compileRest(value.value as Int)
-            DataType.STRING -> Wave.EMPTY
+            DataType.NOTE -> compileNote(value.value as Note, parameters)
+            DataType.INT -> compileRest(value.value as Int, parameters)
+            DataType.MAP -> {
+               config = schema.parse(value, config, globalConfig)
+               parameters = CompilationParameters(config)
+               Wave.EMPTY
+            }
             else -> throw CustomException("Invalid data type: '${value.typeName}")
          }
       }
    }
 
-   private fun compileNote(note: Note) =
-      sound((tuningTable[note.pitch] ?: error("")) * 2.0.pow(note.octave), duration(note.duration))
+   private fun compileNote(note: Note, parameters: CompilationParameters) =
+      sound((parameters.tuningTable[note.pitch] ?: error("")) * 2.0.pow(note.octave), duration(note.duration, parameters), parameters)
 
-   private fun duration(duration: Fraction) = 60.0 * 4.0 * duration.decimal / bpm
+   private fun duration(duration: Fraction, parameters: CompilationParameters) = 60.0 * 4.0 * duration.decimal / parameters.bpm
 
-   private fun compileRest(rest: Int) = Wave.zeros(duration(Fraction(1, rest)), samplingRate)
+   private fun compileRest(rest: Int, parameters: CompilationParameters) = Wave.zeros(duration(Fraction(1, rest), parameters), samplingRate)
 
    private fun sound(
       frequency: Double,
-      duration: Double
+      duration: Double,
+      parameters: CompilationParameters
    ): Wave {
-      val wave = Wave.merge(*overtones.mapIndexed { overtone, ratio ->
+      val wave = Wave.merge(*parameters.overtones.mapIndexed { overtone, ratio ->
          Wave.sine(frequency * (overtone + 1), duration, samplingRate) * ratio
       }.toTypedArray())
 
-      return envelope.apply(wave)
+      return parameters.envelope.apply(wave)
    }
 }
