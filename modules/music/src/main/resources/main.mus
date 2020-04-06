@@ -61,11 +61,11 @@ function range(begin: note, end: note, filter: string = "all", duration: int = 4
     return (range(begin.toInt(), end.toInt()+1) as i ^ noteFromInt(i, duration, dot)) as n ^ n % currentFilter.contains(n.pitch);
 }
 
-function transpose(value: int, ...notes: <note, int, string>) {
+function transpose(value: int, ...notes: <note, int, map<string><>>) {
     return transpose(value, notes);
 }
 
-function transpose(value: int, notes: list<note, int, string>) {
+function transpose(value: int, notes: list<note, int, map<string><>>) {
     output = [];
     notes as item ^ {
         if(typeOf(item) == "note") {
@@ -90,11 +90,11 @@ function tuplet(sub: int, ...notes: note) {
     return notes as note ^ note.withDuration(note.duration.get("numerator") * sub, note.duration.get("denominator") * notes.size);
 }
 
-function semitones(...notes: <note, int, string>) {
+function semitones(...notes: <note, int, map<string><>>) {
     return semitones(notes);
 }
 
-function semitones(staff: list<note, int, string>) {
+function semitones(staff: list<note, int, map<string><>>) {
     notes = _filterNotes(staff);
     if(notes.size < 2) {
         return [];
@@ -103,15 +103,15 @@ function semitones(staff: list<note, int, string>) {
     return ((notes.size - 1) as i ^ [notes.get(i+1).toInt() - notes.get(i).toInt()]).flatten();
 }
 
-function _filterNotes(staff: list<note, int, string>) {
+function _filterNotes(staff: list<note, int, map<string><>>) {
     return staff as item ^ item % typeOf(item) == "note";
 }
 
-function transposeTo(target: note, ...notes: <note, int, string>) {
+function transposeTo(target: note, ...notes: <note, int, map<string><>>) {
     return transposeTo(target, notes);
 }
 
-function transposeTo(target: note, staff: list<note, int, string>) {
+function transposeTo(target: note, staff: list<note, int, map<string><>>) {
     notes = _filterNotes(staff);
     if(notes.size < 1) {
         return staff;
@@ -120,4 +120,18 @@ function transposeTo(target: note, staff: list<note, int, string>) {
     semitones = semitones(notes.get(0), target).get(0);
 
     return transpose(semitones, staff);
+}
+
+extend list<note, int, map<string><>> {
+    function transpose(value: int) {
+        return transpose(value, this);
+    }
+
+    function transposeTo(target: note) {
+        return transposeTo(target, this);
+    }
+
+    function semitones() {
+        return semitones(this);
+    }
 }
