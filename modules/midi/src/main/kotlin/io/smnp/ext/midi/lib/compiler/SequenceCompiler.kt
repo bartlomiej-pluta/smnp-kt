@@ -59,7 +59,7 @@ abstract class SequenceCompiler {
 
                command["velocity"]?.let {
                   val value = it as? Float ?: throw CustomException("Invalid parameter type: 'velocity' is supposed to be of float type")
-                  velocity = (127.0 * value).toInt()
+                  velocity = (127.0 * value.coerceIn(0.0F, 1.0F)).toInt()
                }
 
                noteOnTick

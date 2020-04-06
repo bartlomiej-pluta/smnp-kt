@@ -13,6 +13,7 @@ import kotlin.math.pow
 class WaveCompiler(config: Value, private val samplingRate: Double) {
    private val schema = ConfigMapSchema()
       .optional("bpm", Matcher.ofType(DataType.INT), Value.int(120))
+      .optional("velocity", Matcher.ofType(DataType.FLOAT), Value.float(1.0F))
       .optional(
          "overtones", Matcher.listOf(DataType.FLOAT), Value.list(
             listOf(
@@ -76,6 +77,6 @@ class WaveCompiler(config: Value, private val samplingRate: Double) {
          Wave.sine(frequency * (overtone + 1), duration, samplingRate) * ratio
       }.toTypedArray())
 
-      return parameters.envelope.apply(wave)
+      return parameters.envelope.apply(wave) * parameters.velocity.toDouble()
    }
 }
