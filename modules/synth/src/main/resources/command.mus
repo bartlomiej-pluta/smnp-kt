@@ -1,12 +1,12 @@
-function o(overtones: list<float>) {
+function overtones(overtones: list<float>) {
     return { overtones -> overtones };
 }
 
-function e(envelope: map<string><>) {
+function envelope(envelope: map<string><>) {
     return { envelope -> envelope };
 }
 
-function t(tuning: float) {
+function tuning(tuning: float) {
     return { tuning -> tuning };
 }
 
