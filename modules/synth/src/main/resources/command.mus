@@ -1,0 +1,15 @@
+function o(overtones: list<float>) {
+    return { overtones -> overtones };
+}
+
+function e(envelope: map<string><>) {
+    return { envelope -> envelope };
+}
+
+function t(tuning: float) {
+    return { tuning -> tuning };
+}
+
+function bpm(bpm: int) {
+    return { bpm -> bpm };
+}

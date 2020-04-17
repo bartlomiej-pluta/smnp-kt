@@ -1,0 +1,3 @@
+function i(instrument: int) {
+    return { instrument -> instrument };
+}

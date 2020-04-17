@@ -1,4 +1,4 @@
-function vel(value: float) {
+function v(value: float) {
     return { velocity -> value };
 }
 
