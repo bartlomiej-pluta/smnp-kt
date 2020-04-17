@@ -43,7 +43,7 @@ object Midi {
          val sequence = Sequence(Sequence.PPQ, config.getUnwrappedOrDefault("ppq",
             DEFAULT_PPQ
          ))
-         provideCompiler(config).compileLines(lines, sequence)
+         provideCompiler(config).compileLines(lines, config, sequence)
          play(sequence)
          writeToFile(sequence)
       }
@@ -70,7 +70,7 @@ object Midi {
          val sequence = Sequence(Sequence.PPQ, config.getUnwrappedOrDefault("ppq",
             DEFAULT_PPQ
          ))
-         provideCompiler(config).compileChannels(channels, sequence)
+         provideCompiler(config).compileChannels(channels, config, sequence)
          play(sequence)
          writeToFile(sequence)
       }

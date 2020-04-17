@@ -22,6 +22,8 @@ class MidiFunction : Function("midi") {
       .optional("ppq", ofType(INT))
       .optional("output", ofType(STRING))
       .optional("play", ofType(BOOL))
+      .optional("velocity", ofType(FLOAT), Value.float(1.0F))
+      .optional("instrument", ofType(INT), Value.int(0))
 
    override fun define(new: FunctionDefinitionTool) {
       new function vararg(

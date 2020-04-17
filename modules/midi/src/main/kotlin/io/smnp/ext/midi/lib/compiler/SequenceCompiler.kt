@@ -3,6 +3,7 @@ package io.smnp.ext.midi.lib.compiler
 import io.smnp.data.entity.Note
 import io.smnp.error.CustomException
 import io.smnp.error.ShouldNeverReachThisLineException
+import io.smnp.util.config.ConfigMap
 import javax.sound.midi.MidiEvent
 import javax.sound.midi.Sequence
 import javax.sound.midi.ShortMessage
@@ -24,11 +25,14 @@ abstract class SequenceCompiler {
       const val ZERO = 0x00
    }
 
-   fun compileLines(lines: List<List<Any>>, sequence: Sequence) =
-      lines.forEachIndexed { channel, line -> compileLine(line, channel, sequence) }
+   fun compileChannels(channels: Map<Int, List<List<Any>>>, config: ConfigMap, sequence: Sequence) {
+      channels.forEach { (channel, lines) ->
+         lines.forEach { line -> compileLine(line, channel - 1, config, sequence) }
+      }
+   }
 
-   fun compileChannels(channels: Map<Int, List<List<Any>>>, sequence: Sequence) = channels.forEach { (channel, lines) ->
-      lines.forEach { line -> compileLine(line, channel - 1, sequence) }
+   fun compileLines(lines: List<List<Any>>, config: ConfigMap, sequence: Sequence) {
+      lines.forEachIndexed { channel, line -> compileLine(line, channel, config, sequence) }
    }
 
    protected abstract fun compileNote(
@@ -42,10 +46,12 @@ abstract class SequenceCompiler {
 
    abstract fun compileRest(noteOnTick: Long, item: Int, ppq: Int): Long
 
-   private fun compileLine(line: List<Any>, channel: Int, sequence: Sequence) {
+   private fun compileLine(line: List<Any>, channel: Int, config: ConfigMap, sequence: Sequence) {
       val track = sequence.createTrack()
 
-      var velocity = 127
+      track.add(event(Command.PROGRAM_CHANGE + channel, channel, config["instrument"].value as Int, 0, 0))
+      var velocity = velocityToInt(config["velocity"].value as Float)
+
       val lastTick = line.fold(0L) { noteOnTick, item ->
          when (item) {
             is Note -> compileNote(item, velocity, channel, noteOnTick, track, sequence.resolution)
@@ -59,7 +65,7 @@ abstract class SequenceCompiler {
 
                command["velocity"]?.let {
                   val value = it as? Float ?: throw CustomException("Invalid parameter type: 'velocity' is supposed to be of float type")
-                  velocity = (127.0 * value.coerceIn(0.0F, 1.0F)).toInt()
+                  velocity = velocityToInt(value)
                }
 
                noteOnTick
@@ -70,6 +76,8 @@ abstract class SequenceCompiler {
 
       track.add(allNotesOff(channel, lastTick))
    }
+
+   private fun velocityToInt(value: Float) = (127.0 * value.coerceIn(0.0F, 1.0F)).toInt()
 
    protected fun noteOn(note: Note, velocity: Int, channel: Int, tick: Long): MidiEvent {
       return event(Command.NOTE_ON, channel, note.intPitch() + 12, velocity, tick)
