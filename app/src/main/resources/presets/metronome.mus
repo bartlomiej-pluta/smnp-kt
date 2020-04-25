@@ -1,4 +1,4 @@
-import smnp.music.tools;
+import smnp.music.tool;
 import smnp.text;
 import smnp.io;
 import smnp.system;
