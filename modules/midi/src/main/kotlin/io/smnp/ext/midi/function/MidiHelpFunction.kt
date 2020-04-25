@@ -44,7 +44,7 @@ class MidiHelpFunction : Function("midiHelp") {
          }
 
          val notes = Value.list(
-            listOf(Value.string("i:$instrument")) + environment.invokeFunction(
+            listOf(Value.map(mapOf(Value.string("instrument") to Value.int(instrument)))) + environment.invokeFunction(
                "range",
                listOf(begin, end)
             ).value as List<Value>
@@ -60,7 +60,7 @@ class MidiHelpFunction : Function("midiHelp") {
                println(it)
                Midi
                   .with(ConfigMap(mapOf(Value.string("bpm") to Value.int(bpm))))
-                  .play(mapOf(channel to listOf(listOf("i:$instrument", it))))
+                  .play(mapOf(channel to listOf(listOf(mapOf("instrument" to instrument), it))))
                Thread.sleep(100)
             }
          }

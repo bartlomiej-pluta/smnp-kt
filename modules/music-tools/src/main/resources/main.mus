@@ -4,11 +4,13 @@ function metronome(bpm: int = 120, beats: int = 4, accent: note = @A#2, beat: no
 }
 
 function alert(melody: string = "beep") {
+    i = instrument(108)
+
     melodies = {
-        beep -> ["i:108", @c5, 4, @c5, 1, 4],
-        bell -> ["i:108", @c5:8, @db5:8],
-        alarm1 -> ["i:108", (range(@g, @g5) as n ^ n.withDuration(32))].flatten(),
-        alarm2 -> ["i:108", (range(@g, @g5) as n ^ n.withDuration(32)), -(range(@c, @c5) as n ^ n.withDuration(32))].flatten()
+        beep -> [i, @c5, 4, @c5, 1, 4],
+        bell -> [i, @c5:8, @db5:8],
+        alarm1 -> [i, (range(@g, @g5) as n ^ n.withDuration(32))].flatten(),
+        alarm2 -> [i, (range(@g, @g5) as n ^ n.withDuration(32)), -(range(@c, @c5) as n ^ n.withDuration(32))].flatten()
     };
 
     if(not melodies.containsKey(melody)) {
@@ -22,11 +24,13 @@ function alert(melody: string = "beep") {
 }
 
 function alert(cycles: int, melody: string = "beep") {
+    i = instrument(108)
+
     melodies = {
-        beep -> ["i:108", @c5, 4, @c5, 1, 4],
-        bell -> ["i:108", @c5:8, @db5:8],
-        alarm1 -> ["i:108", (range(@g, @g5) as n ^ n.withDuration(32))].flatten(),
-        alarm2 -> ["i:108", (range(@g, @g5) as n ^ n.withDuration(32)), -(range(@c, @c5) as n ^ n.withDuration(32))].flatten()
+        beep -> [i, @c5, 4, @c5, 1, 4],
+        bell -> [i, @c5:8, @db5:8],
+        alarm1 -> [i, (range(@g, @g5) as n ^ n.withDuration(32))].flatten(),
+        alarm2 -> [i, (range(@g, @g5) as n ^ n.withDuration(32)), -(range(@c, @c5) as n ^ n.withDuration(32))].flatten()
     };
 
     if(not melodies.containsKey(melody)) {
