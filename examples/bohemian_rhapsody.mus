@@ -1,0 +1,68 @@
+import smnp.io;
+import smnp.audio.midi;
+import smnp.music;
+import smnp.collection;
+
+println("Bohemian Rhapsody :: part");
+println("by Queen");
+
+#B
+## Melody
+M1 = (2 ^ 1) + $ 4/4 @d:8 @d:8 + 2 8  @b3:8          | @c:8 @d:16 @d:16 + 4 4 8 @d:16 @d:16 |
+         @eb:8 @f:8 @eb:8 @d:8 @c @c:8 @d:8          | @eb:16 @f:8 @eb:8d @d:8 @c 4         |
+         @d:8 @d:8 + 2  @d:8 @f:8                    | @a:8d @g:16 @g:2 8 @g:8              |
+         @b:8 @b:8 @b:8 @b:8 @b:8d @g:16 @d:8d @c:16 | @c:2 2                               ||;
+
+## Piano measures
+p_B  = $ 4/4 @d:8 @f3:8 @b3:8 @d:8 @g:8 @f3:8 @f:8 + 8                                                  ||;
+p_g  = $ 4/4 @d:8 @g3:8 @b3:8 @d:8 @a:8 @g3:8 @g:8 @b3:8                                                ||;
+p_c  = $ 4/4 @g:8 @c:8 @eb:8 @g:8 @d5:8 @c:8 @c5:8 @c:8                                                 ||;
+p_cF = $ 4/4 @b:8 @c:8 @eb:8 @g:8 @a:8 @eb:8 @f:8 @c:8                                                  ||;
+p1   = $ 4/4 @eb:8 @c:8 @eb:8 @g:8 @eb:8 @g:8 @eb:8 @g:8 | @eb:8 @a3:8 @eb:8 @g:8 @eb:8 @g:8 @eb:8 @g:8 ||;
+
+## Piano
+P1 = p_B + p_B + p_B + p_g + p_c + p_cF + p_B + p_g + p1;
+
+## Bass
+B1 = $ 4/4 @b3:1 | @b3:1 | @b3:1 | @g3:1 | @c3:1 | @c3:2 @f3:2 | @b3:2d @a3 | @g3:1 | @c3:2 @h2 @b2 | @a2:2 @ab2 @g2 ||;
+
+# Eb
+## Melody
+M2 = $ 4/4 @g:16 @g:16 + 2 8 @f:8 @g:16 @ab:16        | @g:2 4 8 @g:16 @g:16                                 |  
+           @ab:8d @g:16 @g:8 @f:16 @f:2 @b3:16        | @b3:8 @f:8 @f:8 @g:16 @g:8d @ab:8 @ab:8 @b:16 @ab:16 |  
+           @ab:8 @g:8 8 @f:16 @g:16 @b:4d @f:16 @g:16 | @eb:4d @b3:16 @b3:16 @h3:8 @db:8 @h3:16 @db:16 @h3:8 | 
+           @b3:2 2                                                                                           ||;
+
+
+## Piano measures
+p_Eb  = $ 4/4 @b:8 @eb:8 @eb5:8 @eb:8 @b:8 @eb:8 @f:8 @b:8  ||;
+p_f   = $ 4/4 @ab:8 @f:8 @ab:8 @ab:8 @ab:8 @eb:8 @ab:8 @d:8 ||;
+p_B   = $ 4/4 @d @f @g @ab                                  ||;
+p_EbB = $ 4/4 @b:8 @eb:8 @eb5:8 @eb:8 @b:8 @d:8 @b:8 @d:8   ||;
+p_cf  = $ 4/4 @g:8 @c:8 @g:8 @c:8 @h3:2                     ||;
+
+## Piano
+P2 = p_Eb + p_c + p_f + p_B + p_EbB + p_cf;
+
+## Bass
+B2 = $ 4/4 @eb3:2d @d3 | @c3:1 | @f3:4d @e3:8 @eb3 @d3 | @b2 @b2 @b2 @b2 | @eb3:2 @d3:2 |@c2:2 @f2:2 | @eb2:2 2 ||;
+
+# Combine part 1 and part 2
+M = M1 + M2;
+P = P1 + P2;
+B = B1 + B2;
+
+# Drums
+D = [
+    (10 ^ 1) + (6 ^ $ 4/4 @C2:8 8 8 16 @C2:16 @C2:8 @C2:8 4 ||).flatten(),
+    (10 ^ 1) + (6 ^ $ 4/4 4 @E2 4 @E2 ||).flatten(),
+    (10 ^ 1) + (6 ^ $ 4/4 @F#2:8 @F#2:8 @F#2:8 @F#2:8 @F#2:8 @F#2:8 @F#2:8 @F#2:8 ||).flatten()
+
+];
+
+midi({ bpm -> 72 }, {
+    1 -> [transpose(12, M)],
+    2 -> [P],
+    3 -> [B],
+    10 -> D
+});

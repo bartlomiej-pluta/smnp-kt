@@ -1,0 +1,17 @@
+import smnp.io;
+import smnp.audio.synth;
+
+println("Prząśniczka");
+println("by S. Moniuszko");
+
+S = $ 4/4 @a:4d @a:8 @c5 @d5         | @e5:2 @a @a  | @f5:2 @e5 @d5       | @e5:2d @e5 |
+          @e5:4d @h:8 @e5 @h         | @c5:2 @a @c5 | @e5:2 @h @h         | @c5:2d @e5 |
+          @g5:4d @f5:8 @e5:4d @d5:8  | @c5:2d @c5   | @d5:4d @d5:8 @h @g  | @e5:2d 4   |
+          @e5:4d @f5:8 @e5:4d @d#5:8 | @e5:2 @a5:2  | @f5:4d @d5:8 @h @e5 | @a:2d 4    ||;
+
+A = $ 4/4 1                          | @a:2 2       | @a:2 2              | @a:2d 4    |
+          @g#:4d @g#:8 @g# @g#       | @a:2 2       | @g#:2 @g# @g#       | @a:2d 4    |
+          1                          | 1            | @h:4d @h:8 @g 4     | @c5:2d 4   |
+          1                          | 1            | 1                   | 1          ||;
+
+synth({ bpm -> 284 }, S, A);

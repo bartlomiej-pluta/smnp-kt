@@ -1,0 +1,29 @@
+import smnp.io;
+import smnp.audio.midi;
+import smnp.music;
+
+println("Narodził się nam Zbawiciel / Quem pastores laudavere");
+
+instrument = 7;
+
+S = $ 3/4 @f:2 @a  | @c5:2 @a  | @c5:2 @d5 | @c5 @g:2 |
+          @a:2 @c5 | @b:2 @g   | @f:2 @d   | @e @c:2  |
+          @a:2 @b  | @c5:2 @d5 | @c5:2 @g  | @a @f:2  |
+          @b:2 @b  | @a @g @a  | @f @d @e  | @f:2d    ||;
+
+A = $ 3/4 @c:2 @f   | @g:2 @f  | @f @g @f | @f @f @e  |
+          @f @e @eb | @d:2 @c  | @d:2 @d  | @c @c @b3 |
+          @c:2 @c   | @f @d @g | @g:2 @e  | @e @d:2   |
+          @f:2 @f   | @f @e @f | @c:2 @c  | @c:2d     ||;
+
+T = transpose(-12, $ 3/4 @a @b @c5     | @c5 @b @c5 | @a:2 @b   | @a @c5:2 |
+                         @c5:2 @a      | @b:2 @c5   | @d5 @c @b | @g @g:2  |
+                         @f @a @g      | @a:2 @b    | @b:2 @g   | @g @a:2  |
+                         @d5 @db5 @db5 | @c5 @b @a  | @g:2 @b   | @a:2d    ||);
+
+B = transpose(-12, $ 3/4 @f:2 @f  | @e:2 @f   | @f:2 @f  | @c @c:2   |
+                         @f:2 @f# | @g @f @e  | @d @f @g | @c @e:2   |
+                         @f:2 @e  | @f @f# @g | @e @d @c | @c# @d @c |
+                         @b3:2 @b | @c:2 @c   | @c:2 @c  | @f:2d     ||);
+
+midi({ bpm -> 150, instrument -> instrument }, S, A, T, B);

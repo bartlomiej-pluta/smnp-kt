@@ -1,0 +1,21 @@
+import smnp.io;
+import smnp.collection;
+import smnp.math;
+
+function bubbleSort(numbers: list<int, float>) {
+    sorted = numbers;
+    -range(0, numbers.size) as i ^ {
+        i as j ^ {
+            if (sorted.get(j) > sorted.get(j+1)) {
+                sorted = sorted.swap(j, j+1);
+            }
+        }
+    }
+
+    return sorted;
+}
+
+randList = range(1, 20).shuffle();
+
+println(randList);
+println(bubbleSort(randList));

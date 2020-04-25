@@ -1,0 +1,32 @@
+import smnp.io;
+import smnp.audio.synth;
+import smnp.music;
+
+println("Adeste Fideles");
+println("by John Francis Wade");
+
+S = [@g] + $ 4/4 @g:2 @d @g   | @a:2 @d:2    | @h @a @h @c5     | @h:2 @a @g        |
+                 @g:2 @f# @e  | @f# @g @a @h | @f#:2 @e:4d @d:8 | @d:2d 4           |
+                 @d5:2 @c5 @h | @c5:2 @h:2   | @a @h @g @a      | @f#:4d @e:8 @d @g |
+                 @g @f# @g @a | @g:2 @d @h   | @h @a @h @c5     | @h:2 @a @h        |
+                 @c5 @h @a @g | @f#:2 @g @c5 | @h:2 @a:4d @g:8  | @g:1              ||;
+
+A = [@d] + $ 4/4 @d:2 @d @d           | @e:2 @d:2   | @d @d @d @e      | @d:2 @d @h3 |
+                 @h3 @c# @d @c#       | @d @d @d @d | @d:2 @c#:4d @d:8 | @d:2d 4     |
+                 @d:2 @e:8 @f#:8 @g   | @g @f# @g:2 | @d @d @e @e      | @d:2 @d @d  |
+                 @d:1                 | @d:2d @d    | @d:1             | @d:2d @g    |
+                 @f# @g @d @d:8 @c#:8 | @d:2 @d @e  | @d:2 @d:4d @h3:8 | @h3:1       ||;
+
+T = [@h3] + $ 4/4 @h3:2 @h3 @h3  | @c:2 @a3:2       | @g3 @a3 @g3 @g3     | @g3:2 @f#3 @g3 |
+                  @g3:2 @a3 @a3  | @a3 @g3 @f#3 @d3 | @a3:2 @g3:4d @f#3:8 | @f#3:2d 4      |
+                  @h3:2 @c @d    | @c:2 @d:2        | @d @g3 @h3 @c       | @a3:2 @f#3 @h3 |
+                  @h3 @a3 @h3 @c | @h3:2d @g3       | @g3 @f#3 @g3 @a3    | @g3:2 @f#3 @d  |
+                  @d @d @a3 @a3  | @a3:2 @g3:2      | @g3:2 @f#3:4d @g3:8 | @g3:1          ||;
+
+B = [@g3] + $ 4/4 @g3:2 @h3 @g3    | @g3:2 @f#3:2     | @g3 @f#3 @g3 @c3   | @d3:2 @d3 @e3 |
+                  @e3:2 @d3 @a2    | @d3 @h2 @f#2 @g2 | @a2:2 @a2:4d @d3:8 | @d2:2d 4      |
+                  @h3:2 @a3 @g3    | @a3:2 @g3:2      | @f#3 @g3 @e3 @c3   | @d3:2 @d3 4   |
+                  1                | 1                | 1                  | 2 4 @g3       |
+                  @a3 @g3 @f#3 @e3 | @d3 @c3 @h2 @c3  | @d3:2 @d3:4d @g2:8 | @g2:1         ||;
+
+synth({}, S, A, T, transpose(-12, B));
