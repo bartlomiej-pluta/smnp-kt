@@ -34,8 +34,47 @@ It is great to see how the nature of sound works.
 as possible. Thanks to that, the base modules: `smnp.midi` and `smnp.synth` 
 which correspond to MIDI engine and synthesising engine respectively are implemented using plain old Java library, nothing else.
 
+## Getting started
+Take a look at the following examples. Feel also free to dive into `examples/` directory to find more examples.
+
+### Hello, world!
+The must-be program of each programming language. 
+The _SMNP_ implementation would look something like this:
+```php
+import smnp.io;
+
+println("Hello, world!"); # Hello, world!
+```
+
+### Play some music
+Following example shows the note literals as well as the staff syntax
+used to produce a polyphonic melody of _Prząśniczka_ - a Polish song composed by Stanisław Moniuszko.
+The staffs are being consumed by `midi` function from `smnp.audio.midi` module which
+puts the notes on your system's MIDI engine and eventually plays the song.
+```php
+import smnp.io;
+import smnp.audio.midi;
+
+println("Prząśniczka");
+println("by S. Moniuszko");
+
+S = $ 4/4 @a:4d @a:8 @c5 @d5         | @e5:2 @a @a  | @f5:2 @e5 @d5       | @e5:2d @e5 |
+          @e5:4d @h:8 @e5 @h         | @c5:2 @a @c5 | @e5:2 @h @h         | @c5:2d @e5 |
+          @g5:4d @f5:8 @e5:4d @d5:8  | @c5:2d @c5   | @d5:4d @d5:8 @h @g  | @e5:2d 4   |
+          @e5:4d @f5:8 @e5:4d @d#5:8 | @e5:2 @a5:2  | @f5:4d @d5:8 @h @e5 | @a:2d 4    ||;
+
+A = $ 4/4 1                          | @a:2 2       | @a:2 2              | @a:2d 4    |
+          @g#:4d @g#:8 @g# @g#       | @a:2 2       | @g#:2 @g# @g#       | @a:2d 4    |
+          1                          | 1            | @h:4d @h:8 @g 4     | @c5:2d 4   |
+          1                          | 1            | 1                   | 1          ||;
+
+midi({ bpm -> 284 }, S, A);
+
+```
+
+
 ## Documentation
-Documentation has been edited with _GitHub Wiki Pages_ and is available [here](https://github.com/bartlomiej-pluta/smnp/wiki).
+Documentation is edited with _GitHub Wiki Pages_ and is available [here](https://github.com/bartlomiej-pluta/smnp/wiki).
 
 ## Disclaimers
 1. Readability of the code and its structure is one of most important things
