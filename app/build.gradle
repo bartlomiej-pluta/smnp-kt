@@ -24,7 +24,7 @@ jar {
 
     zip64 true
     manifest {
-        attributes 'Main-Class': 'io.smnp.SMNPKt'
+        attributes 'Main-Class': 'com.bartlomiejpluta.smnp.SMNPKt'
     }
 
     // This line of code recursively collects and copies all of a project's files

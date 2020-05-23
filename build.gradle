@@ -11,7 +11,7 @@ configure(subprojects - project(':modules')) {
         mavenCentral()
     }
 
-    group 'io.bartek'
+    group 'com.bartlomiejpluta'
     version '1.0-SNAPSHOT'
 
     sourceCompatibility = 1.8
