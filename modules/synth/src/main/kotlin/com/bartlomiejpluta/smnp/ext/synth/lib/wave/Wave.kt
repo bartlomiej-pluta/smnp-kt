@@ -14,7 +14,7 @@ class Wave(val bytes: ByteArray) {
    }
 
    operator fun times(value: Double): Wave {
-      return Wave(bytes.map { (it * value).toByte() }.toByteArray())
+      return Wave(bytes.map { (it * value).toInt().toByte() }.toByteArray())
    }
 
    fun extend(bytes: ByteArray): Wave {
@@ -35,7 +35,7 @@ class Wave(val bytes: ByteArray) {
 
          val maxValue = Byte.MAX_VALUE.toDouble() / (signal.max() ?: 1.0)
 
-         return Wave(signal.map { (it * maxValue).toByte() }.toByteArray())
+         return Wave(signal.map { (it * maxValue).toInt().toByte() }.toByteArray())
       }
 
       fun sine(frequency: Double, duration: Double, samplingRate: Double): Wave {
@@ -43,7 +43,7 @@ class Wave(val bytes: ByteArray) {
          val buffer = ByteArray(length)
 
          buffer.forEachIndexed { i, _ ->
-            buffer[i] = (Byte.MAX_VALUE * sin(i / samplingRate * 2.0 * Math.PI * frequency)).toByte()
+            buffer[i] = (Byte.MAX_VALUE * sin(i / samplingRate * 2.0 * Math.PI * frequency)).toInt().toByte()
          }
 
          return Wave(buffer)

@@ -1,5 +1,5 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.3.61' apply false
+    id 'org.jetbrains.kotlin.jvm' version '1.8.10' apply false
 }
 
 configure(subprojects - project(':modules')) {
@@ -14,13 +14,13 @@ configure(subprojects - project(':modules')) {
     group 'com.bartlomiejpluta'
     version '1.0-SNAPSHOT'
 
-    sourceCompatibility = 1.8
+    sourceCompatibility = 17
 
     compileKotlin {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = "17"
     }
     compileTestKotlin {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = "17"
     }
 }
 
@@ -62,6 +62,6 @@ task pack(type: Zip) {
     def outputDir = file('build/zip')
     outputDir.mkdir()
 
-    archiveName 'smnp.zip'
-    destinationDir(outputDir)
+    archiveFileName = 'smnp.zip'
+    destinationDirectory = outputDir
 }

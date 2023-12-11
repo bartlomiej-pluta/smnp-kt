@@ -30,7 +30,7 @@ fun main(args: Array<String>): Unit = mainBody {
          }?.let { it as DefaultEnvironment }?.let { disposedEnvironment ->
             if (loadedModules != null) {
                println("Loaded modules:")
-               when (loadedModules) {
+               when (loadedModules!!) {
                   ModulesPrintMode.LIST -> disposedEnvironment.modules.forEach { println(it) }
                   ModulesPrintMode.TREE -> disposedEnvironment.printModules(false)
                   ModulesPrintMode.CONTENT -> disposedEnvironment.printModules(true)

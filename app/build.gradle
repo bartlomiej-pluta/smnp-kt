@@ -1,6 +1,7 @@
 dependencies {
-    compile project(':core')
-    compile "com.xenomachina:kotlin-argparser:2.0.7"
+    implementation project(':api')
+    implementation project(':core')
+    implementation "com.xenomachina:kotlin-argparser:2.0.7"
 }
 
 ext.generatedResourcesDir = file("$buildDir/generated-resources")
@@ -30,12 +31,14 @@ jar {
     // This line of code recursively collects and copies all of a project's files
     // and adds them to the JAR itself. One can extend this task, to skip certain
     // files or particular types at will
-    from configurations.compile.collect {
+    from configurations.runtimeClasspath.collect {
         exclude "META-INF/*.SF"
         exclude "META-INF/*.DSA"
         exclude "META-INF/*.RSA"
         it.isDirectory() ? it : zipTree(it)
     }
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from files(sourceSets.main.output.classesDirs)
     from files(sourceSets.main.resources)
 }

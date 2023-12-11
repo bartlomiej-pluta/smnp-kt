@@ -10,7 +10,7 @@ abstract class Envelope {
          (byte * eval(
             index.toDouble(),
             wave.bytes.size
-         )).toByte()
+         )).toInt().toByte()
       }.toByteArray())
    }
 
