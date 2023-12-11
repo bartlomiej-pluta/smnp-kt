@@ -7,5 +7,11 @@ dependencies {
 }
 
 jar {
-    from configurations.fatjar.collect { it.isDirectory() ? it : zipTree(it) }
+    from configurations.compileClasspath
+      // FIXME: This is an ugly hack to include the xchart dependency into the output jar
+      // For some reason without this filter the module is no longer discoverable by SMNP core.
+      // Further investigation is required, however this temporary workaround works fine for the time being (11.12.2023).
+      .filter { it.getAbsolutePath().contains("xchart") }
+      .collect { it.isDirectory() ? it : zipTree(it) }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
